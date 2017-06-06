@@ -9,4 +9,63 @@ snippet img "Image tag" b
 endsnippet
 
 snippet `apicontent "API Content" b
+### ${1:GET} /api/${2:PATH}
+
+#### 描述
+${3:Description}
+
+#### 登录验证
+${4:不}需要。
+
+#### 参数
+| 参数名 | 类型 | 位置 | 必填 | 描述 |
+| ---------- | ---------- | ---------- | ---------- | ---------- |
+${5:| ${6} | ${7} | ${8} | ${9} | ${10} |}
+
+#### 返回值
+
+##### 成功
+${11:返回空。}
+
+##### 失败
+```json
+{
+  "message": "The token has been blacklisted",
+  "status_code": 400
+}
+```
+
+##### 错误码
+| 错误码 | 描述 |
+| ---------- | ---------- |
+| 400 | token错误或已过期 |
+| 422 | 参数错误 |
+| 429 | 超出接口单位时间访问次数限制 |
+endsnippet
+
+snippet `apifields "API Fields" b
+##### 字段
+| 名称 | 类型 | 说明 |
+| ---------- | ---------- | ---------- |
+| ${1:name} | ${2:type} | ${3:desc} |${0}
+endsnippet
+
+snippet `apifieldrow "API Field Row" b
+| ${1:name} | ${2:type} | ${3:desc} |${0}
+endsnippet
+
+snippet `apiindex "API Index Row" b
+| [/api/${1:PATH}](#${2:get}-api${3:path}) | ${4:GET} | ${5:Description} |${0}
+endsnippet
+
+snippet `apijson "API JSON" b
+```json
+{
+  "${1:id}": ${2:0${3:,}}
+}
+```
+endsnippet
+
+snippet `apiparam "API Param Row" b
+| ${1:phone} | ${2:string} | ${3:form} | ${4:是} | ${5:手机号码} |${0}
 endsnippet
