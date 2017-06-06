@@ -1,0 +1,123 @@
+snippet gq "$this->request->getQuery()" i
+$this->request->getQuery('${1:param}'${2:, '${3:type}'${4:, '${5:default}'}});${0}
+endsnippet
+
+snippet gp "$this->request->getPost()" i
+$this->request->getPost('${1:param}'${2:, '${3:type}'${4:, '${5:default}'}});${0}
+endsnippet
+
+snippet rdt "$this->response->redirect()" b
+$this->response->redirect('${1:location}'${2:, ${3:true}${4:, ${5:301}}});${0}
+endsnippet
+
+snippet fwd "$this->dispatcher->forward()" b
+$this->dispatcher->forward(
+	[
+		"controller" => "${1:ctrl}",
+		"action" => "${2:act}"
+	]
+);${0}
+endsnippet
+
+snippet setcookie "$this->cookies->set()" b
+$this->cookies->set('${1:key}', ${2:value});${0}
+endsnippet
+
+snippet getcookie "$this->cookies->get()" b
+$this->cookies->get('${1:key}');
+endsnippet
+
+snippet sessget "$this->session->get()" b
+$this->session->get('${1:name}');${0}
+endsnippet
+
+snippet sessset "$this->session->set()" b
+$this->session->set('${1:name}', ${2:value});${0}
+endsnippet
+
+snippet sessrm "$this->session->remove()" b
+$this->session->remove('${1:name}');${0}
+endsnippet
+
+snippet disview "$this->view->disable()" b
+$this->view->disable();${0}
+endsnippet
+
+snippet setvar "$this->view->setVar()" b
+$this->view->setVar('${1:name}', $${2:var});${0}
+endsnippet
+
+snippet setlvl "$this->view->setRenderLevel()" b
+$this->view->setRenderLevel(\Phalcon\Mvc\View::${1:LEVEL_ACTION_VIEW});${0}
+endsnippet
+
+snippet pickview "$this->view->pick()" b
+$this->view->pick('${1:./ctrl/action}');${0}
+endsnippet
+
+snippet addcss "$this->assets->addCss()" b
+$this->assets->addCss(${1:JS_DOMAIN.'${2:css}'}, false);${0}
+endsnippet
+
+snippet isget "$this->request->isGet()" i
+$this->request->isGet()${0}
+endsnippet
+
+snippet ispost "$this->request->isPost()" i
+$this->request->isPost()${0}
+endsnippet
+
+snippet isajax "$this->request->isAjax()" i
+$this->request->isAjax()${0}
+endsnippet
+
+snippet hasfiles "$this->request->hasFiles()" i
+$this->request->hasFiles()${0}
+endsnippet
+
+# --- QueryBuilder start ---
+
+snippet di "\Phalcon\DI::getDefault()" i
+\Phalcon\DI::getDefault()${0}
+endsnippet
+
+snippet phql "Create default QueryBuilder" b
+$${1:builder} = \Phalcon\DI::getDefault()->getModelsManager()->createBuilder();${0}
+endsnippet
+
+snippet and "andWhere()" i
+$builder->andWhere('${1:cond}'${2:, ['${3:placeHolder}'=>$${4:var}]});${0}
+endsnippet
+
+snippet "->and" "andWhere()" r
+->andWhere('${1:cond}'${2:, ['${3:placeHolder}'=>$${4:var}]})${0}
+endsnippet
+
+snippet page "Create paginator adapted for QueryBuilder" b
+$${1:paginator} = new \Phalcon\Paginator\Adapter\QueryBuilder(
+	[
+		"builder" => $${2:builder},
+		"limit" => $${3:chunk},
+		"page" => $${4:page}
+	]
+);
+$${5:pages} = $$1->getPaginate();${0}
+endsnippet
+
+# --- QueryBuilder end ---
+
+snippet rawval "Create \Phalcon\Db\RawValue" i
+new \Phalcon\Db\RawValue('${1:now()}');${0}
+endsnippet
+
+snippet act "Phalcon Action" b
+/**
+ * ${2:doc}
+ * @return ${3:void}
+ * @author donieli
+ */
+public function ${1:test}Action()
+{
+	${4:// code}
+}
+endsnippet

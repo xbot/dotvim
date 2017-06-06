@@ -1,0 +1,23 @@
+snippet lgr "private static final Logger logger" b
+private static final Logger logger = LoggerFactory.getLogger(${1:MyClass}.class);${0}
+endsnippet
+
+snippet cos "public static final String" b
+public static final String ${1:var} = "$2";$0
+endsnippet
+
+snippet co "public static final" b
+public static final ${1:String} ${2:var} = $3;$0
+endsnippet
+
+snippet setter "setter method"
+public void set${1:Attr}(${2:Long} $1) {
+    this.$1 = $1;
+}$0
+endsnippet
+
+snippet getter "getter method"
+public ${1:Long} get${2:Attr}() {
+    return this.$2;
+}$0
+endsnippet

@@ -1,0 +1,16 @@
+snippet lvalidator "参数检验"
+$validator = Validator::make($request->all(), [
+	${1}
+]);
+if ($validator->fails()) {
+	return $this->response->error($validator->errors()->first(), 422);
+}
+endsnippet
+
+snippet luserid "当前用户ID" i
+$this->auth->user()->id${0}
+endsnippet
+
+snippet lerror "返回错误响应" i
+$this->response->error(${1}, ${2:500});${0}
+endsnippet

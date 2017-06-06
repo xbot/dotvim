@@ -1,0 +1,152 @@
+clearsnippets array
+
+snippet php "Multi-line <?php ?>"
+<?php
+${1}
+?>
+endsnippet
+
+snippet phps "Single-line <?php ?>" w
+<?php ${1} ?>
+endsnippet
+
+snippet ?= "Single-line <?= $var >" i
+<?= $${1:var} ?>
+endsnippet
+
+snippet clog "ChromePhp::log()" i
+require_once('ChromePhp.php'); ChromePhp::log($${1:var});${0}
+endsnippet
+
+snippet cwarn "ChromePhp::warn()" i
+require_once('ChromePhp.php'); ChromePhp::warn($${1:var});${0}
+endsnippet
+
+snippet cerror "ChromePhp::error()" i
+require_once('ChromePhp.php'); ChromePhp::error($${1:var});${0}
+endsnippet
+
+snippet fpc "file_put_contents+print_r in UNIX"
+file_put_contents('${1:/tmp/z.joy}', print_r(${2}, true)."\n\n", FILE_APPEND);${3}
+endsnippet
+
+snippet fpc2 "file_put_contents+var_export in UNIX"
+file_put_contents('${1:/tmp/z.joy}', var_export(${2}, true)."\n\n", FILE_APPEND);${3}
+endsnippet
+
+snippet trace "file_put_contents+debug_trace"
+foreach(debug_backtrace() as $k=>$v){
+    if($v['function'] == "include" || $v['function'] == "include_once" || $v['function'] == "require_once" || $v['function'] == "require"){
+        $$2 .= "#".$k." ".$v['function']."(".$v['args'][0].") called at [".$v['file'].":".$v['line']."]\n";
+    }else{
+        $$2 .= "#".$k." ".$v['function']."() called at [".$v['file'].":".$v['line']."]\n";
+    }
+}
+file_put_contents('${1:/tmp/z.joy}', "$${2:stackstr}\n\n", FILE_APPEND);${3}
+endsnippet
+
+snippet ifs "Single-line if statement"
+if (${1:/* condition */}) ${2:/* code... */};${3}
+endsnippet
+
+snippet try "try ... catch"
+try {
+    ${1:// code}  
+} catch (${2:Exception} $${3:e}) {
+    ${4:// code}
+}${5}
+endsnippet
+
+snippet nfuc "function($param) use ($var) {}" i
+function($${1:param})${2: use ($${3:var})} {${4}}${0}
+endsnippet
+
+snippet todo "// TODO: "
+// TODO: ${1}
+endsnippet
+
+snippet rdd "print_r() and die()" b
+echo '<pre>'; print_r($${1:var}); echo '</pre>';${2: die();}
+endsnippet
+
+snippet kv "key => value pair" i
+'${1:key}' => ${2:$${3:value}},${0}
+endsnippet
+
+# php functions start
+snippet export "var_export($var, true)" i
+var_export($${1:var}${2:, true})${0}
+endsnippet
+
+snippet amap "array_map()" i
+array_map(${1:callback}, ${2:$${3:arr}})${0}
+endsnippet
+
+snippet afil "array_filter()" i
+array_filter($${1:arr}, ${2:callback})${0}
+endsnippet
+
+snippet apop "array_pop()" i
+array_pop(${1:$${2:arr}})${0}
+endsnippet
+
+snippet arand "array_rand()" i
+array_rand($${1:arr}, ${2:5})${0}
+endsnippet
+
+snippet asli "array_slice()" i
+array_slice(${1:$${2:arr}}, ${3:0}${4:, ${5:5}})${0}
+endsnippet
+
+snippet aval "array_values()" i
+array_values(${1:$${2:arr}})${0}
+endsnippet
+
+snippet akey "array_keys()" i
+array_keys(${1:$${2:arr}})${0}
+endsnippet
+
+snippet auq "array_unique()" i
+array_unique(${1:$${2:arr}})${0}
+endsnippet
+
+snippet ac "count()" i
+count(${1:$${2:arr}})${0}
+endsnippet
+
+snippet ina "in_array()" i
+in_array(${1:$${2:var}}, ${3:$${4:arr}})${0}
+endsnippet
+
+snippet achu "array_chunk()" i
+array_chunk(${1:$${2:arr}}, ${3:size})${0}
+endsnippet
+
+snippet awal "array_walk()" i
+array_walk($${1:arr}, ${2:callback})${0}
+endsnippet
+
+snippet emp "empty()" i
+empty(${1:$${2:var}})${0}
+endsnippet
+# php functions end
+
+# php comment start
+snippet pa "@param" b
+* @param ${1:int} $${2:var} ${3:POST ${4:desc}}
+endsnippet
+
+snippet au "@author donieli" b
+* @author donieli
+endsnippet
+# php comment end
+
+# unit tests start
+snippet asm "$this->assertEmpty()" b
+$this->assertEmpty(${1:$${2:arr}});${0}
+endsnippet
+
+snippet asnm "$this->assertNotEmpty()" b
+$this->assertNotEmpty(${1:$${2:arr}});${0}
+endsnippet
+# unit tests end
