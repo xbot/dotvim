@@ -1,9 +1,9 @@
 snippet lvalidator "参数检验"
-$validator = Validator::make($request->all(), [
-	${1}
+$validator = Validator::make($${1:request->all()}, [
+	${2}
 ]);
 if ($validator->fails()) {
-	return $this->response->error($validator->errors()->first(), 422);
+	return $this->${3:response->}error($validator->errors()->first(), 422);
 }
 endsnippet
 
