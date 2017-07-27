@@ -33,6 +33,8 @@ github:Blackrush/vim-gocode
 github:Shougo/unite-outline
 github:brooth/far.vim
 github:cespare/vim-golang
+github:chemzqm/denite-git
+github:chemzqm/vim-easygit
 github:dgryski/vim-godef
 github:diepm/vim-php-wrapper
 github:hewes/unite-gtags
@@ -41,6 +43,7 @@ github:peterhoeg/vim-qml
 github:plasticboy/vim-markdown
 github:rizzatti/dash.vim
 github:shawncplus/phpcomplete.vim
+github:shougo/denite.nvim
 github:tobyS/pdv
 github:tobyS/vmustache
 github:trevordmiller/nova-vim
@@ -64,7 +67,6 @@ splitjoin
 surround
 unite
 vim-airline
-vim-colorscheme-switcher
 vim-easy-align
 vim-jsbeautify
 vim-lastplace
