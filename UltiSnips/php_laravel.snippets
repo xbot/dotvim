@@ -8,9 +8,67 @@ if ($validator->fails()) {
 endsnippet
 
 snippet luserid "当前用户ID" i
-$this->auth->user()->id${0}
+$this${1:->auth}->user()->id${0}
+endsnippet
+
+snippet lreturn "返回JSON" b
+return $this->${1:response->}success(${2});${0}
 endsnippet
 
 snippet lerror "返回错误响应" i
-$this->${1:response->}error(${2}, ${3:500});${0}
+return $this->${1:response->}error(${2}, ${3:500});${0}
+endsnippet
+
+snippet ltable "migration: create table" b
+Schema::create('${1:users}', function (Blueprint $table) {
+	${2:$table->increments('id')->comment('ID');}${0}
+});
+endsnippet
+	
+snippet lstring "migration: table->string()" b
+$table->string('${1:email}', ${2:50})${3:->nullable()}->comment('${4:电邮}');${0}
+endsnippet
+	
+snippet lint "migration: table->integer()" b
+$table->integer('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
+endsnippet
+
+snippet ltinyint "migration: table->tinyInteger()" b
+$table->tinyInteger('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
+endsnippet
+
+snippet ldecimal "migration: table->decimal()" b
+$table->decimal('${1:price}', ${3:10}, ${4:2})${5:->nullable()}${6:->default(${7:0})}->comment('${8:价格}');${0}
+endsnippet
+	
+snippet lts "migration: table->timestamps()" b
+$table->timestamps();
+endsnippet
+
+snippet ldrop "migration: table->drop()" b
+Schema::drop('${1:users}');${0}
+endsnippet
+
+snippet ltext "migration: table->text()" b
+$table->text('${1:desc}')${2:->nullable()}->comment('${3:描述}');${0}
+endsnippet
+
+snippet ldatetime "migration: table->datetime()" b
+$table->datetime('${1:created_at}')${2:->nullable()}->comment('${3:创建时间}');${0}
+endsnippet
+
+snippet laction "controller->action()" b
+/**
+ * ${4:Description}
+ *
+ * @param   Request $request 请求对象${5}
+ * @return  Illuminate\Http\JsonResponse
+ * @author  donieli
+ * @since   ${6:1.0}
+ * @version ${7:1.0}
+ */
+public function ${1:actionName}(Request $request${2:, $${3:id}})
+{
+	${8:// TODO: finish this.}
+}${0}
 endsnippet
