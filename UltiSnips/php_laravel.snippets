@@ -15,8 +15,12 @@ snippet lreturn "返回JSON" b
 return $this->${1:response->}success(${2});${0}
 endsnippet
 
-snippet lerror "返回错误响应" i
+snippet lfail "返回错误响应" i
 return $this->${1:response->}error(${2}, ${3:500});${0}
+endsnippet
+
+snippet lerr "Log::error()" b
+Log::error('${1}');${0}
 endsnippet
 
 snippet ltable "migration: create table" b
