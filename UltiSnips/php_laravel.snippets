@@ -20,7 +20,7 @@ return $this->${1:response->}error(${2}, ${3:500});${0}
 endsnippet
 
 snippet lerr "Log::error()" b
-Log::error('${1}');${0}
+Log::error('${1}'${2:.json_encode(${3:$request->all()})});${0}
 endsnippet
 
 snippet ltable "migration: create table" b
