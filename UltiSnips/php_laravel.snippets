@@ -76,3 +76,67 @@ public function ${1:actionName}(Request $request${2:, $${3:id}})
 	${8:// TODO: finish this.}
 }${0}
 endsnippet
+
+snippet ..where "->where()" i
+->where('${1:id}', ${2:'${3}', $${4:id}})${0}
+endsnippet
+
+snippet ..in "->whereIn()" i
+->whereIn('${1:id}', ${2:$${3:ids}})${0}
+endsnippet
+
+snippet ..order "->orderBy()" i
+->orderBy(${1:'${2}', '${3:desc}'})${0}
+endsnippet
+
+snippet ..group "->groupBy()" i
+->groupBy('${1}')${0}
+endsnippet
+
+snippet ..page "->skip()->take()" i
+->skip(($${1:page} - 1) * $${2:size})->take($${2:size})${0}
+endsnippet
+
+snippet ..sel "->select()" i
+->select(${1})${0}
+endsnippet
+
+snippet ..add "->addSelect()" i
+->addSelect(${1})${0}
+endsnippet
+
+snippet ..table "DB::table()" i
+DB::table('${1}')${0}
+endsnippet
+
+snippet lget "$request->get()" i
+$request->get('${1}'${2:, ${3:1}})${0}
+endsnippet
+
+snippet lhas "$request->has()" i
+$request->has('${1}')
+endsnippet
+
+snippet lbegin "DB::beginTransaction()" b
+DB::beginTransaction();
+endsnippet
+
+snippet lroll "DB::rollBack()" b
+DB::rollBack();
+endsnippet
+
+snippet lcommit "DB::commit()" b
+DB::commit();
+endsnippet
+
+snippet lresult "return ['totalPages', 'result']" b
+return [
+	'totalPages' => $${1:totalPages},
+	'result'     => $${2:${3:query}->get()},
+];
+endsnippet
+
+snippet ltotal "calc $totalPages" b
+$${1:totalNum}   = $${2:query}->count();
+$${3:totalPages} = ceil($${4:totalNum} / $${5:size});
+endsnippet
