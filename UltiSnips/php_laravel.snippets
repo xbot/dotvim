@@ -89,6 +89,10 @@ snippet ..null "->whereNull()" i
 ->where${1:Not}Null('${2}')${0}
 endsnippet
 
+snippet ..raw "->whereRaw()" i
+->whereRaw('${1}')${0}
+endsnippet
+
 snippet ..order "->orderBy()" i
 ->orderBy(${1:'${2}', '${3:desc}'})${0}
 endsnippet
