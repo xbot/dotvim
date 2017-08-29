@@ -85,6 +85,10 @@ snippet ..in "->whereIn()" i
 ->whereIn('${1:id}', ${2:$${3:ids}})${0}
 endsnippet
 
+snippet ..null "->whereNull()" i
+->where${1:Not}Null('${2}')${0}
+endsnippet
+
 snippet ..order "->orderBy()" i
 ->orderBy(${1:'${2}', '${3:desc}'})${0}
 endsnippet
