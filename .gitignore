@@ -18,3 +18,5 @@ private.vim
 sessions/
 syntax/
 test/
+*.swp
+*.swo

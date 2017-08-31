@@ -1,5 +1,15 @@
 clearsnippets array
 
+snippet construct "__construct()" b
+/**
+ * @param $3mixed ${2/, /\n     * \@param mixed /g}
+ */
+public function __construct(${1:Dependency $${2:dependencies}})
+{${2/(\w+)(, )*/\n        $this->$2 = $$2;/g}
+}
+$0
+endsnippet
+
 snippet .. "->" i
 ->${0}
 endsnippet

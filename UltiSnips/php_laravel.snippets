@@ -109,12 +109,20 @@ snippet ..sel "->select()" i
 ->select(${1})${0}
 endsnippet
 
+snippet ..get "->get()" i
+->get()${0}
+endsnippet
+
 snippet ..add "->addSelect()" i
 ->addSelect(${1})${0}
 endsnippet
 
 snippet ..table "DB::table()" i
 DB::table('${1}')${0}
+endsnippet
+
+snippet ..join "->join()" i
+->join('${1}', '${2}', '${3:=}', '${4}')${0}
 endsnippet
 
 snippet lget "$request->get()" i
@@ -147,4 +155,8 @@ endsnippet
 snippet ltotal "calc $totalPages" b
 $${1:totalNum}   = $${2:query}->count();
 $${3:totalPages} = ceil($${4:totalNum} / $${5:size});
+endsnippet
+
+snippet lq "$query" b
+$query${0}
 endsnippet
