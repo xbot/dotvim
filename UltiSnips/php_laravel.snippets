@@ -1,9 +1,9 @@
 snippet lvalidator "参数检验"
 $validator = Validator::make($${1:request->all()}, [
-	${2}
+    ${2}
 ]);
 if ($validator->fails()) {
-	return $this->${3:response->}error($validator->errors()->first(), 422);
+    return $this->${3:response->}error($validator->errors()->first(), 422);
 }
 endsnippet
 
@@ -23,16 +23,22 @@ snippet lerr "Log::error()" b
 Log::error('${1}'${2:.json_encode(${3:$request->all()})});${0}
 endsnippet
 
-snippet ltable "migration: create table" b
+snippet lctbl "migration: create table" b
 Schema::create('${1:users}', function (Blueprint $table) {
-	${2:$table->increments('id')->comment('ID');}${0}
+    ${2:$table->increments('id')->comment('ID');}${0}
 });
 endsnippet
-	
+
+snippet ltbl "migration: alter table" b
+Schema::table('${1:users}', function (Blueprint $table) {
+    ${2}
+});${0}
+endsnippet
+    
 snippet lstring "migration: table->string()" b
 $table->string('${1:email}', ${2:50})${3:->nullable()}->comment('${4:电邮}');${0}
 endsnippet
-	
+    
 snippet lint "migration: table->integer()" b
 $table->integer('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
 endsnippet
@@ -44,7 +50,7 @@ endsnippet
 snippet ldecimal "migration: table->decimal()" b
 $table->decimal('${1:price}', ${3:10}, ${4:2})${5:->nullable()}${6:->default(${7:0})}->comment('${8:价格}');${0}
 endsnippet
-	
+    
 snippet lts "migration: table->timestamps()" b
 $table->timestamps();
 endsnippet
@@ -73,7 +79,7 @@ snippet laction "controller->action()" b
  */
 public function ${1:actionName}(Request $request${2:, $${3:id}})
 {
-	${8:// TODO: finish this.}
+    ${8:// TODO: finish this.}
 }${0}
 endsnippet
 
@@ -81,11 +87,19 @@ snippet ..where "->where()" i
 ->where('${1:id}', ${2:'${3}', $${4:id}})${0}
 endsnippet
 
-snippet ..in "->whereIn()" i
-->whereIn('${1:id}', ${2:$${3:ids}})${0}
+snippet ..or "->orWhere()" i
+->orWhere('${1:id}', ${2:'${3}', $${4:id}})${0}
 endsnippet
 
-snippet ..null "->whereNull()" i
+snippet ..betw "->whereBetween() or ->whereNotBetween()" i
+->where${1:Not}Between('${2}', ${3:[${4}, ${5}]})${0}
+endsnippet
+
+snippet ..in "->whereIn() or ->whereNotIn()" i
+->where${1:Not}In('${2:id}', ${3:$${4:ids}})${0}
+endsnippet
+
+snippet ..null "->whereNull() or ->whereNotNull" i
 ->where${1:Not}Null('${2}')${0}
 endsnippet
 
@@ -93,8 +107,30 @@ snippet ..raw "->whereRaw()" i
 ->whereRaw('${1}')${0}
 endsnippet
 
+snippet ..hav "->having()" i
+->having('${1}', '${2:>}', ${3})${0}
+endsnippet
+
+snippet ..havraw "->havingRaw()" i
+->havingRaw('${1}')${0}
+endsnippet
+
+snippet ..when "->when()" i
+->when(${1}, function ($${2:query}) ${3:use ($${4:var}) }{
+    ${5}
+}${6})${0}
+endsnippet
+
 snippet ..order "->orderBy()" i
 ->orderBy(${1:'${2}', '${3:desc}'})${0}
+endsnippet
+
+snippet ..insert "->insert() or ->insertGetId()" i
+->insert${1:GetId}(${2})${0}
+endsnippet
+
+snippet ..update "->update()" i
+->update(${1})${0}
 endsnippet
 
 snippet ..group "->groupBy()" i
@@ -109,20 +145,104 @@ snippet ..sel "->select()" i
 ->select(${1})${0}
 endsnippet
 
-snippet ..get "->get()" i
-->get()${0}
-endsnippet
-
 snippet ..add "->addSelect()" i
 ->addSelect(${1})${0}
 endsnippet
 
-snippet ..table "DB::table()" i
-DB::table('${1}')${0}
+snippet ..get "->get()" i
+->get()${0}
+endsnippet
+
+snippet ..fir "->first()" i
+->first()${0}
+endsnippet
+
+snippet ..count "->count()" i
+->count(${1})${0}
+endsnippet
+
+snippet ..min "->min()" i
+->min('${1}')${0}
+endsnippet
+
+snippet ..max "->max()" i
+->max('${1}')${0}
+endsnippet
+
+snippet ..avg "->avg()" i
+->avg('${1}')${0}
+endsnippet
+
+snippet ..sum "->sum()" i
+->sum('${1}')${0}
+endsnippet
+
+snippet ..dist "->distinct()" i
+->distinct()${0}
 endsnippet
 
 snippet ..join "->join()" i
-->join('${1}', '${2}', '${3:=}', '${4}')${0}
+->join('${1}', ${2:'${3}', '${4:=}', '${5}'})${0}
+endsnippet
+
+snippet ..exi "->whereExists() or ->whereNotExists()" i
+->where${1:Not}Exists(${2})${0}
+endsnippet
+
+snippet ..val "->value()" i
+->value('${1}')${0}
+endsnippet
+
+snippet ..plu "->pluck()" i
+->pluck('${1}')${0}
+endsnippet
+
+snippet ..incr "->increment()" i
+->increment('${1}'${2:, ${3:10}})${0}
+endsnippet
+
+snippet ..decr "->decrement()" i
+->decrement('${1}'${2:, ${3:10}})${0}
+endsnippet
+
+snippet ..del "->delete()" i
+->delete()${0}
+endsnippet
+
+snippet ..from "->from()" i
+->from('${1}')${0}
+endsnippet
+
+snippet ..lst "->latest()" i
+->latest()${0}
+endsnippet
+
+snippet ..ost "->oldest()" i
+->oldest()${0}
+endsnippet
+
+snippet dbtbl "DB::table()" i
+DB::table('${1}')${0}
+endsnippet
+
+snippet dbraw "DB::raw()" i
+DB::raw('${1}')${0}
+endsnippet
+
+snippet dbstmt "DB::statement()" b
+DB::statement('${1}');${0}
+endsnippet
+
+snippet dbbegin "DB::beginTransaction()" b
+DB::beginTransaction();
+endsnippet
+
+snippet dbroll "DB::rollBack()" b
+DB::rollBack();
+endsnippet
+
+snippet dbcommit "DB::commit()" b
+DB::commit();
 endsnippet
 
 snippet lget "$request->get()" i
@@ -133,30 +253,14 @@ snippet lhas "$request->has()" i
 $request->has('${1}')
 endsnippet
 
-snippet lbegin "DB::beginTransaction()" b
-DB::beginTransaction();
-endsnippet
-
-snippet lroll "DB::rollBack()" b
-DB::rollBack();
-endsnippet
-
-snippet lcommit "DB::commit()" b
-DB::commit();
-endsnippet
-
 snippet lresult "return ['totalPages', 'result']" b
 return [
-	'totalPages' => $${1:totalPages},
-	'result'     => $${2:${3:query}->get()},
+    'totalPages' => $${1:totalPages},
+    'result'     => $${2:${3:query}->get()},
 ];
 endsnippet
 
 snippet ltotal "calc $totalPages" b
 $${1:totalNum}   = $${2:query}->count();
 $${3:totalPages} = ceil($${4:totalNum} / $${5:size});
-endsnippet
-
-snippet lq "$query" b
-$query${0}
 endsnippet

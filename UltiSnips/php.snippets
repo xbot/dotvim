@@ -18,6 +18,30 @@ snippet this "$this->" i
 $this->${0}
 endsnippet
 
+snippet vbq "$query" i
+$query${0}
+endsnippet
+
+snippet vbr "$result" i
+$result${0}
+endsnippet
+
+snippet vbd "$data" i
+$data${0}
+endsnippet
+
+snippet vbi "$item" i
+$item${0}
+endsnippet
+
+snippet vb "Variable" i
+$${1:id}${0}
+endsnippet
+
+snippet ppt "$obj->property" i
+$${1:user}->${2:id}
+endsnippet
+
 snippet php "Multi-line <?php ?>"
 <?php
 ${1}
