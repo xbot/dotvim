@@ -55,8 +55,12 @@ snippet lts "migration: table->timestamps()" b
 $table->timestamps();
 endsnippet
 
-snippet ldrop "migration: table->drop()" b
+snippet ldrop "migration: Schema::drop()" b
 Schema::drop('${1:users}');${0}
+endsnippet
+
+snippet ldropcol "migration: $table->dropColumn()" b
+$table->dropColumn('${1}');${0}
 endsnippet
 
 snippet ltext "migration: table->text()" b
