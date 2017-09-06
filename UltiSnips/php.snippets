@@ -115,7 +115,7 @@ snippet kv "key => value pair" i
 endsnippet
 
 # php functions start
-snippet export "var_export($var, true)" i
+snippet vexp "var_export($var, true)" i
 var_export($${1:var}${2:, true})${0}
 endsnippet
 
@@ -167,18 +167,18 @@ snippet awal "array_walk()" i
 array_walk($${1:arr}, ${2:callback})${0}
 endsnippet
 
-snippet emp "empty()" i
-empty(${1:$${2:var}})${0}
+snippet emp "empty() or !empty()" i
+${1:!}empty(${2:$${3:var}})${0}
 endsnippet
 # php functions end
 
 # php comment start
 snippet pa "@param" b
-* @param ${1:int} $${2:var} ${3:POST ${4:desc}}
+@param ${1:int} $${2:var} ${3:POST ${4:desc}}
 endsnippet
 
 snippet au "@author donieli" b
-* @author donieli
+@author donieli
 endsnippet
 # php comment end
 
