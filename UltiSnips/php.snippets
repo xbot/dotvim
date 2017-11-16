@@ -106,10 +106,6 @@ snippet todo "// TODO: "
 // TODO: ${1}
 endsnippet
 
-snippet rdd "print_r() and die()" b
-echo '<pre>'; print_r($${1:var}); echo '</pre>';${2: die();}
-endsnippet
-
 snippet kv "key => value pair" i
 '${1:key}' => ${2:$${3:value}},${0}
 endsnippet
@@ -170,15 +166,23 @@ endsnippet
 snippet emp "empty() or !empty()" i
 ${1:!}empty(${2:$${3:var}})${0}
 endsnippet
+
+snippet jenc "json_encode()" i
+json_encode(${1:$${2:var}})${0}
+endsnippet
+
+snippet jdec "json_decode()" i
+json_decode(${1:$${2:var}}${3:, true})${0}
+endsnippet
 # php functions end
 
 # php comment start
-snippet pa "@param" b
-@param ${1:int} $${2:var} ${3:POST ${4:desc}}
+snippet pa "@param" i
+param ${1:int} $${2:var} ${3:POST ${4:desc}}
 endsnippet
 
-snippet au "@author donieli" b
-@author donieli
+snippet au "@author donieli" i
+author donieli
 endsnippet
 # php comment end
 
@@ -191,3 +195,16 @@ snippet asnm "$this->assertNotEmpty()" b
 $this->assertNotEmpty(${1:$${2:arr}});${0}
 endsnippet
 # unit tests end
+
+snippet st "$st = microtime(true);" b
+$st = microtime(true);${0}
+endsnippet
+
+snippet et "$et = microtime(true);" b
+$et = microtime(true);
+var_dump('${1:1}:'.($et-$st));${0}
+endsnippet
+
+snippet prd "print_r() and die()" b
+print_r(${1:$${2:var}}); die();${0}
+endsnippet

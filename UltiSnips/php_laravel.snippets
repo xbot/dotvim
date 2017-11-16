@@ -43,12 +43,32 @@ snippet lint "migration: table->integer()" b
 $table->integer('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
 endsnippet
 
-snippet ltinyint "migration: table->tinyInteger()" b
+snippet luint "migration: table->unsignedInteger()" b
+$table->unsignedInteger('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
+endsnippet
+
+snippet ltint "migration: table->tinyInteger()" b
 $table->tinyInteger('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
+endsnippet
+
+snippet lutint "migration: table->unsignedTinyInteger()" b
+$table->unsignedTinyInteger('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
+endsnippet
+
+snippet lsint "migration: table->smallInteger()" b
+$table->smallInteger('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
+endsnippet
+
+snippet lusint "migration: table->unsignedSmallInteger()" b
+$table->unsignedSmallInteger('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
 endsnippet
 
 snippet ldecimal "migration: table->decimal()" b
 $table->decimal('${1:price}', ${3:10}, ${4:2})${5:->nullable()}${6:->default(${7:0})}->comment('${8:价格}');${0}
+endsnippet
+
+snippet lbool "migration: table->boolean()" b
+$table->boolean('${1:email}')${2:->nullable()}${3:->default(${4:1})}->comment('${5:是否显示}');${0}
 endsnippet
     
 snippet lts "migration: table->timestamps()" b
@@ -120,7 +140,7 @@ snippet ..havraw "->havingRaw()" i
 endsnippet
 
 snippet ..when "->when()" i
-->when(${1}, function ($${2:query}) ${3:use ($${4:var}) }{
+->when(${1}, function ($${2:query}) ${3:use ($${4:request}) }{
     ${5}
 }${6})${0}
 endsnippet
@@ -193,6 +213,18 @@ snippet ..join "->join()" i
 ->join('${1}', ${2:'${3}', '${4:=}', '${5}'})${0}
 endsnippet
 
+snippet ..ljoin "->leftJoin()" i
+->leftJoin('${1}', ${2:'${3}', '${4:=}', '${5}'})${0}
+endsnippet
+
+snippet ..rjoin "->rightJoin()" i
+->rightJoin('${1}', ${2:'${3}', '${4:=}', '${5}'})${0}
+endsnippet
+
+snippet ..on "->on()" i
+->on('${1}', '${2}', '${3}')${0}
+endsnippet
+
 snippet ..exi "->whereExists() or ->whereNotExists()" i
 ->where${1:Not}Exists(${2})${0}
 endsnippet
@@ -227,6 +259,10 @@ endsnippet
 
 snippet ..ost "->oldest()" i
 ->oldest()${0}
+endsnippet
+
+snippet ..sql "->toSql()" i
+->toSql()${0}
 endsnippet
 
 snippet dbtbl "DB::table()" i
