@@ -308,3 +308,17 @@ snippet ltotal "calc $totalPages" b
 $${1:totalNum}   = $${2:query}->count();
 $${3:totalPages} = ceil($${4:totalNum} / $${5:size});
 endsnippet
+
+snippet lmake "$this->app->make()" b
+$${1:var} = $this->app->make(${2});${0}
+endsnippet
+
+snippet lins "$this->app->instance()" b
+$this->app->instance(${1:User}::class, $${2:fakeUser});${0}
+endsnippet
+
+snippet lsing "$this->app->singleton()" b
+$this->app->singleton('${1:OSS}', function ($app) {
+    ${1}
+});${0}
+endsnippet
