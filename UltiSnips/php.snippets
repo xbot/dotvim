@@ -1,11 +1,25 @@
-clearsnippets array
+clearsnippets array in
 
-snippet construct "__construct()" b
-/**
- * @param $3mixed ${2/, /\n     * \@param mixed /g}
- */
-public function __construct(${1:Dependency $${2:dependencies}})
-{${2/(\w+)(, )*/\n        $this->$2 = $$2;/g}
+snippet pub "Public function" b
+public function ${1:name}(${2:$param})
+{
+	${VISUAL}${3:return null;}
+}
+$0
+endsnippet
+
+snippet pro "Protected function" b
+protected function ${1:name}(${2:$param})
+{
+	${VISUAL}${3:return null;}
+}
+$0
+endsnippet
+
+snippet pri "Private function" b
+private function ${1:name}(${2:$param})
+{
+	${VISUAL}${3:return null;}
 }
 $0
 endsnippet
@@ -93,17 +107,21 @@ endsnippet
 snippet try "try ... catch"
 try {
     ${1:// code}  
-} catch (${2:Exception} $${3:e}) {
+} catch (${2:\Exception} $${3:e}) {
     ${4:// code}
 }${5}
 endsnippet
 
-snippet nfuc "function($param) use ($var) {}" i
+snippet clos "function($param) use ($var) {}" i
 function($${1:param})${2: use ($${3:var})} {${4}}${0}
 endsnippet
 
-snippet todo "// TODO: "
+snippet todo "// TODO: " "re.match('^\s*', snip.buffer[snip.line-1])" be
 // TODO: ${1}
+endsnippet
+
+snippet todo "// TODO: " "re.match('^\s*// ', snip.buffer[snip.line-1])" ie
+TODO: ${1}
 endsnippet
 
 snippet kv "key => value pair" i
@@ -135,11 +153,11 @@ snippet asli "array_slice()" i
 array_slice(${1:$${2:arr}}, ${3:0}${4:, ${5:5}})${0}
 endsnippet
 
-snippet aval "array_values()" i
+snippet avals "array_values()" i
 array_values(${1:$${2:arr}})${0}
 endsnippet
 
-snippet akey "array_keys()" i
+snippet akeys "array_keys()" i
 array_keys(${1:$${2:arr}})${0}
 endsnippet
 
@@ -178,11 +196,24 @@ endsnippet
 
 # php comment start
 snippet pa "@param" i
-param ${1:int} $${2:var} ${3:POST ${4:desc}}
+@param ${1:int} $${2:var} ${3:desc}
 endsnippet
 
 snippet au "@author donieli" i
-author donieli
+@author donieli
+endsnippet
+
+snippet ret "@return mixed" i
+@return ${1:void}
+endsnippet
+
+snippet ver "@since and @version" i
+@since ${1:1.0}
+* @version $1
+endsnippet
+
+snippet thr "@throws" i
+@throws ${1:\Exception}
 endsnippet
 # php comment end
 
