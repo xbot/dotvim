@@ -47,6 +47,14 @@ snippet luint "migration: table->unsignedInteger()" b
 $table->unsignedInteger('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
 endsnippet
 
+snippet lbint "migration: table->bigInteger()" b
+$table->bigInteger('${1:user_id}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:用户ID}');${0}
+endsnippet
+
+snippet lubint "migration: table->unsignedBigInteger()" b
+$table->unsignedBigInteger('${1:user_id}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:用户ID}');${0}
+endsnippet
+
 snippet ltint "migration: table->tinyInteger()" b
 $table->tinyInteger('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
 endsnippet
@@ -71,8 +79,12 @@ snippet lbool "migration: table->boolean()" b
 $table->boolean('${1:email}')${2:->nullable()}${3:->default(${4:1})}->comment('${5:是否显示}');${0}
 endsnippet
     
-snippet lts "migration: table->timestamps()" b
+snippet ltss "migration: table->timestamps()" b
 $table->timestamps();
+endsnippet
+
+snippet lts "migration: table->timestamp()" b
+$table->timestamp('${1}')${2:->nullable()}${3:->default(${4:1})}->comment('${5:是否显示}');${0}
 endsnippet
 
 snippet ldrop "migration: Schema::drop()" b
@@ -99,7 +111,7 @@ snippet laction "controller->action()" b
  * @return  Illuminate\Http\JsonResponse
  * @author  donieli
  * @since   ${6:1.0}
- * @version ${7:1.0}
+ * @version $6
  */
 public function ${1:actionName}(Request $request${2:, $${3:id}})
 {

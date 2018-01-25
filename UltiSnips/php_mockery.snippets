@@ -26,6 +26,6 @@ snippet ..with "->with()" i
 ->with(${1})${0}
 endsnippet
 
-snippet ..rt "->andReturn()" i
-->andReturn(${1})${0}
+snippet ..rt "->andReturn() or ->andReturnSelf()" i
+->andReturn${1:Self}(${2})${0}
 endsnippet
