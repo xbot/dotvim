@@ -34,11 +34,11 @@ Schema::table('${1:users}', function (Blueprint $table) {
     ${2}
 });${0}
 endsnippet
-    
+
 snippet lstring "migration: table->string()" b
 $table->string('${1:email}', ${2:50})${3:->nullable()}->comment('${4:电邮}');${0}
 endsnippet
-    
+
 snippet lint "migration: table->integer()" b
 $table->integer('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
 endsnippet
@@ -78,7 +78,7 @@ endsnippet
 snippet lbool "migration: table->boolean()" b
 $table->boolean('${1:email}')${2:->nullable()}${3:->default(${4:1})}->comment('${5:是否显示}');${0}
 endsnippet
-    
+
 snippet ltss "migration: table->timestamps()" b
 $table->timestamps();
 endsnippet
