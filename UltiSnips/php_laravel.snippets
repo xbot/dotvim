@@ -123,11 +123,15 @@ snippet ..where "->where()" i
 ->where('${1:id}', ${2:'${3}', $${4:id}})${0}
 endsnippet
 
+snippet ..key "->whereKey()" i
+->where${1:Key}(${2:$${3:var}})${0}
+endsnippet
+
 snippet ..or "->orWhere()" i
 ->orWhere('${1:id}', ${2:'${3}', $${4:id}})${0}
 endsnippet
 
-snippet ..betw "->whereBetween() or ->whereNotBetween()" i
+snippet ..bt "->whereBetween() or ->whereNotBetween()" i
 ->where${1:Not}Between('${2}', ${3:[${4}, ${5}]})${0}
 endsnippet
 
