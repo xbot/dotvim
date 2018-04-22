@@ -12,19 +12,20 @@ endsnippet
 
 snippet swgparam "@SWG\Parameter" i
 @SWG\Parameter(
-*     name="${1:id}",
-*     in="${2:body}",
-*     description="${3:id}",
-*     required=${4:true},
-*     @SWG\Schema(ref="#/definitions/${5:Tag}"),
-* ),$0
+*         name="${1:id}",
+*         in="${2:body}",
+*         description="${3:id}",
+*         required=${4:true},
+*         type="${5:string}",
+*         @SWG\Schema(ref="#/definitions/${6:Tag}"),
+*     ),$0
 endsnippet
 
 snippet swgresp "@SWG\Response" i
 @SWG\Response(
-*     response=${1:200},
-*     description="${2:请求成功，返回数据}",
-* ),$0
+*         response=${1:200},
+*         description="${2:请求成功，返回数据}",
+*     ),$0
 endsnippet
 
 snippet swgschm "@SWG\Schema" i
@@ -45,11 +46,17 @@ endsnippet
 
 snippet swgppt "@SWG\Property()" i
 @SWG\Property(
-*     property="${1:id}",
-*     type="${2:string}",
-*     example="${3}",
-*     description="${4:id}",
-* ),$0
+*         property="${1:id}",
+*         type="${2:string}",
+*         example="${3}",
+*         description="${4:id}",
+*     ),$0
+endsnippet
+
+snippet swgallof "allOf={}" i
+allOf={
+*         ${1}
+*     },${0}
 endsnippet
 
 snippet swgref "ref='#/definitions/xxx'" i
