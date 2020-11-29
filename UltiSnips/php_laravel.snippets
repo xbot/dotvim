@@ -281,6 +281,10 @@ snippet ..sql "->toSql()" i
 ->toSql()${0}
 endsnippet
 
+snippet dbc "DB::connection()" i
+DB::connection('${1}')${0:;}
+endsnippet
+
 snippet dbtbl "DB::table()" i
 DB::table('${1}')${0}
 endsnippet
@@ -337,4 +341,16 @@ snippet lsing "$this->app->singleton()" b
 $this->app->singleton('${1:OSS}', function ($app) {
     ${1}
 });${0}
+endsnippet
+
+snippet dd "dd()" b
+dd($1);${0}
+endsnippet
+
+snippet lqlog1 "DB::connection()->enableQueryLog()" b
+\DB::connection()->enableQueryLog();${0}
+endsnippet
+
+snippet lqlog2 "DB::getQueryLog()" b
+$logs = \DB::getQueryLog();${0}
 endsnippet

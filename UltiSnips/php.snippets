@@ -4,24 +4,21 @@ snippet pub "Public function" b
 public function ${1:name}(${2:$param})
 {
     ${VISUAL}${3:return null;}
-}
-$0
+}$0
 endsnippet
 
 snippet pro "Protected function" b
 protected function ${1:name}(${2:$param})
 {
     ${VISUAL}${3:return null;}
-}
-$0
+}$0
 endsnippet
 
 snippet pri "Private function" b
 private function ${1:name}(${2:$param})
 {
     ${VISUAL}${3:return null;}
-}
-$0
+}$0
 endsnippet
 
 snippet .. "->" i
@@ -52,7 +49,7 @@ snippet vb "Variable" i
 $${1:id}${0}
 endsnippet
 
-snippet ppt "$obj->property" i
+snippet objppt "$obj->property" i
 $${1:user}->${2:id}
 endsnippet
 
@@ -113,15 +110,15 @@ try {
 endsnippet
 
 snippet clos "function($param) use ($var) {}" i
-function($${1:param})${2: use ($${3:var})} {${4}}${0}
+function ($${1:param})${2: use ($${3:var})} {${4}}${0}
 endsnippet
 
 snippet todo "// TODO: " "re.match('^\s*', snip.buffer[snip.line-1])" be
-// TODO: ${1}
+// TODO donie: ${1}
 endsnippet
 
 snippet todo "// TODO: " "re.match('^\s*// ', snip.buffer[snip.line-1])" ie
-TODO: ${1}
+TODO donie: ${1}
 endsnippet
 
 snippet kv "key => value pair" i
@@ -203,8 +200,8 @@ snippet pa "@param" i
 @param ${1:int} $${2:var} ${3:desc}
 endsnippet
 
-snippet au "@author lidong" i
-@author lidong
+snippet au "@author donie" i
+@author donie
 endsnippet
 
 snippet ret "@return mixed" i
