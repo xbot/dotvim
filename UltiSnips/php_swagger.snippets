@@ -1,31 +1,41 @@
 snippet swgapi "@SWG\{Post/Get/Delete/Put}" i
-@SWG\\${1:Get}(
-*     path="${2:/v1/tags}",
-*     summary="${3}",
-*     description="${4}",
-*     operationId="${5:getTags}",
-*     tags={"${6:tag}"},
-*     consumes={"application/json"},
-*     produces={"application/json"},
-* ),$0
+@SWG\\${1|Get,Post,Put,Delete|}(
+    path="${2:/v1/tags}",
+    summary="${3}",
+    description="${4}",
+    operationId="${5:getTags}",
+    tags={"${6:tag}"},
+    consumes={"application/json"},
+    produces={"application/json"},
+),$0
 endsnippet
 
 snippet swgparam "@SWG\Parameter" i
 @SWG\Parameter(
-*         name="${1:id}",
-*         in="${2:body}",
-*         description="${3:id}",
-*         required=${4:true},
-*         type="${5:string}",
-*         @SWG\Schema(ref="#/definitions/${6:Tag}"),
-*     ),$0
+    name="${1:id}",
+    in="${2:body}",
+    description="${3:id}",
+    required=${4:true},
+    type="${5:string}",
+    @SWG\Schema(ref="#/definitions/${6:Tag}"),
+),$0
 endsnippet
 
 snippet swgresp "@SWG\Response" i
 @SWG\Response(
-*         response=${1:200},
-*         description="${2:请求成功，返回数据}",
-*     ),$0
+    response=${1:200},
+    description="${2:请求成功，返回数据}",
+    allOf={
+	    @SWG\Schema(ref="#/definitions/${3:common-response}"),
+    },
+    @SWG\Property(
+        property="data",
+        type="object",
+        allOf={
+            ${4:schema}
+        },
+    ),
+),$0
 endsnippet
 
 snippet swgschm "@SWG\Schema" i
@@ -38,25 +48,25 @@ endsnippet
 
 snippet swgdef "@SWG\Definition()" i
 @SWG\Definition(
-*     definition="${1:award-applicant}",
-*     description="${2:请求参数}",
-*     ${3}
-* ),$0
+    definition="${1:award-applicant}",
+    description="${2:请求参数}",
+    ${3}
+),$0
 endsnippet
 
 snippet swgppt "@SWG\Property()" i
 @SWG\Property(
-*         property="${1:id}",
-*         type="${2:string}",
-*         example="${3}",
-*         description="${4:id}",
-*     ),$0
+    property="${1:id}",
+    type="${2:string}",
+    example="${3}",
+    description="${4:id}",
+),$0
 endsnippet
 
 snippet swgallof "allOf={}" i
 allOf={
-*         ${1}
-*     },${0}
+    ${1}
+},${0}
 endsnippet
 
 snippet swgref "ref='#/definitions/xxx'" i

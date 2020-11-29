@@ -1,0 +1,45 @@
+snippet tbl "Table" b
+Table(${1:table_name}, ${2:简介}) {
+    ${3:...}
+}$0
+endsnippet
+
+snippet col "Column" b
+Column("${1:name}", "${2:type}"${3:, ${4:notNull}${5:, "${6:defaultValue}"${7:, "${8:label}"${9:, "${10:desc}"}}}})$0
+endsnippet
+
+snippet uq "UNIQUE" i
+UQ("${1}")
+endsnippet
+
+snippet un "UNSIGNED" i
+UN("${1}")
+endsnippet
+
+snippet vc "VARCHAR" i
+VARCHAR[${1:255}]${0}
+endsnippet
+
+snippet ti "TINYINT" i
+TINYINT${1:[${2:1}]}${0}
+endsnippet
+
+snippet dc "DECIMAL" i
+DECIMAL[${1:10${2:,${3:2}}}]
+endsnippet
+
+snippet txt "TEXT" i
+TEXT
+endsnippet
+
+snippet pkt "PK_TYPE" i
+PK_TYPE
+endsnippet
+
+snippet pk "PRIMARY_KEY" b
+PRIMARY_KEY
+endsnippet
+
+snippet ts "TIMESTAMPS" b
+TIMESTAMPS
+endsnippet
