@@ -1,9 +1,11 @@
+*.swo
+*.swp
 .VimballRecord
 .netrwhist
 0/
 GetLatest/
+UltiSnips/php/company_*.snippets
 addons/
-plugged/
 after/
 api/
 autoload/
@@ -13,11 +15,10 @@ doc/
 filetype.vim
 ftdetect/
 ftplugin/
+plugged/
 plugin/
 private.vim
 sessions/
 syntax/
 test/
-*.swp
-*.swo
-UltiSnips/php/company_*.snippets
+undodir/
