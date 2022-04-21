@@ -23,6 +23,10 @@ snippet lerr "Log::error()" b
 Log::error('${1}'${2:.json_encode(${3:$request->all()})});${0}
 endsnippet
 
+snippet ldbg "Log::debug()" b
+\Illuminate\Support\Facades\Log::debug(${1});${0}
+endsnippet
+
 snippet lctbl "migration: create table" b
 Schema::create('${1:users}', function (Blueprint $table) {
     ${2:$table->increments('id')->comment('ID');}${0}
@@ -161,8 +165,12 @@ snippet ..when "->when()" i
 }${6})${0}
 endsnippet
 
-snippet ..order "->orderBy()" i
+snippet ..ob "->orderBy()" i
 ->orderBy(${1:'${2}', '${3:desc}'})${0}
+endsnippet
+
+snippet ..obr "->orderByRaw()" i
+->orderByRaw('${1}')${0}
 endsnippet
 
 snippet ..insert "->insert() or ->insertGetId()" i
@@ -173,7 +181,11 @@ snippet ..update "->update()" i
 ->update(${1})${0}
 endsnippet
 
-snippet ..group "->groupBy()" i
+snippet ..reduce "->reduce()" i
+->reduce(${1})${0}
+endsnippet
+
+snippet ..gb "->groupBy()" i
 ->groupBy('${1}')${0}
 endsnippet
 
@@ -201,8 +213,20 @@ snippet ..fir "->first()" i
 ->first()${0}
 endsnippet
 
+snippet ..exi "->exists()" i
+->exists()${0}
+endsnippet
+
+snippet ..arr "->toArray()" i
+->toArray()${0}
+endsnippet
+
 snippet ..count "->count()" i
 ->count(${1})${0}
+endsnippet
+
+snippet ..lim "->limit()" i
+->limit(${1:10})${0}
 endsnippet
 
 snippet ..min "->min()" i
@@ -225,15 +249,15 @@ snippet ..dist "->distinct()" i
 ->distinct()${0}
 endsnippet
 
-snippet ..join "->join()" i
+snippet ..j "->join()" i
 ->join('${1}', ${2:'${3}', '${4:=}', '${5}'})${0}
 endsnippet
 
-snippet ..ljoin "->leftJoin()" i
+snippet ..lj "->leftJoin()" i
 ->leftJoin('${1}', ${2:'${3}', '${4:=}', '${5}'})${0}
 endsnippet
 
-snippet ..rjoin "->rightJoin()" i
+snippet ..rj "->rightJoin()" i
 ->rightJoin('${1}', ${2:'${3}', '${4:=}', '${5}'})${0}
 endsnippet
 
@@ -281,6 +305,18 @@ snippet ..sql "->toSql()" i
 ->toSql()${0}
 endsnippet
 
+snippet ..each "->each()" i
+->each(${1})${0}
+endsnippet
+
+snippet ..map "->map()" i
+->map(${1})${0}
+endsnippet
+
+snippet ..kb "->keyBy()" i
+->keyBy(${1})${0}
+endsnippet
+
 snippet dbc "DB::connection()" i
 DB::connection('${1}')${0:;}
 endsnippet
@@ -295,6 +331,10 @@ endsnippet
 
 snippet dbstmt "DB::statement()" b
 DB::statement('${1}');${0}
+endsnippet
+
+snippet dbtrans "DB::transaction()" b
+DB::transaction(${1});${0}
 endsnippet
 
 snippet dbbegin "DB::beginTransaction()" b
@@ -347,10 +387,68 @@ snippet dd "dd()" b
 dd($1);${0}
 endsnippet
 
-snippet lqlog1 "DB::connection()->enableQueryLog()" b
-\DB::connection()->enableQueryLog();${0}
+snippet leqlog "DB::enableQueryLog()" b
+\DB::enableQueryLog();${0}
 endsnippet
 
-snippet lqlog2 "DB::getQueryLog()" b
+snippet lgqlog "DB::getQueryLog()" b
 $logs = \DB::getQueryLog();${0}
+endsnippet
+
+snippet llqlog "Save query logs to log" b
+collect(\DB::getQueryLog())->each(function (array $log): void {
+    \Illuminate\Support\Facades\Log::debug(\Safe\json_encode($log));
+});${0}
+endsnippet
+
+############################## Helpers ##############################
+
+snippet aonly "Arr::only()" i
+Arr::only($${1:arr}, ${2})${0}
+endsnippet
+
+snippet afirst "Arr::first()" i
+Arr::first($${1:arr})${0}
+endsnippet
+
+snippet awhere "Arr::where()" i
+Arr::where($${1:arr}, ${2})${0}
+endsnippet
+
+############################## snippets ##############################
+snippet snip_stream_download_zip "Snippet: Stream Download Zip" b
+return response()->streamDownload(function () use ($file_list): void {
+	$options = new ArchiveOption();
+	$options->setContentType('application/octet-stream');
+	$options->setSendHttpHeaders(true);
+	$options->setStatFiles(true);
+	$options->setZeroHeader(true);
+
+	$zip = new ZipStream('download.zip', $options);
+
+	foreach ($file_list as $file_info) {
+		if (($stream = Storage::cloud()->readStream($file_info['cloud_path'])) !== null) {
+			$options = new FileOption();
+			$options->setMethod(MethodOption::STORE());
+			$options->setSize($file_info['size']);
+			$zip->addFileFromStream($file_info['full_path'], $stream, $options);
+		} else {
+			throw new ErrorException('Could not open stream for reading');
+		}
+	}
+
+	$zip->finish();
+}, null, ['Content-length' => $content_length, 'Access-Control-Allow-Origin' => $request->headers->get('Origin')]);
+endsnippet
+
+snippet snip_stream_download_csv "Snippet: Stream Download CSV" b
+return response()->streamDownload(function () use ($request): void {
+	$fd = \Safe\fopen('php://output', 'wb+');
+	$export_field = $this->exportField();
+	\Safe\fwrite($fd, chr(0xEF) . chr(0xBB) . chr(0xBF));
+	\Safe\fwrite($fd, CsvRfcUtils::strPutCsv(array_keys($export_field)));
+	$this->query($request)->chunk(1000, function (Collection $collection) use ($fd, $export_field): void {
+		$this->exportData($collection, $export_field, $fd);
+	});
+}, $this->exportFileName());
 endsnippet

@@ -20,3 +20,4 @@ syntax/
 test/
 *.swp
 *.swo
+UltiSnips/php/company_*.snippets

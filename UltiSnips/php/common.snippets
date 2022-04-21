@@ -1,23 +1,37 @@
-clearsnippets array in
+clearsnippets array in id isa class var get
 
 snippet pub "Public function" b
-public function ${1:name}(${2:$param})
+public function ${1:name}(${2:$param})${3:: ${4:void}}
 {
-    ${VISUAL}${3:return null;}
+    ${VISUAL}${5:return null;}
 }$0
 endsnippet
 
 snippet pro "Protected function" b
-protected function ${1:name}(${2:$param})
+protected function ${1:name}(${2:$param})${3:: ${4:void}}
 {
-    ${VISUAL}${3:return null;}
+    ${VISUAL}${5:return null;}
 }$0
 endsnippet
 
 snippet pri "Private function" b
-private function ${1:name}(${2:$param})
+private function ${1:name}(${2:$param})${3:: ${4:void}}
 {
-    ${VISUAL}${3:return null;}
+    ${VISUAL}${5:return null;}
+}$0
+endsnippet
+
+snippet met "Class method" b
+${1|public,protected,private|} function ${2:name}(${3:$param})${4:: ${5:void}}
+{
+    ${VISUAL}${6:return null;}
+}$0
+endsnippet
+
+snippet test "PHPUnit: test method" b
+public function test${1:name}(${2:$param})${3:: ${4:void}}
+{
+    ${VISUAL}${5:return null;}
 }$0
 endsnippet
 
@@ -25,8 +39,20 @@ snippet .. "->" i
 ->${0}
 endsnippet
 
+snippet : "=>" i
+=>${0}
+endsnippet
+
+snippet vs "$a <=> $b" i
+${1:$${2:a}} <=> ${3:$${4:b}}
+endsnippet
+
 snippet this "$this->" i
 $this->${0}
+endsnippet
+
+snippet self "self::" i
+self::${0}
 endsnippet
 
 snippet vbq "$query" i
@@ -49,7 +75,7 @@ snippet vb "Variable" i
 $${1:id}${0}
 endsnippet
 
-snippet objppt "$obj->property" i
+snippet ppt "$obj->property" i
 $${1:user}->${2:id}
 endsnippet
 
@@ -110,15 +136,19 @@ try {
 endsnippet
 
 snippet clos "function($param) use ($var) {}" i
-function ($${1:param})${2: use ($${3:var})} {${4}}${0}
+function (${1:param})${2: use (${3:var})}${4:: ${5:void}} {${6}}${0}
 endsnippet
 
-snippet todo "// TODO: " "re.match('^\s*', snip.buffer[snip.line-1])" be
-// TODO donie: ${1}
+snippet fn "Arrow function" i
+fn(${1:param}) => ${2:expression}
 endsnippet
 
-snippet todo "// TODO: " "re.match('^\s*// ', snip.buffer[snip.line-1])" ie
-TODO donie: ${1}
+snippet todo "// TODO: " "re.match('^\s*', snip.buffer[snip.line])" be
+// TODO lidong: ${1}
+endsnippet
+
+snippet todo "// TODO: " "re.match('^\s*// ', snip.buffer[snip.line])" ie
+TODO lidong: ${1}
 endsnippet
 
 snippet kv "key => value pair" i
@@ -182,16 +212,24 @@ snippet emp "empty() or !empty()" i
 ${1:! }empty(${2:$${3:var}})${0}
 endsnippet
 
+snippet us "usort()" i
+\Safe\usort(${1:$${2:arr}}, ${3:callback});${0}
+endsnippet
+
 snippet jenc "json_encode()" i
-json_encode(${1:$${2:var}})${0}
+${1:\Safe\\}json_encode(${2:$${3:var}})${0}
 endsnippet
 
 snippet jdec "json_decode()" i
-json_decode(${1:$${2:var}}${3:, true})${0}
+\Safe\json_decode(${1:$${2:var}}${4:, true})${0}
 endsnippet
 
 snippet fexists "function_exists()" i
 function_exists('${1}')
+endsnippet
+
+snippet isarr "is_array()" i
+is_array(${1})${0}
 endsnippet
 # php functions end
 
@@ -215,6 +253,10 @@ endsnippet
 
 snippet thr "@throws" i
 @throws ${1:\Exception}
+endsnippet
+
+snippet arr "/* @param|return|var array<mixed,mixed> */" "re.search(r'@(param|return|var)', snip.buffer[snip.line])" ie
+array<${1|int,string|},${2|int,string,mixed|}>${0}
 endsnippet
 # php comment end
 
@@ -243,4 +285,10 @@ endsnippet
 
 snippet thr "throw new Exception" b
 throw new ${1:Client}Exception('${2}', ${3:422});${0}
+endsnippet
+
+snippet ma "match expression" i
+match (${1}) {
+    ${2}
+};${0}
 endsnippet
