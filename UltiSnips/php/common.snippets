@@ -48,7 +48,7 @@ ${1:$${2:a}} <=> ${3:$${4:b}}
 endsnippet
 
 snippet this "$this->" i
-$this->${0}
+\$this->${0}
 endsnippet
 
 snippet self "self::" i
@@ -56,19 +56,19 @@ self::${0}
 endsnippet
 
 snippet vbq "$query" i
-$query${0}
+\$query${0}
 endsnippet
 
 snippet vbr "$result" i
-$result${0}
+\$result${0}
 endsnippet
 
 snippet vbd "$data" i
-$data${0}
+\$data${0}
 endsnippet
 
 snippet vbi "$item" i
-$item${0}
+\$item${0}
 endsnippet
 
 snippet vb "Variable" i
@@ -188,6 +188,10 @@ snippet akeys "array_keys()" i
 array_keys(${1:$${2:arr}})${0}
 endsnippet
 
+snippet ake "array_key_exists()" i
+array_key_exists(${1:key}, ${2:$${3:arr}})${0}
+endsnippet
+
 snippet auq "array_unique()" i
 array_unique(${1:$${2:arr}})${0}
 endsnippet
@@ -262,20 +266,20 @@ endsnippet
 
 # unit tests start
 snippet asm "$this->assertEmpty()" b
-$this->assertEmpty(${1:$${2:arr}});${0}
+\$this->assertEmpty(${1:$${2:arr}});${0}
 endsnippet
 
 snippet asnm "$this->assertNotEmpty()" b
-$this->assertNotEmpty(${1:$${2:arr}});${0}
+\$this->assertNotEmpty(${1:$${2:arr}});${0}
 endsnippet
 # unit tests end
 
 snippet st "$st = microtime(true);" b
-$st = microtime(true);${0}
+\$st = microtime(true);${0}
 endsnippet
 
 snippet et "$et = microtime(true);" b
-$et = microtime(true);
+\$et = microtime(true);
 var_dump('${1:1}:'.($et-$st));${0}
 endsnippet
 

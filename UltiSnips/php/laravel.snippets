@@ -40,47 +40,47 @@ Schema::table('${1:users}', function (Blueprint $table) {
 endsnippet
 
 snippet lstring "migration: table->string()" b
-$table->string('${1:email}', ${2:50})${3:->nullable()}->comment('${4:电邮}');${0}
+$table->string('${1:email}', ${2:50})${0}
 endsnippet
 
 snippet lint "migration: table->integer()" b
-$table->integer('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
+$table->integer('${1:age}')${0}
 endsnippet
 
 snippet luint "migration: table->unsignedInteger()" b
-$table->unsignedInteger('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
+$table->unsignedInteger('${1:age}')${0}
 endsnippet
 
 snippet lbint "migration: table->bigInteger()" b
-$table->bigInteger('${1:user_id}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:用户ID}');${0}
+$table->bigInteger('${1:user_id}')${0}
 endsnippet
 
 snippet lubint "migration: table->unsignedBigInteger()" b
-$table->unsignedBigInteger('${1:user_id}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:用户ID}');${0}
+$table->unsignedBigInteger('${1:user_id}')${0}
 endsnippet
 
 snippet ltint "migration: table->tinyInteger()" b
-$table->tinyInteger('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
+$table->tinyInteger('${1:age}')${0}
 endsnippet
 
 snippet lutint "migration: table->unsignedTinyInteger()" b
-$table->unsignedTinyInteger('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
+$table->unsignedTinyInteger('${1:age}')${0}
 endsnippet
 
 snippet lsint "migration: table->smallInteger()" b
-$table->smallInteger('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
+$table->smallInteger('${1:age}')${0}
 endsnippet
 
 snippet lusint "migration: table->unsignedSmallInteger()" b
-$table->unsignedSmallInteger('${1:age}')${3:->nullable()}${4:->default(${5:0})}->comment('${6:年龄}');${0}
+$table->unsignedSmallInteger('${1:age}')${0}
 endsnippet
 
 snippet ldecimal "migration: table->decimal()" b
-$table->decimal('${1:price}', ${3:10}, ${4:2})${5:->nullable()}${6:->default(${7:0})}->comment('${8:价格}');${0}
+$table->decimal('${1:price}', ${3:10}, ${4:2})${0}
 endsnippet
 
 snippet lbool "migration: table->boolean()" b
-$table->boolean('${1:email}')${2:->nullable()}${3:->default(${4:1})}->comment('${5:是否显示}');${0}
+$table->boolean('${1:email}')${2:->nullable()}${0}
 endsnippet
 
 snippet ltss "migration: table->timestamps()" b
@@ -88,7 +88,11 @@ $table->timestamps();
 endsnippet
 
 snippet lts "migration: table->timestamp()" b
-$table->timestamp('${1}')${2:->nullable()}${3:->default(${4:1})}->comment('${5:是否显示}');${0}
+$table->timestamp('${1}')${0}
+endsnippet
+
+snippet lenum "migration: table->enum()" b
+$table->enum('${1:type}', ${2:[${3}]})${0}
 endsnippet
 
 snippet ldrop "migration: Schema::drop()" b
@@ -100,11 +104,15 @@ $table->dropColumn('${1}');${0}
 endsnippet
 
 snippet ltext "migration: table->text()" b
-$table->text('${1:desc}')${2:->nullable()}->comment('${3:描述}');${0}
+$table->text('${1:desc}')${0}
 endsnippet
 
 snippet ldatetime "migration: table->datetime()" b
-$table->datetime('${1:created_at}')${2:->nullable()}->comment('${3:创建时间}');${0}
+$table->datetime('${1:created_at}')${0}
+endsnippet
+
+snippet ..after "->after()" i
+->after('${1}')$0
 endsnippet
 
 snippet laction "controller->action()" b
@@ -151,6 +159,10 @@ snippet ..raw "->whereRaw()" i
 ->whereRaw('${1}')${0}
 endsnippet
 
+snippet ..has "->whereHas()" i
+->whereHas('${1}')${0}
+endsnippet
+
 snippet ..hav "->having()" i
 ->having('${1}', '${2:>}', ${3})${0}
 endsnippet
@@ -183,6 +195,10 @@ endsnippet
 
 snippet ..reduce "->reduce()" i
 ->reduce(${1})${0}
+endsnippet
+
+snippet ..filter "->filter()" i
+->filter(${1})${0}
 endsnippet
 
 snippet ..gb "->groupBy()" i
