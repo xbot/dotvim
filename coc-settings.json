@@ -104,7 +104,7 @@
             "args": ["-config", "$HOME/.config/sqls/config.yml"],
             "filetypes": ["sql"],
             "shell": true
-        },
+        }
     },
     "Lua.workspace.library": {
         "/usr/local/share/nvim/runtime/lua": true,
@@ -117,6 +117,17 @@
         "/Users/donie/.hammerspoon/Spoons/EmmyLua.spoon/annotations": true
     },
     "Lua.diagnostics.globals": ["vim", "hs"],
+    "grammarly.filetypes": [
+        "asciidoc",
+        "gitcommit",
+        "gitrebase",
+        "tex",
+        "plaintex",
+        "context",
+        "markdown",
+        "text",
+        "rst"
+    ],
     "diagnostic-languageserver.filetypes": {
     },
     "diagnostic-languageserver.formatters": {
@@ -180,7 +191,6 @@
         "coc-settings.json",
         "tests/**/_baseline/**/*.json"
     ],
-    "prettier.tabWidth": 4,
     "suggest.completionItemKindLabels": {
 		"keyword": "\uf1de",
 		"variable": "\ue79b",
