@@ -3209,18 +3209,10 @@ let php_large_file = 0
 
 augroup php
     au!
-    au FileType php set formatprg=php_beautifier\ -l\ \"ArrayNested()\"
     au FileType php nnoremap <buffer> <A-F12> :call Preserve("normal! gggqG")<CR>
     au FileType php vnoremap <buffer> <A-F12> gq
-    au BufNewFile,BufRead *.lib,*.inc set filetype=php
-    au FileType php set complete+=k,set dict=$VIMRUNTIME/api/php.dict
     au FileType php set keywordprg=:help
     au FileType php set iskeyword=@,48-57,_,128-167,224-235
-    if IsPlatform('win')
-        au FileType php set runtimepath+=$VIM\php
-    else
-        au FileType php set runtimepath+=~/.vim/api/php
-    endif
     au FileType php set fdl=10
 augroup END
 
