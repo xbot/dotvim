@@ -1,11 +1,12 @@
 " cSpell: disable
 
+" ------------------------------ Plugins ------------------------------"{{{
+
 function! s:plugged(bundle)
     let plugs = get(g:, 'plugs', {})
     return has_key(plugs, a:bundle) ? isdirectory(plugs[a:bundle].dir) : 0
 endfunction
 
-" ------------------------------ Plugins ------------------------------"{{{
 call plug#begin('~/.vim/plugged')
 
 Plug '0x84/vim-coderunner'
