@@ -3296,11 +3296,6 @@ if s:plugged('coc.nvim')
         \'coc-yank',
         \]
 
-    " Add (Neo)Vim's native statusline support.
-    " NOTE: Please see `:h coc-status` for integrations with external plugins that
-    " provide custom statusline: lightline.vim, vim-airline.
-    set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
     nnoremap <leader>cocc :tabnew<CR>:CocConfig<CR>
 
     inoremap <silent><expr> <C-n>  coc#pum#visible() ? coc#pum#next(1)       : "\<C-n>"
@@ -3418,7 +3413,7 @@ if s:plugged('coc.nvim')
 
     command! -nargs=0 CocFormat :call CocAction('format')<CR>
 
-    augroup mygroup
+    augroup coc
         autocmd!
         " Setup formatexpr specified filetype(s).
         autocmd FileType typescript,json,php setl formatexpr=CocAction('formatSelected')
