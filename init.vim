@@ -663,6 +663,12 @@ if s:plugged('ultisnips')
     " endfunction"}}}
 endif
 
+" vim-grepper settings
+if s:plugged('vim-grepper')
+    nmap <leader>gs <plug>(GrepperOperator)
+    xmap <leader>gs <plug>(GrepperOperator)
+endif
+
 " Ferret settings
 " @see https://0x3f.org/posts/the-best-practice-of-searching-in-vim/
 if s:plugged('ferret')
@@ -2137,12 +2143,6 @@ dap.adapters.nlua = function(callback, config)
   callback({ type = 'server', host = config.host, port = config.port })
 end
 END
-endif
-
-" vim-grepper settings
-if s:plugged('vim-grepper')
-    nmap <leader>gs <plug>(GrepperOperator)
-    xmap <leader>gs <plug>(GrepperOperator)
 endif
 
 " copilot.vim settings
