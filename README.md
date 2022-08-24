@@ -30,7 +30,7 @@ neovim
 vim
 ```
 
-`~/.mackup/vim.cfg`
+`~/.mackup/dotvim.cfg`
 
 ```ini
 [application]
@@ -39,7 +39,6 @@ name = dotvim
 [configuration_files]
 .vim/UltiSnips
 .vim/after
-.vim/api
 .vim/autoload
 .vim/coc-settings.json
 .vim/colors
@@ -69,7 +68,6 @@ cd ~/.vim
 
 ln -s ~/Dropbox/Mackup/.vim/UltiSnips .
 ln -s ~/Dropbox/Mackup/.vim/after .
-ln -s ~/Dropbox/Mackup/.vim/api .
 ln -s ~/Dropbox/Mackup/.vim/autoload .
 ln -s ~/Dropbox/Mackup/.vim/coc-settings.json .
 ln -s ~/Dropbox/Mackup/.vim/colors .
