@@ -47,8 +47,6 @@ Plug 'mbbill/fencview'
 Plug 'mhinz/vim-startify'
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'on': ['ViraIssues', 'ViraReport', 'ViraLoadProject', 'ViraSetActiveTicket', 'ViraFilterEdit'] }
 Plug 'preservim/nerdcommenter'
-Plug 'rhysd/conflict-marker.vim'
-Plug 'rhysd/git-messenger.vim'
 Plug 'rizzatti/dash.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'segeljakt/vim-silicon'
@@ -126,6 +124,9 @@ Plug 'tpope/vim-rhubarb'
 Plug 'junegunn/gv.vim'
 Plug 'rbong/vim-flog'
 Plug 'sodapopcan/vim-twiggy'
+" Plug 'akinsho/git-conflict.nvim', { 'tag': 'v1.0.0' } " Buggy at present, but with more features than conflict-marker
+Plug 'rhysd/conflict-marker.vim'
+Plug 'rhysd/git-messenger.vim'
 
 " EnhancedJumps group
 Plug 'inkarkat/vim-ingo-library'
@@ -1346,9 +1347,11 @@ endif
 if s:plugged('coc.nvim')
     nnoremap <leader>gc  <Cmd>CocList branches<CR>
 endif
+" git-time-lapse settings
 if s:plugged('git-time-lapse')
     nnoremap <leader>gtl <Cmd>GitTimeLapse<CR>
 endif
+" vim-twiggy settings
 if s:plugged('vim-twiggy')
     nnoremap <leader>lb :Twiggy<CR>
 
@@ -1356,6 +1359,19 @@ if s:plugged('vim-twiggy')
     let g:twiggy_local_branch_sort     = 'mru'
     let g:twiggy_remote_branch_sort    = 'date'
     let g:twiggy_num_columns           = 50
+endif
+" git-conflict settings
+if s:plugged('git-conflict.nvim')
+lua << EOF
+require('git-conflict').setup({
+    default_mappings = true,
+    disable_diagnostics = false,
+    highlights = {
+        incoming = 'DiffText',
+        current = 'DiffAdd',
+    }
+})
+EOF
 endif
 
 " gv.vim settings
