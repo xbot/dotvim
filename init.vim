@@ -28,7 +28,6 @@ Plug 'dstein64/vim-startuptime'
 Plug 'farmergreg/vim-lastplace'
 Plug 'gcmt/wildfire.vim'
 Plug 'godlygeek/tabular'
-Plug 'haya14busa/incsearch.vim'
 Plug 'jacoborus/tender.vim'
 Plug 'janko-m/vim-test'
 Plug 'jiangmiao/auto-pairs'
@@ -140,6 +139,7 @@ Plug 'honza/vim-snippets'
 if has('nvim')
     Plug 'kyazdani42/nvim-web-devicons'
     Plug 'akinsho/bufferline.nvim', { 'tag': 'v2.6.0' }
+    " Plug 'akinsho/bufferline.nvim', { 'tag': 'v2.*' }
     Plug 'nvim-lualine/lualine.nvim'
 else
     " airline group
@@ -217,7 +217,7 @@ if has('nvim')
     Plug 'akinsho/toggleterm.nvim', {'tag' : 'v2.*'}
     Plug 'elihunter173/dirbuf.nvim' " Conflict with dirvish
     Plug 'f-person/git-blame.nvim'
-    Plug 'github/copilot.vim'
+    " Plug 'github/copilot.vim'
     Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
     Plug 'kevinhwang91/nvim-bqf', { 'for': 'qf' } | Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'kevinhwang91/nvim-hlslens'
@@ -618,15 +618,10 @@ au FocusGained,BufEnter * if mode() == 'n' && getcmdwintype() == '' | checktime 
 
 " ------------------------------ Plugin Settings --------------------------{{{
 " FencView settings
-let g:fencview_autodetect    = 0
-let g:fencview_checklines    = 10
-let g:fencview_auto_patterns = '*.txt,*.htm{l\=},*.php,*.lib,*.inc,*.sql'
-
-" incsearch settings
-if s:plugged('incsearch.vim')
-    map /  <Plug>(incsearch-forward)
-    map ?  <Plug>(incsearch-backward)
-    map g/ <Plug>(incsearch-stay)
+if s:plugged('fencview')
+    let g:fencview_autodetect    = 0
+    let g:fencview_checklines    = 10
+    let g:fencview_auto_patterns = '*.txt,*.htm{l\=},*.php,*.lib,*.inc,*.sql'
 endif
 
 " UltiSnips settings
@@ -924,7 +919,10 @@ require("bufferline").setup({
         right_mouse_command = nil,
         left_mouse_command = nil,
         middle_mouse_command = nil,
-        indicator_icon = "▎",
+        indicator = {
+            style = 'icon',
+            icon = '▎',
+        },
         buffer_close_icon = "",
         modified_icon = "●",
         close_icon = "",
@@ -1207,7 +1205,7 @@ cmp.setup({
         { name = 'nvim_lsp' },
         { name = 'ultisnips' },
         { name = 'buffer' },
-        { name = 'copilot' },
+        -- { name = 'copilot' },
     },
     formatting = {
         format = lspkind.cmp_format({with_text = false, maxwidth = 50}),
@@ -2301,12 +2299,55 @@ if s:plugged('wilder.nvim')
                 \ 'previous_key': '<S-Tab>',
                 \ 'accept_key': '<Down>',
                 \ 'reject_key': '<Up>',
-                \ 'enable_cmdline_enter': 0,
+                \ 'enable_cmdline_enter': 1,
                 \ })
-    " 'highlighter' : applies highlighting to the candidates
+
+    let find_cmd = 'find'
+    if IsPlatform('mac')
+        let find_cmd = 'gfind'
+    endif
+
+    call wilder#set_option('pipeline', [
+                \   wilder#branch(
+                \     wilder#python_file_finder_pipeline({
+                \       'file_command': [find_cmd, '.', '-type', 'f', '-printf', '%P\n'],
+                \       'dir_command': [find_cmd, '.', '-type', 'd', '-printf', '%P\n'],
+                \       'filters': ['fuzzy_filter', 'difflib_sorter'],
+                \     }),
+                \     wilder#cmdline_pipeline({
+                \       'fuzzy': 2,
+                \       'set_pcre2_pattern': 1,
+                \     }),
+                \     wilder#python_search_pipeline({
+                \       'pattern': 'fuzzy',
+                \     }),
+                \   ),
+                \ ])
+
     call wilder#set_option('renderer', wilder#popupmenu_renderer({
                 \ 'highlighter': wilder#basic_highlighter(),
+                \ 'pumblend': 20,
+                \ 'left': [
+                \   ' ', wilder#popupmenu_devicons(),
+                \ ],
+                \ 'right': [
+                \   ' ', wilder#popupmenu_scrollbar(),
+                \ ],
                 \ }))
+
+    " call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_palette_theme({
+    "             \ 'border': 'rounded',
+    "             \ 'max_height': '75%',
+    "             \ 'min_height': 0,
+    "             \ 'prompt_position': 'top',
+    "             \ 'reverse': 0,
+    "             \ 'left': [
+    "             \   ' ', wilder#popupmenu_devicons(),
+    "             \ ],
+    "             \ 'right': [
+    "             \   ' ', wilder#popupmenu_scrollbar(),
+    "             \ ],
+    "             \ })))
 endif
 
 " neoformat settings
@@ -2557,12 +2598,15 @@ if s:plugged('vim-maximizer')
     vnoremap <leader>mm :MaximizerToggle<CR>gv
     inoremap <leader>mm <C-o>:MaximizerToggle<CR>
 endif
+
 " Jump to next window and maximize it.
 " Notice that <TAB> is equivalent to <C-I> in some conditions,
 " so remap <C-I> as an opposite of <C-O>.
 nmap     <Tab>   <C-W>j<C-W>_
 nnoremap <S-Tab> <C-W>k<C-W>_
-nnoremap <C-U>   <C-I>
+" <C-U> is used to scroll window upwards, find another available hotkey when
+" it's needed.
+" nnoremap <C-U>   <C-I>
 
 " Move window around
 " :h window-moving
