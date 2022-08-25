@@ -20,5 +20,6 @@ plugin/
 private.vim
 sessions/
 syntax/
+tags
 test/
 undodir/
