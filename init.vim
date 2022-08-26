@@ -81,19 +81,23 @@ Plug 'fatih/vim-go',                 { 'for': 'go'        }
 Plug 'Blackrush/vim-gocode',         { 'for': 'go'        }
 
 " colorschemes
+Plug 'altercation/vim-colors-solarized'
 Plug 'arcticicestudio/nord-vim'
 Plug 'base16-project/base16-vim'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'joshdick/onedark.vim'
 Plug 'ldelossa/vimdark'
 Plug 'lifepillar/vim-solarized8'
-Plug 'altercation/vim-colors-solarized'
 Plug 'liuchengxu/space-vim-theme'
 Plug 'morhetz/gruvbox'
 if has('nvim')
+    Plug 'EdenEast/nightfox.nvim'
+    Plug 'LunarVim/horizon.nvim'
     Plug 'Mofiqul/dracula.nvim'
+    Plug 'NTBBloodbath/doom-one.nvim'
 else
     Plug 'dracula/vim', { 'as': 'dracula' }
+    Plug 'romgrk/doom-one.vim'
 endif
 
 " LeaderF group
@@ -530,20 +534,22 @@ else
     " colorscheme base16-oned
 
     if has('nvim')
-        set background=light
-        " set background=dark
-        let g:tokyonight_style = 'day' " available: night, storm, day
-        let g:tokyonight_italic_functions = 1
-        " let g:tokyonight_transparent = 1
-        " let g:tokyonight_transparent_sidebar = 1
-        " let g:tokyonight_dark_sidebar = 1
-        " let g:tokyonight_dark_float = 1
-        " Change the "hint" color to the "orange" color, and make the "error" color bright red
-        let g:tokyonight_colors = {
-                    \ 'hint': 'orange',
-                    \ 'error': '#ff0000',
-                    \ }
-        colorscheme tokyonight
+        " set background=light
+        " " set background=dark
+        " let g:tokyonight_style = 'day' " available: night, storm, day
+        " let g:tokyonight_italic_functions = 1
+        " " let g:tokyonight_transparent = 1
+        " " let g:tokyonight_transparent_sidebar = 1
+        " " let g:tokyonight_dark_sidebar = 1
+        " " let g:tokyonight_dark_float = 1
+        " " Change the "hint" color to the "orange" color, and make the "error" color bright red
+        " let g:tokyonight_colors = {
+        "             \ 'hint': 'orange',
+        "             \ 'error': '#ff0000',
+        "             \ }
+        " colorscheme tokyonight
+
+        set background=dark | colorscheme doom-one
     else
         set background=light
         let g:solarized_termcolors=256
@@ -982,7 +988,7 @@ require('lualine').setup{
     },
     sections = {
         lualine_a = { 'mode' },
-        lualine_b = { 'branch' },
+        lualine_b = { {'branch', icon = ''} },
         lualine_c = {
             {
                 'filename',
