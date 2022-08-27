@@ -20,6 +20,7 @@
     "snippets.loadVSCodeProjectSnippets": false,
     "snippets.userSnippetsDirectory": "~/.vim/UltiSnips",
     "codeLens.enable": true,
+    "intelephense.client.disableInlayHints": false,
     "intelephense.diagnostics.enable": false,
     "intelephense.progress.enable": true,
     "intelephense.environment.phpVersion": "8.1.0",
