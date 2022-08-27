@@ -64,7 +64,6 @@ Plug 'tyru/open-browser.vim'
 Plug 'vim-scripts/Align'
 Plug 'vim-scripts/SQLUtilities'
 Plug 'weirongxu/plantuml-previewer.vim'
-Plug 'wellle/targets.vim'
 
 Plug 'peterhoeg/vim-qml',            { 'for': 'qml'       }
 Plug 'vim-scripts/Pydiction',        { 'for': 'python'    }
@@ -171,6 +170,7 @@ endif
 
 " textobj-user group
 let g:textobj_lastpat_no_default_key_mappings=1
+Plug 'wellle/targets.vim'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-datetime'
 Plug 'kana/vim-textobj-diff'
@@ -186,12 +186,12 @@ Plug 'Julian/vim-textobj-variable-segment'
 " Plug 'kana/vim-textobj-underscore' " Also provided in targets.vim
 " Plug 'kentaro/vim-textobj-function-php' " Too old and 'if' works not as exptected in PHP syntax.
 
-" ctags group
+" ctags/gtags group
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'skywind3000/gutentags_plus'
+Plug 'xbot/gtags.vim'
 
 " offline plugins
-Plug '~/.vim/plugged/gtags'
 Plug '~/.vim/plugged/confluencewiki'
 
 " LSP group
@@ -827,18 +827,6 @@ augroup pdv
     au FileType php nnoremap <buffer> <leader>\\ :call pdv#DocumentWithSnip()<CR>
 augroup END
 
-" gtags settings
-let Gtags_Close_When_Single = 1
-let Gtags_Auto_Update       = 1
-let g:cscope_silent         = 1
-augroup gtags
-    au!
-    au FileType php,python,c,cpp,javascript,go map <buffer> <C-]> :Gtags<CR><CR>
-    if has('gui_running')
-        au FileType php,python,c,cpp,javascript,go map <buffer> <C-S-]> :Gtags -r<CR><CR>
-    endif
-augroup END
-
 " easy-align settings
 if s:plugged('vim-easy-align')
     vmap <leader>al <Plug>(EasyAlign)
@@ -850,23 +838,28 @@ let g:markdown_fenced_languages = ['html', 'python', 'ruby', 'vim', 'php', 'bash
 
 " leaderf settings
 if s:plugged('LeaderF')"{{{
-    let g:Lf_ShortcutF       = '<C-P>'
+
+    let g:Lf_CommandMap      = {'<c-c>': ['<esc>', '<c-c>']}
     let g:Lf_DefaultMode     = 'NameOnly'
     let g:Lf_DelimiterChar   = ";"
-    let g:Lf_WindowPosition  = 'popup'
-    let g:Lf_PreviewInPopup  = 1
-    let g:Lf_CommandMap      = {'<c-c>': ['<esc>', '<c-c>']}
-    let g:Lf_ExternalCommand = 'rg --files --no-ignore --follow "%s"'
-    let g:Lf_ReverseOrder    = 1
-    let g:Lf_StlSeparator    = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "Cascadia Code PL" }
-    let g:Lf_ShowDevIcons    = 1
     let g:Lf_DevIconsFont    = "CaskaydiaCove Nerd Font"
+    let g:Lf_ExternalCommand = 'rg --files --no-ignore --follow "%s"'
+    let g:Lf_PopupShowFoldcolumn = 0 " Bring left border of the popup window into alignment.
+    let g:Lf_PreviewInPopup  = 1
+    let g:Lf_ReverseOrder    = 1
+    let g:Lf_ShortcutF       = '<C-P>'
+    let g:Lf_ShowDevIcons    = 1
     let g:Lf_ShowHidden      = 1
+    let g:Lf_StlSeparator    = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "Cascadia Code PL" }
+    let g:Lf_WindowPosition  = 'popup'
+
     let g:Lf_RgConfig        = [
         \ "--hidden"
     \ ]
-    " Bring left border of the popup window into alignment.
-    let g:Lf_PopupShowFoldcolumn = 0
+    
+    let g:Lf_GtagsAutoGenerate = 0
+    let g:Lf_GtagsGutentags = 1
+    let g:Lf_CacheDirectory = expand('~')
 
     " " Looks not so good.
     " let g:Lf_PopupShowBorder = 1
@@ -885,8 +878,20 @@ if s:plugged('LeaderF')"{{{
     nmap <leader>mru :LeaderfMru<CR>
     nmap <leader>ot  :call <SID>flexible_leaderf_tag()<CR>
 
+    noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
+    noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
+    noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+    noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+    noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
+
     function! s:flexible_leaderf_tag()"{{{
-        let l:cmd = "Leaderf tag"
+        let l:sub_cmd = 'tag'
+
+        if exists('g:gutentags_modules') && index(g:gutentags_modules, 'gtags_cscope') >= 0
+            let l:sub_cmd = 'gtags'
+        endif
+
+        let l:cmd = "Leaderf " . l:sub_cmd
 
         let l:cword = s:get_cword_safely()
         if l:cword != ''
@@ -1463,23 +1468,54 @@ if s:plugged('vim-startify')
 endif
 
 " Gutentags settings
-if s:plugged('vim-gutentags') && s:plugged('gutentags_plus')
-    let g:gutentags_plus_nomap = 1
-    " let g:gutentags_define_advanced_commands = 1
-    " enable gtags module
-    let g:gutentags_modules = ['ctags', 'gtags_cscope']
-    " config project root markers.
-    " let g:gutentags_project_root = ['.root']
-    " generate datebases in my cache directory, prevent gtags files polluting my project
-    if has('nvim')
-        let g:gutentags_cache_dir = expand('~/.cache/tags')
-    else
-        let g:gutentags_cache_dir = expand('~/.cache/vim_tags')
-    endif
-    " change focus to quickfix window after search (optional).
+if s:plugged('vim-gutentags')
+
+    " Use gtags
+    let g:gutentags_modules = ['gtags_cscope']
+
+    " " Use ctags
+    " let g:gutentags_modules = ['ctags']
+    " let g:gutentags_ctags_exclude = ['_ide_helper.php', '*.js', 'Makefile']
+    " let g:gutentags_ctags_extra_args = ['--PHP-kinds=+cdfint-va']
+    " let g:gutentags_project_root = ['.root'] " config project root markers.
+
+    let g:gutentags_cache_dir = expand(g:Lf_CacheDirectory . '/.LfCache/gtags')
+    let g:gutentags_define_advanced_commands = 1
+
+endif
+if s:plugged('gutentags_plus')
+
+    let g:gutentags_plus_nomap  = 1
     let g:gutentags_plus_switch = 1
-    let g:gutentags_ctags_exclude = ['_ide_helper.php', '*.js', 'Makefile']
-    let g:gutentags_ctags_extra_args = ['--PHP-kinds=+cdfint-va']
+
+    " noremap <silent> <leader>gc :GscopeFind s <C-R><C-W><cr>
+    " noremap <silent> <leader>gc :GscopeFind g <C-R><C-W><cr>
+    " noremap <silent> <leader>gc :GscopeFind c <C-R><C-W><cr>
+    " noremap <silent> <leader>gt :GscopeFind t <C-R><C-W><cr>
+    " noremap <silent> <leader>ge :GscopeFind e <C-R><C-W><cr>
+    " noremap <silent> <leader>gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
+    " noremap <silent> <leader>gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
+    " noremap <silent> <leader>gd :GscopeFind d <C-R><C-W><cr>
+    " noremap <silent> <leader>ga :GscopeFind a <C-R><C-W><cr>
+    " noremap <silent> <leader>gz :GscopeFind z <C-R><C-W><cr>
+
+endif
+
+" gtags settings
+if s:plugged('gtags.vim')
+
+    let Gtags_Auto_Update       = 1
+    let Gtags_Close_When_Single = 1
+    let g:cscope_silent         = 1
+
+    augroup gtags
+        au!
+        au FileType php,python,c,cpp,javascript,go map <buffer> <C-]> :Gtags<CR><CR>
+        if has('gui_running')
+            au FileType php,python,c,cpp,javascript,go map <buffer> <C-S-]> :Gtags -r<CR><CR>
+        endif
+    augroup END
+
 endif
 
 " undotree
