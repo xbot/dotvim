@@ -2476,6 +2476,15 @@ vim.g.dracula_colors = {
 EOF
 endif
 
+" open-browser settings
+if s:plugged('open-browser.vim')
+
+    let g:netrw_nogx = 1 " disable netrw's gx mapping.
+	nmap gx <Plug>(openbrowser-smart-search)
+	vmap gx <Plug>(openbrowser-smart-search)
+
+endif
+
 "}}}
 
 " ------------------------------ Auto Commands ------------------------------"{{{
@@ -2780,12 +2789,6 @@ nmap <silent> <leader><leader>ds <Plug>DashSearch
 " Open MR of the current branch in web browser
 nmap <leader><leader>mr :AsyncRun glab mr view -w<CR>
 
-" Open the link under cursor
-if IsPlatform('mac')
-    nnoremap gx <Cmd>call jobstart(["open", expand("<cfile>")], {"detach": v:true})<CR>
-elseif IsPlatform('unix')
-    nnoremap gx <Cmd>call jobstart(["xdg-open", expand("<cfile>")], {"detach": v:true})<CR>
-endif
 "}}}
 
 " ------------------------------ Functions -----------------------------{{{
