@@ -2485,6 +2485,15 @@ if s:plugged('open-browser.vim')
 
 endif
 
+" vim-illuminate settings
+if s:plugged('vim-illuminate')
+
+    hi link IlluminatedWordText  Visual
+    hi link IlluminatedWordRead  Visual
+    hi link IlluminatedWordWrite Visual
+
+endif
+
 "}}}
 
 " ------------------------------ Auto Commands ------------------------------"{{{
