@@ -1974,16 +1974,13 @@ endif
 
 " vista settings
 if s:plugged('vista.vim')
+
     nnoremap <silent> <leader>tb :Vista!!<CR>
 
     let g:vista_ignore_kinds = ['Variable', 'Function']
     let g:vista_sidebar_position = 'vertical botright'
     let g:vista_sidebar_width = 50
     let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
-    let g:vista_default_executive = 'coc'
-    let g:vista_executive_for = {
-                \ 'php': 'coc',
-                \ }
     let g:vista_fzf_preview = ['right:50%']
     let g:vista#renderer#enable_icon = 1
     let g:vista#renderer#icons = {
@@ -1991,6 +1988,19 @@ if s:plugged('vista.vim')
                 \   "variable": "\uf71b",
                 \  }
     let g:vista_stay_on_open = 0
+
+    if s:plugged('coc.nvim')
+        let g:vista_default_executive = 'coc'
+        let g:vista_executive_for = {
+                    \ 'php': 'coc',
+                    \ }
+    elseif s:plugged('nvim-lspconfig')
+        let g:vista_default_executive = 'nvim_lsp'
+        let g:vista_executive_for = {
+                    \ 'php': 'nvim_lsp',
+                    \ }
+    endif
+
 endif
 
 " Telescope settings
