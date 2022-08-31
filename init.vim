@@ -1470,14 +1470,14 @@ endif
 " Gutentags settings
 if s:plugged('vim-gutentags')
 
-    " Use gtags
-    let g:gutentags_modules = ['gtags_cscope']
+    " " Use gtags
+    " let g:gutentags_modules = ['gtags_cscope']
 
-    " " Use ctags
-    " let g:gutentags_modules = ['ctags']
-    " let g:gutentags_ctags_exclude = ['_ide_helper.php', '*.js', 'Makefile']
-    " let g:gutentags_ctags_extra_args = ['--PHP-kinds=+cdfint-va']
-    " let g:gutentags_project_root = ['.root'] " config project root markers.
+    " Use ctags
+    let g:gutentags_modules          = ['ctags', 'gtags_cscope']
+    let g:gutentags_ctags_exclude    = ['_ide_helper.php', 'Makefile', 'node_modules', '*.js', '*.json', '*.md', '*.ts']
+    let g:gutentags_ctags_extra_args = ['--PHP-kinds=+cdfint-va']
+    let g:gutentags_project_root     = ['.git'] " config project root markers.
 
     let g:gutentags_cache_dir = expand(g:Lf_CacheDirectory . '/.LfCache/gtags')
     let g:gutentags_define_advanced_commands = 1
