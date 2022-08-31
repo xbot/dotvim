@@ -2,6 +2,15 @@
 {
     "diagnostic.enable": true,
     "diagnostic.displayByAle": false,
+    "diagnostic.floatConfig": {
+        "border": true,
+        "rounded": true,
+        "title": "Diagnostic",
+        "shadow": false,
+        "close": true,
+        "winblend": 20,
+        "focusable": true
+    },
     "list.height": 20,
     "list.source.files.command": "rg",
     "list.source.files.args": ["--files","--no-ignore"],

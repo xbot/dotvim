@@ -3540,7 +3540,17 @@ if s:plugged('coc.nvim')
     " vim-test is more convinient to run tests.
     " nmap <silent> gl <Plug>(coc-codelens-action)
 
-    highlight CocFloating guibg=#99cccc guifg=#336699
+    " --- Highlight groups BEGIN ---
+
+    if g:colors_name == 'tokyonight' && &background == 'light'
+        " Compatible to colorscheme tokyonight
+        highlight CocFloating guibg=#E1E2E6 guifg=#336699
+    else
+        " Compatible to most colorschemes
+        highlight CocFloating guibg=#99cccc guifg=#336699
+    endif
+
+    " --- Highlight groups END ---
 
     " " coc-prettier
     " command! -nargs=0 Prettier :CocCommand prettier.formatFile
