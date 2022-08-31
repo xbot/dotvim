@@ -974,7 +974,7 @@ require("bufferline").setup({
         persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
         enforce_regular_tabs = false,
         always_show_bufferline = false,
-        sort_by = "id",
+        sort_by = "tabs",
     },
 })
 EOF
@@ -2038,7 +2038,7 @@ endif
 if s:plugged('auto-session')
     set sessionoptions+=winpos,terminal,folds
 
-    let g:auto_session_pre_save_cmds = ["tabdo Vista!", "tabdo windo call CleanupBeforeSaveSession()", "tabdo NvimTreeClose"]
+    let g:auto_session_pre_save_cmds = ["call CleanupBeforeSaveSession()"]
 
     nnoremap <leader>os :<C-u>SearchSession<CR>
     nnoremap <leader>ss :<C-u>SaveSession<CR>
@@ -2054,14 +2054,24 @@ require('auto-session').setup {
 EOF
 
     function! CleanupBeforeSaveSession()"{{{
+        let l:current_tab = tabpagenr()
+
+        execute 'tabdo NvimTreeClose'
+        execute 'tabdo Vista!'
+        execute 'tabdo windo call CloseSessionUnconcernedTabs()'
+
+        execute 'tabnext' l:current_tab
+    endfunction"}}}
+    function! CloseSessionUnconcernedTabs()"{{{
         let l:ft = &ft
 
         if l:ft == 'GV'
             execute ':tabclose'
         elseif l:ft == 'DiffviewFiles' || l:ft == 'DiffviewFileHistory'
-            execute ':tabclose'
+            execute ':DiffviewClose'
         endif
     endfunction"}}}
+
 endif
 
 " session-lens settings
