@@ -190,7 +190,8 @@
         "**/.git/objects/**",
         ".vscode",
         "coc-settings.json",
-        "tests/**/_baseline/**/*.json"
+        "tests/**/_baseline/**/*.json",
+        "storage/logs/engine/**"
     ],
     "suggest.completionItemKindLabels": {
 		"keyword": "\uf1de",
