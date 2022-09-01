@@ -614,6 +614,15 @@ au FocusGained,BufEnter * if mode() == 'n' && getcmdwintype() == '' | checktime 
 "}}}
 
 " ------------------------------ Plugin Settings --------------------------{{{
+" vim-plug settings
+if exists('g:plug_home')
+
+    let g:plug_window='-tabnew'
+
+    command! SnapshotPlugins PlugSnapshot ~/.vim/plugin.lock
+
+endif
+
 " FencView settings
 if s:plugged('fencview')
     let g:fencview_autodetect    = 0
@@ -1568,9 +1577,6 @@ if s:plugged('defx.nvim')
         return defx#do_action('multi', ['drop'])
     endfunction
 endif
-
-" vim-plug settings
-let g:plug_window='-tabnew'
 
 " vim-clap
 if s:plugged('vim-clap')
