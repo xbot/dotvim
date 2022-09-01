@@ -469,7 +469,6 @@ if has('gui_running')
         set macligatures
         set macthinstrokes
         " set guifont=Monaco\ for\ Powerline:h16
-        " set guifont=Cascadia\ Code\ PL:h16
         set guifont=CaskaydiaCove\ Nerd\ Font:h16
     endif
 
@@ -482,13 +481,9 @@ if has('gui_running')
     " colorscheme solarized
 
     colorscheme solarized8_flat
-    " colorscheme flattened_light
     " colorscheme dracula
     " colorscheme nord
-    " colorscheme tender
     " colorscheme onedark
-    " colorscheme gruvbox
-    " colorscheme base16-default-light
 
     " set lines=65 columns=189
     " set lines=70 columns=300
@@ -534,22 +529,24 @@ else
     " colorscheme base16-oned
 
     if has('nvim')
-        " set background=light
-        " " set background=dark
-        " let g:tokyonight_style = 'day' " available: night, storm, day
-        " let g:tokyonight_italic_functions = 1
-        " " let g:tokyonight_transparent = 1
-        " " let g:tokyonight_transparent_sidebar = 1
-        " " let g:tokyonight_dark_sidebar = 1
-        " " let g:tokyonight_dark_float = 1
-        " " Change the "hint" color to the "orange" color, and make the "error" color bright red
-        " let g:tokyonight_colors = {
-        "             \ 'hint': 'orange',
-        "             \ 'error': '#ff0000',
-        "             \ }
-        " colorscheme tokyonight
 
-        set background=dark | colorscheme doom-one
+        set background=light
+        " set background=dark
+        let g:tokyonight_style = 'day' " available: night, storm, day
+        let g:tokyonight_italic_functions = 1
+        " let g:tokyonight_transparent = 1
+        " let g:tokyonight_transparent_sidebar = 1
+        " let g:tokyonight_dark_sidebar = 1
+        " let g:tokyonight_dark_float = 1
+        " Change the "hint" color to the "orange" color, and make the "error" color bright red
+        let g:tokyonight_colors = {
+                    \ 'hint': 'orange',
+                    \ 'error': '#ff0000',
+                    \ }
+        colorscheme tokyonight
+
+        " set background=dark | colorscheme doom-one
+
     else
         set background=light
         let g:solarized_termcolors=256
@@ -561,15 +558,8 @@ endif
 if s:plugged('vim-airline')
     if !has('gui_running') && has('nvim')
         let g:airline_theme = 'base16_harmonic_light'
-        " let g:airline_theme = 'base16_solarized_light'
     else
-        " let g:airline_theme = 'solarized'
-        " let g:airline_theme = 'base16_onedark'
         let g:airline_theme = 'base16_solarized_light'
-        " let g:airline_theme = 'base16_one_light'
-        " let g:airline_theme = 'base16_grayscale_light'
-        " let g:airline_theme = 'transparent'
-        " let g:airline_theme = 'base16_unikitty_light'
     endif
 endif
 " LeaderF colorscheme
@@ -2060,6 +2050,7 @@ require('auto-session').setup {
     auto_session_enabled = true,
     auto_session_create_enabled = false,
     auto_save_enabled = false,
+    auto_restore_enabled = true,
 }
 EOF
 
@@ -2713,7 +2704,7 @@ nnoremap <leader>T <C-w>T
 nnoremap gH H
 nnoremap gM M
 nnoremap gL L
-if ! s:plugged('bufferline.nvim')
+if !s:plugged('bufferline.nvim')
     nnoremap H  :tabp<CR>
     nnoremap L  :tabn<CR>
 endif
@@ -3408,6 +3399,7 @@ augroup END
 
 " ------------------------------ COC settings -----------------------------{{{
 if s:plugged('coc.nvim')
+
     let g:coc_node_path='~/.nvm/versions/node/v14.16.1/bin/node'
     let g:coc_global_extensions = [
         \'@yaegassy/coc-intelephense',
@@ -3451,20 +3443,24 @@ if s:plugged('coc.nvim')
         return !col || getline('.')[col - 1]  =~# '\s'
     endfunction"}}}
 
-    let g:coc_snippet_next = '<tab>'
+    let g:coc_snippet_next = '<TAB>'
     " --- The COC implementation of <TAB> behavior END ---
+
+    " Float window
+    nmap <leader>ff <Plug>coc-float-jump
+    nmap <leader>fH <Plug>coc-float-hide
 
     " Use `[g` and `]g` to navigate diagnostics
     nmap <silent> [d <Plug>(coc-diagnostic-prev)
     nmap <silent> ]d <Plug>(coc-diagnostic-next)
 
-    " GoTo code navigation.
+    " Code navigation.
     nmap <silent> gd <Plug>(coc-definition)
     nmap <silent> gD <Plug>(coc-declaration)
     nmap <silent> gy <Plug>(coc-type-definition)
     nmap <silent> gi <Plug>(coc-implementation)
-    " nmap <silent> gR <Plug>(coc-references)
     nmap <silent> gr <Plug>(coc-references-used)
+    nmap <silent> gR <Plug>(coc-references)
 
     " Use K to show documentation in preview window.
     nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -3544,7 +3540,7 @@ if s:plugged('coc.nvim')
 
     if g:colors_name == 'tokyonight' && &background == 'light'
         " Compatible to colorscheme tokyonight
-        highlight CocFloating guibg=#E1E2E6 guifg=#336699
+        highlight CocFloating guibg=#E1E2E6 guifg=#2D7DE8
     else
         " Compatible to most colorschemes
         highlight CocFloating guibg=#99cccc guifg=#336699
