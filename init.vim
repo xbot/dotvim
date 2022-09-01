@@ -2498,7 +2498,21 @@ if s:plugged('open-browser.vim')
 
     let g:netrw_nogx = 1 " disable netrw's gx mapping.
 	nmap gx <Plug>(openbrowser-smart-search)
-	vmap gx <Plug>(openbrowser-smart-search)
+	" vmap gx <Plug>(openbrowser-smart-search)
+    vnoremap gx :<C-U>call <SID>my_smart_search()<CR>
+
+    fun! s:my_smart_search()"{{{
+        let l:selection = s:get_visual_selection(visualmode(), 1)
+
+        let l:result = matchlist(l:selection, "^Plug\\s'\\([^']\\+\\)'.*$")
+        if len(l:result) > 2
+            let l:plugin_name = l:result[1]
+            exe 'OpenBrowser https://github.com/' . l:plugin_name
+            return
+        endif
+
+        exe 'OpenBrowserSmartSearch ' . l:selection
+    endfun"}}}
 
 endif
 
@@ -2819,6 +2833,29 @@ nmap <leader><leader>mr :AsyncRun glab mr view -w<CR>
 
 " ------------------------------ Functions -----------------------------{{{
 
+fun! s:get_visual_selection(type, ...)"{{{
+    let sel_save   = &selection
+    let &selection = 'inclusive'
+    let reg_save   = @@
+
+    if a:0
+        silent exe 'normal! `<' . a:type . '`>y'
+    elseif a:type ==? 'line'
+        silent exe "normal! '[V']y"
+    elseif a:type ==? 'block'
+        silent exe 'normal! `[\<C-V>`]y'
+    else
+        silent exe 'normal! `[v`]y'
+    endif
+
+    let l:selection = @@
+
+    let &selection = sel_save
+    let @@ = reg_save
+
+    return l:selection
+endfun"}}}
+
 if IsPlatform('win')
     set diffexpr=MyDiff()
 endif
@@ -3093,32 +3130,17 @@ augroup quickfix_mapping
 augroup END
 
 " translate the word under cursor
-fun! SearchWord()"{{{
+fun! s:search_cursor_word()"{{{
     echo system('ydcv --', expand('<cword>'))
 endfun"}}}
 " translate selected text
-fun! SearchWord_v(type, ...)"{{{
-    let sel_save   = &selection
-    let &selection = 'inclusive'
-    let reg_save   = @@
+fun! s:search_selected_word()"{{{
+    let l:selection = s:get_visual_selection(visualmode(), 1)
 
-    if a:0
-        silent exe 'normal! `<' . a:type . '`>y'
-    elseif a:type ==? 'line'
-        silent exe "normal! '[V']y"
-    elseif a:type ==? 'block'
-        silent exe 'normal! `[\<C-V>`]y'
-    else
-        silent exe 'normal! `[v`]y'
-    endif
-
-    echo system('ydcv --', @@)
-
-    let &selection = sel_save
-    let @@ = reg_save
+    echo system('ydcv --', l:selection)
 endfun"}}}
-" nnoremap <Leader>df :call SearchWord()<CR>
-" vnoremap <Leader>df :<C-U>call SearchWord_v(visualmode(), 1)<CR>
+" nnoremap <Leader>df :call <SID>search_cursor_word()<CR>
+" vnoremap <Leader>df :<C-U>call <SID>search_selected_word()<CR>
 
 " remap n/N to nzz/Nzz in a nice way
 function! s:nice_next(cmd)
