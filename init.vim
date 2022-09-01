@@ -920,12 +920,16 @@ if s:plugged('bufferline.nvim')
     nnoremap <silent><leader>9 <Cmd>BufferLineGoToBuffer 9<CR>
     nnoremap <silent><leader>0 <Cmd>BufferLineGoToBuffer -1<CR>
 
+    au TabNewEntered * BufferLineSortByTabs
+
 lua << EOF
 require("bufferline").setup({
     options = {
         mode = "tabs",
         separator_style = "slant",
-        numbers = "ordinal",
+        numbers = function(opts)
+            return string.format('%s.%s', opts.ordinal, opts.raise(opts.id))
+        end,
         close_command = "bdelete! %d",
         right_mouse_command = nil,
         left_mouse_command = nil,
@@ -3475,8 +3479,8 @@ if s:plugged('coc.nvim')
     " --- The COC implementation of <TAB> behavior END ---
 
     " Float window
-    nmap <leader>ff <Plug>coc-float-jump
-    nmap <leader>fH <Plug>coc-float-hide
+    nmap <leader>ff <Plug>(coc-float-jump)
+    nmap <leader>fH <Plug>(coc-float-hide)
 
     " Use `[g` and `]g` to navigate diagnostics
     nmap <silent> [d <Plug>(coc-diagnostic-prev)
