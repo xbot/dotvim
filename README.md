@@ -20,6 +20,34 @@ This is my Neovim setup, which is also compatible to Vim, at least for now.
 
 # Install
 
+## Manual
+
+Assume this repo is placed at `~/Dropbox/Mackup/.vim`.
+
+```bash
+cd ~/.vim
+
+ln -s ~/Dropbox/Mackup/.vim/UltiSnips .
+ln -s ~/Dropbox/Mackup/.vim/after .
+ln -s ~/Dropbox/Mackup/.vim/autoload .
+ln -s ~/Dropbox/Mackup/.vim/coc-settings.json .
+ln -s ~/Dropbox/Mackup/.vim/colors .
+ln -s ~/Dropbox/Mackup/.vim/doc .
+ln -s ~/Dropbox/Mackup/.vim/ftdetect .
+ln -s ~/Dropbox/Mackup/.vim/ftplugin .
+ln -s ~/Dropbox/Mackup/.vim/indent .
+ln -s ~/Dropbox/Mackup/.vim/init.vim .
+ln -s ~/Dropbox/Mackup/.vim/spell .
+ln -s ~/Dropbox/Mackup/.vim/syntax .
+ln -s ~/Dropbox/Mackup/.vim/plugin.lock .
+
+ln -s ~/.vim/init.vim ~/.vimrc
+ln -s ~/.vim ~/.config/nvim
+
+# Install plugins
+vim -S ~/.vim/plugin.lock
+```
+
 ## Mackup
 
 `~/.mackup.cfg`
@@ -49,7 +77,7 @@ name = dotvim
 .vim/init.vim
 .vim/spell
 .vim/syntax
-.vim/undodir
+.vim/plugin.lock
 ```
 
 ```bash
@@ -59,33 +87,5 @@ ln -s ~/.vim/init.vim ~/.vimrc
 ln -s ~/.vim ~/.config/nvim
 
 # Install plugins
-vim -S ~/.vim/plugins.lock
-```
-
-## Manual
-
-Assume this repo is placed at `~/Dropbox/Mackup/.vim`.
-
-```bash
-cd ~/.vim
-
-ln -s ~/Dropbox/Mackup/.vim/UltiSnips .
-ln -s ~/Dropbox/Mackup/.vim/after .
-ln -s ~/Dropbox/Mackup/.vim/autoload .
-ln -s ~/Dropbox/Mackup/.vim/coc-settings.json .
-ln -s ~/Dropbox/Mackup/.vim/colors .
-ln -s ~/Dropbox/Mackup/.vim/doc .
-ln -s ~/Dropbox/Mackup/.vim/ftdetect .
-ln -s ~/Dropbox/Mackup/.vim/ftplugin .
-ln -s ~/Dropbox/Mackup/.vim/indent .
-ln -s ~/Dropbox/Mackup/.vim/init.vim .
-ln -s ~/Dropbox/Mackup/.vim/spell .
-ln -s ~/Dropbox/Mackup/.vim/syntax .
-ln -s ~/Dropbox/Mackup/.vim/undodir .
-
-ln -s ~/.vim/init.vim ~/.vimrc
-ln -s ~/.vim ~/.config/nvim
-
-# Install plugins
-vim -S ~/.vim/plugins.lock
+vim -S ~/.vim/plugin.lock
 ```
