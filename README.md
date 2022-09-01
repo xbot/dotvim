@@ -4,7 +4,7 @@ This is my Neovim setup, which is also compatible to Vim, at least for now.
 
 # Features
 
-- Plugin management via [vim-plug](https://github.com/junegunn/vim-plug).
+- Plugin management (with snapshots) via [vim-plug](https://github.com/junegunn/vim-plug).
 - LSP via [coc.nvim](https://github.com/neoclide/coc.nvim) or Neovim native LSP, the default is coc.nvim.
 - Code snippet insertion via [UltiSnips](https://github.com/SirVer/ultisnips).
 - Fuzzy finder via [LeaderF](https://github.com/Yggdroot/LeaderF).
@@ -57,6 +57,9 @@ mackup restore -f
 
 ln -s ~/.vim/init.vim ~/.vimrc
 ln -s ~/.vim ~/.config/nvim
+
+# Install plugins
+vim -S ~/.vim/plugins.lock
 ```
 
 ## Manual
@@ -82,4 +85,7 @@ ln -s ~/Dropbox/Mackup/.vim/undodir .
 
 ln -s ~/.vim/init.vim ~/.vimrc
 ln -s ~/.vim ~/.config/nvim
+
+# Install plugins
+vim -S ~/.vim/plugins.lock
 ```
