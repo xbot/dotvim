@@ -1957,6 +1957,20 @@ EOF
     endfunction
 endif
 
+" git-blame settings
+if s:plugged('git-blame.nvim')
+
+    let g:gitblame_ignored_filetypes = ['GV', 'DiffviewFiles']
+
+    " A hack for diffview, disable git-blame in diffview tabs.
+    augroup git-blame
+        au!
+        au WinEnter * exec 'GitBlameDisable'
+        au BufEnter * if !exists('t:diffview_view_initialized') | exec 'GitBlameEnable' | endif
+    augroup END
+
+endif
+
 " Tabular settings
 if s:plugged('tabular')
     au FileType markdown inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
