@@ -1356,10 +1356,11 @@ if s:plugged('vim-fugitive')
     nnoremap <leader>gp  <Cmd>Git push<CR>
     nnoremap <leader>dgh <Cmd>diffget //2<CR>
     nnoremap <leader>dgl <Cmd>diffget //3<CR>
-    nnoremap <Leader>gb  <Cmd>Git blame<CR>
+    nnoremap gb          <Cmd>Git blame<CR>
 endif
 if s:plugged('coc.nvim')
-    nnoremap <leader>gc  <Cmd>CocList branches<CR>
+    nnoremap <leader>gb  <Cmd>CocList branches<CR>
+    nnoremap <leader>gB  <Cmd>CocList branches -a<CR>
 endif
 " git-time-lapse settings
 if s:plugged('git-time-lapse')
