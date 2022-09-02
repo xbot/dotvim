@@ -609,7 +609,7 @@ endif
 
 " Auto reload file if changed outside.
 set autoread
-au FocusGained,BufEnter * if mode() == 'n' && getcmdwintype() == '' | checktime | endif
+autocmd FocusGained,BufEnter * if mode() == 'n' && getcmdwintype() == '' | checktime | endif
 
 "}}}
 
@@ -693,7 +693,7 @@ if s:plugged('ferret')
     " in the command-line window.
     augroup escape_ferret_pattern_in_the_current_line_in_commandline_window
         au!
-        au BufEnter * if mode() == 'n' && getcmdwintype() == '' | nnoremap <leader>ee :call EscapeFerretPatternInCurrentLine()<CR> | endif
+        autocmd BufEnter * if mode() == 'n' && getcmdwintype() == '' | nnoremap <leader>ee :call EscapeFerretPatternInCurrentLine()<CR> | endif
     augroup END
 
     function! EscapeFerretPatternInCurrentLine()
@@ -703,13 +703,12 @@ if s:plugged('ferret')
 
     " List all tasks under the current directory
     map <leader><leader>tl :Ack //\s(TODO\|FIXME)\s(lidong\|donie)<CR>
-    if has("autocmd")
-        " Highlight TODO, FIXME, NOTE, etc.
-        if v:version > 701
-            autocmd Syntax * call matchadd('Todo',  '\W\zs\(TODO\|FIXME\|CHANGED\|BUG\|HACK\)')
-            autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
-        endif
-    endif
+    " Highlight TODO, FIXME, NOTE, etc.
+    augroup ferret
+        au!
+        autocmd Syntax * call matchadd('Todo',  '\W\zs\(TODO\|FIXME\|CHANGED\|BUG\|HACK\)')
+        autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
+    augroup END
 endif
 
 " ListToggle settings
@@ -816,14 +815,14 @@ if s:plugged('ale')"{{{
     nmap <Leader>ad :ALEDetail<CR>
     nmap <Leader>af :ALEFix<CR>
 
-    " au FileType php let b:ale_disable_lsp = 1
+    " autocmd FileType php let b:ale_disable_lsp = 1
 endif"}}}
 
 " pdv settings
 let g:pdv_template_dir = $HOME .'/.vim/plugged/pdv/templates_snip'
 augroup pdv
     au!
-    au FileType php nnoremap <buffer> <leader>\\ :call pdv#DocumentWithSnip()<CR>
+    autocmd FileType php nnoremap <buffer> <leader>\\ :call pdv#DocumentWithSnip()<CR>
 augroup END
 
 " easy-align settings
@@ -920,7 +919,7 @@ if s:plugged('bufferline.nvim')
     nnoremap <silent><leader>9 <Cmd>BufferLineGoToBuffer 9<CR>
     nnoremap <silent><leader>0 <Cmd>BufferLineGoToBuffer -1<CR>
 
-    au TabNewEntered * BufferLineSortByTabs
+    autocmd TabNewEntered * BufferLineSortByTabs
 
 lua << EOF
 require("bufferline").setup({
@@ -1397,7 +1396,7 @@ if s:plugged('gv.vim')
     nnoremap <leader>gvg :GV  --pretty=%cd\ %h%d\ %s\ (%an,\ %ci) --date=format:%Y-%m-%d --abbrev-commit --no-merges --grep<space>
     vnoremap <leader>gvc :GV!<CR>
     augroup gv
-        au FileType git set fdl=0
+        autocmd FileType git set fdl=0
     augroup END
 endif
 
@@ -1514,9 +1513,9 @@ if s:plugged('gtags.vim')
 
     augroup gtags
         au!
-        au FileType php,python,c,cpp,javascript,go map <buffer> <C-]> :Gtags<CR><CR>
+        autocmd FileType php,python,c,cpp,javascript,go map <buffer> <C-]> :Gtags<CR><CR>
         if has('gui_running')
-            au FileType php,python,c,cpp,javascript,go map <buffer> <C-S-]> :Gtags -r<CR><CR>
+            autocmd FileType php,python,c,cpp,javascript,go map <buffer> <C-S-]> :Gtags -r<CR><CR>
         endif
     augroup END
 
@@ -1627,15 +1626,15 @@ if s:plugged('vim-dirvish')
 
     augroup dirvish_dovish_map_keys
         au!
-        au FileType dirvish unmap <buffer> p
-        au FileType dirvish nmap <silent><buffer> i  <Plug>(dovish_create_file)
-        au FileType dirvish nmap <silent><buffer> I  <Plug>(dovish_create_directory)
-        au FileType dirvish nmap <silent><buffer> dd <Plug>(dovish_delete)
-        au FileType dirvish nmap <silent><buffer> r  <Plug>(dovish_rename)
-        au FileType dirvish nmap <silent><buffer> yy <Plug>(dovish_yank)
-        au FileType dirvish xmap <silent><buffer> yy <Plug>(dovish_yank)
-        au FileType dirvish nmap <silent><buffer> p  <Plug>(dovish_copy)
-        au FileType dirvish nmap <silent><buffer> P  <Plug>(dovish_move)
+        autocmd FileType dirvish unmap <buffer> p
+        autocmd FileType dirvish nmap <silent><buffer> i  <Plug>(dovish_create_file)
+        autocmd FileType dirvish nmap <silent><buffer> I  <Plug>(dovish_create_directory)
+        autocmd FileType dirvish nmap <silent><buffer> dd <Plug>(dovish_delete)
+        autocmd FileType dirvish nmap <silent><buffer> r  <Plug>(dovish_rename)
+        autocmd FileType dirvish nmap <silent><buffer> yy <Plug>(dovish_yank)
+        autocmd FileType dirvish xmap <silent><buffer> yy <Plug>(dovish_yank)
+        autocmd FileType dirvish nmap <silent><buffer> p  <Plug>(dovish_copy)
+        autocmd FileType dirvish nmap <silent><buffer> P  <Plug>(dovish_move)
     augroup END
     " --- END ---}}}
 endif
@@ -1771,7 +1770,7 @@ endif
 
 " rest.nvim settings
 if s:plugged('rest.nvim')
-    au FileType http nmap <leader>sr <Plug>RestNvim
+    autocmd FileType http nmap <leader>sr <Plug>RestNvim
 endif
 
 " vim-devicons settings
@@ -1932,9 +1931,12 @@ EOF
     nnoremap <leader>dv :DiffviewOpen<CR>
     nnoremap <leader>df :DiffviewFileHistory %<CR>
 
-    au! FileType GV        call <SID>MapKeyBindingsForGv()
-    au! FileType floggraph nnoremap vv <Esc>:call <SID>DiffviewCommitUnderCursorInFlog()<CR>
-    au BufWinEnter diffview://*/log/*/commit_log nnoremap <buffer> q <Cmd>q<CR>
+    augroup diffview
+        au!
+        autocmd FileType    GV        call <SID>MapKeyBindingsForGv()
+        autocmd FileType    floggraph nnoremap vv <Esc>:call <SID>DiffviewCommitUnderCursorInFlog()<CR>
+        autocmd BufWinEnter diffview://*/log/*/commit_log nnoremap <buffer> q <Cmd>q<CR>
+    augroup END
 
     function! s:MapKeyBindingsForGv()
         exec 'nnoremap ri <Esc>:call <SID>RebaseInteractivelySinceCommitUnderCursorInGv()<CR>'
@@ -1965,15 +1967,15 @@ if s:plugged('git-blame.nvim')
     " A hack for diffview, disable git-blame in diffview tabs.
     augroup git-blame
         au!
-        au WinEnter * exec 'GitBlameDisable'
-        au BufEnter * if !exists('t:diffview_view_initialized') | exec 'GitBlameEnable' | endif
+        autocmd WinEnter * exec 'GitBlameDisable'
+        autocmd BufEnter * if !exists('t:diffview_view_initialized') | exec 'GitBlameEnable' | endif
     augroup END
 
 endif
 
 " Tabular settings
 if s:plugged('tabular')
-    au FileType markdown inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+    autocmd FileType markdown inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 
     function! s:align()"{{{
         let p = '^\s*|\s.*\s|\s*$'
@@ -2135,12 +2137,12 @@ if s:plugged('vimspector')
                 \    'vimspectorPC':         999,
                 \ }
 
-    au FileType php nmap <F3> :call MyVimspectorRun('stop')<CR>
-    au FileType php nmap <F5> :call MyVimspectorRun('continue')<CR>
-    au FileType php nmap <Leader>bp <Plug>VimspectorBreakpoints
-    au FileType php nmap <leader><leader><F3> :call MyVimspectorRun('reset')<CR>
-    au FileType php nmap <leader>di <Plug>VimspectorBalloonEval
-    au FileType php xmap <leader>di <Plug>VimspectorBalloonEval
+    autocmd FileType php nmap <F3> :call MyVimspectorRun('stop')<CR>
+    autocmd FileType php nmap <F5> :call MyVimspectorRun('continue')<CR>
+    autocmd FileType php nmap <Leader>bp <Plug>VimspectorBreakpoints
+    autocmd FileType php nmap <leader><leader><F3> :call MyVimspectorRun('reset')<CR>
+    autocmd FileType php nmap <leader>di <Plug>VimspectorBalloonEval
+    autocmd FileType php xmap <leader>di <Plug>VimspectorBalloonEval
 
     function! MyVimspectorRun(command)"{{{
         if a:command == 'continue'
@@ -2182,7 +2184,7 @@ if s:plugged('vimspector')
     endfunction"}}}
 
     augroup MyVimspectorUICustomistaion
-        autocmd!
+        au!
         autocmd User VimspectorUICreated call s:CustomiseUI()
         autocmd User VimspectorTerminalOpened call s:SetUpTerminal()
     augroup END
@@ -2310,8 +2312,11 @@ if s:plugged('goyo.vim')
         set cursorcolumn
     endfunction
 
-    autocmd! User GoyoEnter nested call <SID>goyo_enter()
-    autocmd! User GoyoLeave nested call <SID>goyo_leave()
+    augroup goyo
+        au!
+        autocmd User GoyoEnter nested call <SID>goyo_enter()
+        autocmd User GoyoLeave nested call <SID>goyo_leave()
+    augroup END
 endif
 
 " nvim-treesitter settings
@@ -2550,23 +2555,23 @@ endif
 if IsPlatform('win')
     augroup windows
         au!
-        au GUIEnter * simalt ~x
-        au VimEnter *.* cd %:h
+        autocmd GUIEnter * simalt ~x
+        autocmd VimEnter *.* cd %:h
     augroup END
 else
-    " au GUIEnter * call MaximizeWindow()
+    " autocmd GUIEnter * call MaximizeWindow()
 endif
 
 " Javascript filetype
 augroup javascript
     au!
-    au FileType javascript setl fen
-    au FileType javascript setl foldlevel=0
-    au BufRead *.omnijs set filetype=javascript
-    au BufRead *.pac setl filetype=javascript
-    au BufRead *.pac setl foldlevel=1
+    autocmd FileType javascript setl fen
+    autocmd FileType javascript setl foldlevel=0
+    autocmd BufRead *.omnijs set filetype=javascript
+    autocmd BufRead *.pac setl filetype=javascript
+    autocmd BufRead *.pac setl foldlevel=1
 augroup END
-" au FileType javascript call JavaScriptFold()
+" autocmd FileType javascript call JavaScriptFold()
 function! JavaScriptFold()"{{{
     setl foldmethod=syntax
     setl foldlevelstart=1
@@ -2579,17 +2584,17 @@ function! JavaScriptFold()"{{{
 endfunction"}}}
 
 " Devilspie
-au BufNewFile,BufRead *.ds set filetype=lisp
+autocmd BufNewFile,BufRead *.ds set filetype=lisp
 
 " Markdown
 augroup markdown
     autocmd BufNewFile,BufRead *.mkd,*.md set filetype=markdown
     " autocmd BufNewFile,BufRead *.mkd set wrap
-    au FileType markdown set wrap
-    " au FileType markdown set guifontwide=
-    " au FileType markdown set background=light
-    " au FileType markdown colorscheme zenesque
-    " au FileType markdown colorscheme newspaper
+    autocmd FileType markdown set wrap
+    " autocmd FileType markdown set guifontwide=
+    " autocmd FileType markdown set background=light
+    " autocmd FileType markdown colorscheme zenesque
+    " autocmd FileType markdown colorscheme newspaper
 augroup END
 
 " Confluence Wiki
@@ -2602,73 +2607,73 @@ map Q gq
 " This problem is found only on my linux, it should be checked out that what reason causes such a problem
 augroup vim_comment_string
     au!
-    au FileType vim set commentstring=\"%s
+    autocmd FileType vim set commentstring=\"%s
 augroup END
 
 " Fold method
 let g:sh_fold_enabled=1
 augroup fold_method
     au!
-    au FileType python     setl fdm=indent
-    au FileType sql        setl fdm=manual
-    au FileType sh         setl fdm=syntax
-    au FileType java       setl fdm=syntax
-    au FileType java       setl fdl=1
-    au FileType javascript setl fdl=1
-    au FileType php        setl fdm=syntax
-    au FileType git        setl fdm=syntax
+    autocmd FileType python     setl fdm=indent
+    autocmd FileType sql        setl fdm=manual
+    autocmd FileType sh         setl fdm=syntax
+    autocmd FileType java       setl fdm=syntax
+    autocmd FileType java       setl fdl=1
+    autocmd FileType javascript setl fdl=1
+    autocmd FileType php        setl fdm=syntax
+    autocmd FileType git        setl fdm=syntax
 augroup END
 
 " " Plain text
 " augroup text
     " au!
-    " au BufNewFile,BufRead *.txt set wrap
+    " autocmd BufNewFile,BufRead *.txt set wrap
 " augroup END
 
 " Dokuwiki
 augroup dokuwiki
     au!
-    au BufNewFile,BufRead *.doku set ft=dokuwiki
+    autocmd BufNewFile,BufRead *.doku set ft=dokuwiki
 augroup END
 
 " Auto handle resources
 if IsPlatform('unix')
     augroup xbindkeys
         au!
-        au! BufWritePost,FileWritePost .xbindkeysrc silent !ps aux|grep -P '\sxbindkeys$'|awk '{print $2}'|xargs kill > /dev/null 2>&1 ; xbindkeys > /dev/null 2>&1
-        au! BufWritePost,FileWritePost .xbindkeys.scm silent !ps aux|grep -P '\sxbindkeys\s'|awk '{print $2}'|xargs kill > /dev/null 2>&1 ; xbindkeys -fg ~/.xbindkeys.scm > /dev/null 2>&1
-        au! BufWritePost,FileWritePost .Xdefaults   silent !xrdb ~/.Xdefaults
-        au! BufWritePost,FileWritePost .Xresources  silent !xrdb ~/.Xresources
+        autocmd BufWritePost,FileWritePost .xbindkeysrc silent !ps aux|grep -P '\sxbindkeys$'|awk '{print $2}'|xargs kill > /dev/null 2>&1 ; xbindkeys > /dev/null 2>&1
+        autocmd BufWritePost,FileWritePost .xbindkeys.scm silent !ps aux|grep -P '\sxbindkeys\s'|awk '{print $2}'|xargs kill > /dev/null 2>&1 ; xbindkeys -fg ~/.xbindkeys.scm > /dev/null 2>&1
+        autocmd BufWritePost,FileWritePost .Xdefaults   silent !xrdb ~/.Xdefaults
+        autocmd BufWritePost,FileWritePost .Xresources  silent !xrdb ~/.Xresources
     augroup END
 endif
 
 augroup sql
     au!
-    au FileType sql set synmaxcol=0
+    autocmd FileType sql set synmaxcol=0
 augroup END
 
 " Quickfix and location windows
 augroup quickfix
     au!
-    " au WinLeave * if &buftype=='quickfix' | lclose | endif
-    au! FileType qf nnoremap <buffer> <leader><Enter> <C-w><Enter>
+    " autocmd WinLeave * if &buftype=='quickfix' | lclose | endif
+    autocmd FileType qf nnoremap <buffer> <leader><Enter> <C-w><Enter>
 augroup END
 
 " vim help
 augroup vim_help
     au!
-    au FileType vim set keywordprg='help'
+    autocmd FileType vim set keywordprg='help'
 augroup END
 
 augroup disable_numbers_in_diff_mode
     au!
-    au BufEnter * if &diff | set nonu nornu | endif
+    autocmd BufEnter * if &diff | set nonu nornu | endif
 augroup END
 
 if s:plugged('taboo.vim')
     augroup on_gv_start
         au!
-        au FileType GV TabooRename Commits
+        autocmd FileType GV TabooRename Commits
     augroup END
 endif
 
@@ -2790,9 +2795,9 @@ nnoremap <leader>dn :s/\(^\s*\/\/\s\)\@<=TODO\s\(lidong\\|donie\):\s//<CR>
 exec 'nmap <leader><leader>, :tabnew '.gbl_vimrc_file.'<CR><C-W>_'
 exec 'nmap <leader><leader>. :so '.gbl_vimrc_file.'<CR>'
 " Source vimrc after it is modified
-" exec 'au! bufwritepost '.gbl_vimrc_name.' so '.gbl_vimrc_file
+" exec 'autocmd! bufwritepost '.gbl_vimrc_name.' so '.gbl_vimrc_file
 " To fix the problem that the folding method remains to be 'syntax' when open the vimrc file in a php file
-exec 'au! bufreadpre '.gbl_vimrc_name.' setl fdm=marker'
+exec 'autocmd! bufreadpre '.gbl_vimrc_name.' setl fdm=marker'
 
 " Show PWD
 nmap <leader>pwd :pwd<CR>
@@ -2960,7 +2965,7 @@ command! -nargs=0 SaveNOEOF :call SaveNOEOF()
 command! -complete=file -nargs=1 SaveAsNOEOF :call SaveAsNOEOF(<q-args>)
 augroup save_no_eof
     au!
-    au! BufWriteCmd version*.txt call SaveNOEOF()
+    autocmd BufWriteCmd version*.txt call SaveNOEOF()
 augroup END
 
 " Set the current buffer to use utf-8 encoding and unix format
@@ -3145,7 +3150,7 @@ function! OpenQuickfixInNewTab()"{{{
 endfunction"}}}
 augroup quickfix_mapping
     au!
-    au BufWinEnter * if &buftype=='quickfix'|noremap <buffer> <C-T> :call OpenQuickfixInNewTab()<CR>|endif
+    autocmd BufWinEnter * if &buftype=='quickfix'|noremap <buffer> <C-T> :call OpenQuickfixInNewTab()<CR>|endif
 augroup END
 
 " translate the word under cursor
@@ -3193,8 +3198,8 @@ command! CopyAbsoluteFilePath let @+=expand('%:p') | if s:plugged('vim-oscyank')
 
 " Copy fully qualified class & method name in php files
 " @see https://github.com/tyru/current-func-info.vim
-au filetype php command! CopyFQCN let @+=GetFullyQualifiedClassNameForPhp()  | if s:plugged('vim-oscyank') | execute 'OSCYankReg +' | endif | echo @+ . ' copied.'
-au filetype php command! CopyFQMN let @+=GetFullyQualifiedMethodNameForPhp() | if s:plugged('vim-oscyank') | execute 'OSCYankReg +' | endif | echo @+ . ' copied.'
+autocmd filetype php command! CopyFQCN let @+=GetFullyQualifiedClassNameForPhp()  | if s:plugged('vim-oscyank') | execute 'OSCYankReg +' | endif | echo @+ . ' copied.'
+autocmd filetype php command! CopyFQMN let @+=GetFullyQualifiedMethodNameForPhp() | if s:plugged('vim-oscyank') | execute 'OSCYankReg +' | endif | echo @+ . ' copied.'
 function! GetFullyQualifiedClassNameForPhp()"{{{
     " Save some registers
     let l:r_a = @a
@@ -3296,16 +3301,16 @@ endfunction
 " ------------------------------ Python -----------------------------{{{
 augroup python
     au!
-    au filetype python map  <buffer> <F5>   :call StartPDB()<CR>
-    au filetype python map  <buffer> <S-F5> :call StopPDB()<CR>
-    au filetype python map  <buffer> <F6>   :Cstep<CR>
-    au filetype python map  <buffer> <F7>   :Cnext<CR>
-    au filetype python map  <buffer> <S-N>  :Cnext<CR>
-    au FileType python map  <buffer> <A-CR> :python runScript()<CR>
-    au filetype python nmap <buffer> <C-CR> :call ExecutePythonScript()<CR>
-    au filetype python imap <buffer> <C-CR> <ESC><C-CR>
-    au FileType python set  formatprg=PythonTidy.py
-    " au FileType python autocmd BufWritePre <buffer> let s:saveview = winsaveview() | exe '%!PythonTidy.py' | call winrestview(s:saveview) | unlet s:saveview
+    autocmd filetype python map  <buffer> <F5>   :call StartPDB()<CR>
+    autocmd filetype python map  <buffer> <S-F5> :call StopPDB()<CR>
+    autocmd filetype python map  <buffer> <F6>   :Cstep<CR>
+    autocmd filetype python map  <buffer> <F7>   :Cnext<CR>
+    autocmd filetype python map  <buffer> <S-N>  :Cnext<CR>
+    autocmd FileType python map  <buffer> <A-CR> :python runScript()<CR>
+    autocmd filetype python nmap <buffer> <C-CR> :call ExecutePythonScript()<CR>
+    autocmd filetype python imap <buffer> <C-CR> <ESC><C-CR>
+    autocmd FileType python set  formatprg=PythonTidy.py
+    " autocmd FileType python autocmd BufWritePre <buffer> let s:saveview = winsaveview() | exe '%!PythonTidy.py' | call winrestview(s:saveview) | unlet s:saveview
 augroup END
 
 " Start pyclewn
@@ -3367,9 +3372,9 @@ endif
 " ------------------------------ Go -----------------------------{{{
 " augroup golang
     " au!
-    " au BufWritePre *.go :Fmt
-    " au FileType go map <buffer> <C-CR> :silent write \| !go run %<CR>
-    " au FileType go imap <buffer> <C-CR> <Esc><C-CR>
+    " autocmd BufWritePre *.go :Fmt
+    " autocmd FileType go map <buffer> <C-CR> :silent write \| !go run %<CR>
+    " autocmd FileType go imap <buffer> <C-CR> <Esc><C-CR>
 " augroup END
 
 " let g:gofmt_command = 'goimports'
@@ -3382,18 +3387,18 @@ let php_large_file = 0
 
 augroup php
     au!
-    au FileType php nnoremap <buffer> <A-F12> :call Preserve("normal! gggqG")<CR>
-    au FileType php vnoremap <buffer> <A-F12> gq
-    au FileType php set keywordprg=:help
-    au FileType php set iskeyword=@,48-57,_,128-167,224-235
-    au FileType php set fdl=10
+    autocmd FileType php nnoremap <buffer> <A-F12> :call Preserve("normal! gggqG")<CR>
+    autocmd FileType php vnoremap <buffer> <A-F12> gq
+    autocmd FileType php set keywordprg=:help
+    autocmd FileType php set iskeyword=@,48-57,_,128-167,224-235
+    autocmd FileType php set fdl=10
 augroup END
 
 " pdv
 let g:pdv_template_dir=$HOME .'/.vim/plugged/pdv/templates_snip'
 augroup pdv
     au!
-    au FileType php nnoremap <buffer> <leader>\\ :call pdv#DocumentWithSnip()<CR>
+    autocmd FileType php nnoremap <buffer> <leader>\\ :call pdv#DocumentWithSnip()<CR>
 augroup END
 
 " Open a temporary PHP file in a new window
@@ -3425,12 +3430,12 @@ function! ForceHTMLComment(mode, type) range"{{{
 endfunction"}}}
 " augroup php_force_html_comment
     " au!
-    " au FileType php nmap <buffer> <leader>fhcc :call ForceHTMLComment("n", "Comment")<CR>
-    " au FileType php vmap <buffer> <leader>fhcc :call ForceHTMLComment("x", "Comment")<CR>
-    " au FileType php nmap <buffer> <leader>fhcs :call ForceHTMLComment("n", "Sexy")<CR>
-    " au FileType php vmap <buffer> <leader>fhcs :call ForceHTMLComment("x", "Sexy")<CR>
-    " au FileType php nmap <buffer> <leader>fhcu :call ForceHTMLComment("n", "Uncomment")<CR>
-    " au FileType php vmap <buffer> <leader>fhcu :call ForceHTMLComment("x", "Uncomment")<CR>
+    " autocmd FileType php nmap <buffer> <leader>fhcc :call ForceHTMLComment("n", "Comment")<CR>
+    " autocmd FileType php vmap <buffer> <leader>fhcc :call ForceHTMLComment("x", "Comment")<CR>
+    " autocmd FileType php nmap <buffer> <leader>fhcs :call ForceHTMLComment("n", "Sexy")<CR>
+    " autocmd FileType php vmap <buffer> <leader>fhcs :call ForceHTMLComment("x", "Sexy")<CR>
+    " autocmd FileType php nmap <buffer> <leader>fhcu :call ForceHTMLComment("n", "Uncomment")<CR>
+    " autocmd FileType php vmap <buffer> <leader>fhcu :call ForceHTMLComment("x", "Uncomment")<CR>
 " augroup END
 
 function! PhpSyntaxOverride()
@@ -3440,7 +3445,7 @@ endfunction
 
 augroup phpSyntaxOverride
     au!
-    au FileType php call PhpSyntaxOverride()
+    autocmd FileType php call PhpSyntaxOverride()
 augroup END
 "}}}
 
@@ -3601,7 +3606,7 @@ if s:plugged('coc.nvim')
     command! -nargs=0 CocFormat :call CocAction('format')<CR>
 
     augroup coc
-        autocmd!
+        au!
         " Setup formatexpr specified filetype(s).
         autocmd FileType typescript,json,php setl formatexpr=CocAction('formatSelected')
         " Update signature help on jump placeholder.
