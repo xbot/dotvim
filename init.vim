@@ -1661,6 +1661,7 @@ require("nvim-tree").setup {
             custom_only = false,
             list = {
                 -- user mappings go here
+                { key = "t", action = "tabnew" },
             },
         },
     },
