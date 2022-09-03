@@ -1936,6 +1936,10 @@ EOF
         autocmd FileType    GV        call <SID>MapKeyBindingsForGv()
         autocmd FileType    floggraph nnoremap vv <Esc>:call <SID>DiffviewCommitUnderCursorInFlog()<CR>
         autocmd BufWinEnter diffview://*/log/*/commit_log nnoremap <buffer> q <Cmd>q<CR>
+        if s:plugged('git-blame.nvim')
+            autocmd User DiffviewViewEnter exec 'GitBlameDisable'
+            autocmd User DiffviewViewLeave exec 'GitBlameEnable'
+        endif
     augroup END
 
     function! s:MapKeyBindingsForGv()
@@ -1963,13 +1967,6 @@ endif
 if s:plugged('git-blame.nvim')
 
     let g:gitblame_ignored_filetypes = ['GV', 'DiffviewFiles']
-
-    " A hack for diffview, disable git-blame in diffview tabs.
-    augroup git-blame
-        au!
-        autocmd WinEnter * exec 'GitBlameDisable'
-        autocmd BufEnter * if !exists('t:diffview_view_initialized') | exec 'GitBlameEnable' | endif
-    augroup END
 
 endif
 
