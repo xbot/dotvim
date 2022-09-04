@@ -837,7 +837,6 @@ let g:markdown_fenced_languages = ['html', 'python', 'ruby', 'vim', 'php', 'bash
 " leaderf settings
 if s:plugged('LeaderF')"{{{
 
-    let g:Lf_CommandMap      = {'<c-c>': ['<esc>', '<c-c>']}
     let g:Lf_DefaultMode     = 'NameOnly'
     let g:Lf_DelimiterChar   = ";"
     let g:Lf_DevIconsFont    = "CaskaydiaCove Nerd Font"
@@ -851,6 +850,11 @@ if s:plugged('LeaderF')"{{{
     let g:Lf_StlSeparator    = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "Cascadia Code PL" }
     let g:Lf_WindowPosition  = 'popup'
 
+    let g:Lf_CommandMap      = {
+                \'<C-c>': ['<Esc>', '<C-c>'],
+                \'<C-j>': ['<C-n>', '<C-j>'],
+                \'<C-k>': ['<C-p>', '<C-k>'],
+                \}
     let g:Lf_RgConfig        = [
         \ "--hidden"
     \ ]
