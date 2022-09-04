@@ -1678,6 +1678,7 @@ require("nvim-tree").setup {
     filters = {
         dotfiles = true,
     },
+    hijack_directories = { enable = false },
 }
 EOF
 endif
