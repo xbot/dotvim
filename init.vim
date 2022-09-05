@@ -219,10 +219,11 @@ endif
 " neovim plugins
 if has('nvim')
 
+    " Plug 'github/copilot.vim'
     Plug 'akinsho/toggleterm.nvim', {'tag' : 'v2.*'}
+    Plug 'ckipp01/stylua-nvim'
     Plug 'elihunter173/dirbuf.nvim' " Conflict with dirvish
     Plug 'f-person/git-blame.nvim'
-    " Plug 'github/copilot.vim'
     Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
     Plug 'kevinhwang91/nvim-bqf', { 'for': 'qf' } | Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'kevinhwang91/nvim-hlslens'
@@ -2603,9 +2604,6 @@ augroup END
 " Confluence Wiki
 autocmd BufNewFile,BufRead *.confluence set filetype=confluencewiki
 
-" Don't use Ex mode, use Q for formatting
-map Q gq
-
 " Fix the problem that vim on linux takes C-style commentstring to comment fold markers in vim scripts
 " This problem is found only on my linux, it should be checked out that what reason causes such a problem
 augroup vim_comment_string
@@ -3450,6 +3448,20 @@ augroup phpSyntaxOverride
     au!
     autocmd FileType php call PhpSyntaxOverride()
 augroup END
+"}}}
+
+" ------------------------------ Lua -----------------------------{{{
+
+augroup lua
+    au!
+    autocmd FileType lua if executable('stylua') | setlocal formatprg=stylua\ - | endif
+augroup END
+
+" stylua-nvim settings
+if s:plugged('stylua-nvim')
+    command! -nargs=0 LuaFormat lua require("stylua-nvim").format_file()
+endif
+
 "}}}
 
 " ------------------------------ COC settings -----------------------------{{{
