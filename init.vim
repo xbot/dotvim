@@ -2022,6 +2022,12 @@ if s:plugged('vista.vim')
                     \ }
     endif
 
+    augroup vista
+        au!
+        " Close vista if it is the last window opened
+        autocmd BufEnter * if winnr("$") == 1 && vista#sidebar#IsOpen() | execute "normal! :q!\<CR>" | endif
+    augroup END
+
 endif
 
 " Telescope settings
