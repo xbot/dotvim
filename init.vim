@@ -2331,6 +2331,10 @@ endif
 
 " nvim-treesitter settings
 if s:plugged('nvim-treesitter')
+
+    set foldmethod=expr
+    set foldexpr=nvim_treesitter#foldexpr()
+
 lua << EOF
 require'nvim-treesitter.configs'.setup {
     -- A list of parser names, or "all"
