@@ -406,56 +406,59 @@ endif
 "}}}
 
 " ------------------------------ Application Settings ------------------------"{{{
-set nowrap
-set nobackup
-set number
-set relativenumber
-set cindent
+
+" set spell
+" set winheight=9999
 set autoindent
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-set wildmenu " Type :help and press <TAB> , so that's the effect .
-set lazyredraw " Do not redraw while macros are running , this accelerates vim greatly .
-set expandtab
+set cedit=\<C-Y>
+set cindent
+set clipboard+=unnamed
 set confirm
-set viminfo+=!
+set cursorcolumn
+set cursorline
+set expandtab
+set fdm=marker
+set fillchars+=diff:\ 
 set history=100        " keep 50 lines of command line history
 set hlsearch
-set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}[%Y]%=%l,%c%V%8P
 set ignorecase
-set smartcase
-set fdm=marker
-set splitbelow
-set noequalalways
-set winminheight=1
-" set winheight=9999
-set clipboard+=unnamed
-set mouse=a
-set vb t_vb=
 set laststatus=2
+set lazyredraw " Do not redraw while macros are running , this accelerates vim greatly .
+set list listchars=tab:→\ ,trail:␣,extends:…,eol:⏎
+set mouse=a
+set nobackup
+set noequalalways
+set nowrap
+set nrformats+=alpha
+set number
+set relativenumber
+set shiftround
+set shiftwidth=4
+set smartcase
+set softtabstop=4
+set splitbelow
+set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}[%Y]%=%l,%c%V%8P
+set tabstop=4
+set termguicolors
+set undofile
 set updatetime=10000
-set cursorline
-set cursorcolumn
+set vb t_vb=
+set viminfo+=!
+set wildignore=*.class,*.pyc
+set wildmenu " Type :help and press <TAB> , so that's the effect .
+set winminheight=1
+
 if has('nvim')
     set undodir=~/.vim/undodir/nvim/
 else
     set undodir=~/.vim/undodir/vim/
 endif
-set undofile
-set termguicolors
-set nrformats+=alpha
-set shiftround
-" set spell
 if IsPlatform('win')
     set grepprg=d:/dev/tool/GnuWin32/bin/grep.exe\ -n
 else
     " set grepprg=grep\ -n
     set grepprg=ag\ --nogroup\ --column\ -U\ --ignore\ tags
 endif
-set wildignore=*.class,*.pyc
-set fillchars+=diff:\
-set cedit=\<C-Y>
 
 if has('nvim')
     let g:backupdir=expand(stdpath('data') . '/backup')
@@ -486,8 +489,6 @@ if has('gui_running')
     " colorscheme nord
     " colorscheme onedark
 
-    " set lines=65 columns=189
-    " set lines=70 columns=300
     set lines=70 columns=189
 
     " GUI Options
