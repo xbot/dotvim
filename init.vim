@@ -1793,9 +1793,9 @@ if s:plugged('vim-oscyank') && !exists('g:neovide')
 endif
 
 " nvim-colorizer settings
-if s:plugged('nvim-colorizer')
+if s:plugged('nvim-colorizer.lua')
 lua << EOF
-require'colorizer'.setup {
+require('colorizer').setup {
     '*';
 }
 EOF
