@@ -1797,6 +1797,7 @@ if s:plugged('nvim-colorizer.lua')
 lua << EOF
 require('colorizer').setup {
     '*';
+    '!vim-plug';
 }
 EOF
 endif
