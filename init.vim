@@ -20,7 +20,6 @@ Plug 'adelarsq/vim-matchit'
 Plug 'aklt/plantuml-syntax'
 Plug 'andrejlevkovitch/vim-lua-format'
 Plug 'arecarn/vim-fold-cycle'
-Plug 'brookhong/cscope.vim'
 Plug 'chrisbra/SudoEdit.vim'
 Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-titlecase'
@@ -3372,7 +3371,7 @@ def runScript():
     script="\n".join([line for line in vim.current.buffer])
     exec(script)
 EOF
-else
+elseif has('python')
 python <<EOF
 def runScript():
     script="\n".join([line for line in vim.current.buffer])
