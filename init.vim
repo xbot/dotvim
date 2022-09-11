@@ -141,8 +141,7 @@ Plug 'honza/vim-snippets'
 " tabline and statusline group
 if has('nvim')
     Plug 'kyazdani42/nvim-web-devicons'
-    Plug 'akinsho/bufferline.nvim', { 'tag': 'v2.6.0' }
-    " Plug 'akinsho/bufferline.nvim', { 'tag': 'v2.*' }
+    Plug 'akinsho/bufferline.nvim', { 'tag': 'v2.*' }
     Plug 'nvim-lualine/lualine.nvim'
 else
     " airline group
