@@ -1354,7 +1354,7 @@ endif
 
 " Git mappings, coc, fugitive settings
 if s:plugged('vim-fugitive')
-    nnoremap <leader>gg  <Cmd>Git<CR>
+    nnoremap <leader>gg  :tab G<CR>
     nnoremap <leader>gl  <Cmd>Git pull<CR>
     nnoremap <leader>gp  <Cmd>Git push<CR>
     nnoremap <leader>dgh <Cmd>diffget //2<CR>
