@@ -46,7 +46,6 @@ Plug 'mhinz/vim-startify'
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'on': ['ViraIssues', 'ViraReport', 'ViraLoadProject', 'ViraSetActiveTicket', 'ViraFilterEdit'] }
 Plug 'preservim/nerdcommenter'
 Plug 'rizzatti/dash.vim'
-Plug 'ryanoasis/vim-devicons'
 Plug 'segeljakt/vim-silicon'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'szw/vim-maximizer'
@@ -1809,13 +1808,12 @@ endif
 
 " rest.nvim settings
 if s:plugged('rest.nvim')
-    autocmd FileType http nmap <leader>sr <Plug>RestNvim
-endif
 
-" vim-devicons settings
-if s:plugged('vim-devicons')
-    let g:webdevicons_enable_airline_tabline = 1
-    let g:webdevicons_enable_airline_statusline = 1
+    augroup rest.nvim
+        au!
+        autocmd FileType http nmap <leader>sr <Plug>RestNvim
+    augroup END
+
 endif
 
 " vim-oscyank settings
