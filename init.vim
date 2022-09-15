@@ -273,10 +273,13 @@ if has('nvim')
     " Plug 'kristijanhusak/defx-git'
     " Plug 'kristijanhusak/defx-icons'
 else
+
+    " vim plugins
     Plug 'chrisbra/Colorizer'
     Plug 'easymotion/vim-easymotion'
     Plug 'gcmt/taboo.vim' " Conflict with bufferline.nvim
     Plug 'mbbill/undotree', { 'on': 'UndotreeToggle'   }
+    Plug 'ojroques/vim-oscyank'
     Plug 'pakutoma/toggle-terminal'
     Plug 'rhysd/vim-healthcheck'
     Plug 'vim-scripts/AnsiEsc.vim' " To enhance vim-flog
@@ -297,7 +300,6 @@ endif
 " Plug 'joeytwiddle/sexy_scroller.vim'
 " Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
 " Plug 'mhinz/vim-signify'
-" Plug 'ojroques/vim-oscyank'
 " Plug 'plasticboy/vim-markdown',     { 'for': 'markdown' }
 " Plug 'psliwka/vim-smoothie'
 " Plug 'tweekmonster/startuptime.vim'
@@ -610,6 +612,37 @@ endif
 " Auto reload file if changed outside.
 set autoread
 autocmd FocusGained,BufEnter * if mode() == 'n' && getcmdwintype() == '' | checktime | endif
+
+" clipboard over SSH
+if has('nvim')
+
+    let ssh_client_ip = matchstr($SSH_CLIENT, '\v(\d{1,3}\.){3}\d{1,3}')
+
+    if ssh_client_ip != ''
+        let lemonade_port = 2489
+
+        " iMac
+        if ssh_client_ip == '10.1.1.2'
+            let lemonade_port = 2490
+        endif
+
+        let g:clipboard = {
+            \   'name': 'myClipboard',
+            \   'copy': {
+            \      '+': ['lemonade', '--port=' . lemonade_port, 'copy'],
+            \      '*': ['lemonade', '--port=' . lemonade_port, 'copy'],
+            \      '"': ['lemonade', '--port=' . lemonade_port, 'copy'],
+            \    },
+            \   'paste': {
+            \      '+': ['lemonade', '--port=' . lemonade_port, 'paste'],
+            \      '*': ['lemonade', '--port=' . lemonade_port, 'paste'],
+            \      '"': ['lemonade', '--port=' . lemonade_port, 'paste'],
+            \    },
+            \   'cache_enabled': 1,
+            \ }
+    endif
+
+endif
 
 "}}}
 
@@ -1787,7 +1820,12 @@ endif
 
 " vim-oscyank settings
 if s:plugged('vim-oscyank') && !exists('g:neovide')
-    autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg +' | endif
+
+    augroup oscyank
+        au!
+        autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg +' | endif
+    augroup END
+
 endif
 
 " nvim-colorizer settings
