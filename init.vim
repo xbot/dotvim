@@ -37,7 +37,6 @@ Plug 'junegunn/vim-after-object'
 Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/vim-plug'
 Plug 'junkblocker/git-time-lapse'
-Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 Plug 'liuchengxu/vista.vim'
 Plug 'mattn/gist-vim'
 Plug 'mattn/webapi-vim'
@@ -222,6 +221,7 @@ if has('nvim')
     Plug 'ckipp01/stylua-nvim'
     Plug 'elihunter173/dirbuf.nvim' " Conflict with dirvish
     Plug 'f-person/git-blame.nvim'
+    Plug 'folke/which-key.nvim'
     Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
     Plug 'kevinhwang91/nvim-bqf', { 'for': 'qf' } | Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'kevinhwang91/nvim-hlslens'
@@ -278,6 +278,7 @@ else
     Plug 'chrisbra/Colorizer'
     Plug 'easymotion/vim-easymotion'
     Plug 'gcmt/taboo.vim' " Conflict with bufferline.nvim
+    Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
     Plug 'mbbill/undotree', { 'on': 'UndotreeToggle'   }
     Plug 'ojroques/vim-oscyank'
     Plug 'pakutoma/toggle-terminal'
@@ -1745,6 +1746,17 @@ if s:plugged('vim-silicon')
           \   'round-corner':          v:true,
           \   'window-controls':       v:false,
           \ }
+endif
+
+" which-key.nvim settings
+if s:plugged('which-key.nvim')
+lua << EOF
+    require("which-key").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+    }
+EOF
 endif
 
 " vim-which-key settings
