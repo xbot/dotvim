@@ -2699,7 +2699,10 @@ augroup markdown
 augroup END
 
 " Confluence Wiki
-autocmd BufNewFile,BufRead *.confluence set filetype=confluencewiki
+augroup confluence
+    au!
+    autocmd BufNewFile,BufRead *.confluence,.vira_prompt set filetype=confluencewiki
+augroup END
 
 " Fix the problem that vim on linux takes C-style commentstring to comment fold markers in vim scripts
 " This problem is found only on my linux, it should be checked out that what reason causes such a problem
