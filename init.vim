@@ -2715,14 +2715,15 @@ augroup END
 let g:sh_fold_enabled=1
 augroup fold_method
     au!
-    autocmd FileType python     setl fdm=indent
-    autocmd FileType sql        setl fdm=manual
-    autocmd FileType sh         setl fdm=syntax
-    autocmd FileType java       setl fdm=syntax
+    autocmd FileType git        setl fdm=syntax
+    autocmd FileType http       setl fdm=marker
     autocmd FileType java       setl fdl=1
+    autocmd FileType java       setl fdm=syntax
     autocmd FileType javascript setl fdl=1
     autocmd FileType php        setl fdm=syntax
-    autocmd FileType git        setl fdm=syntax
+    autocmd FileType python     setl fdm=indent
+    autocmd FileType sh         setl fdm=syntax
+    autocmd FileType sql        setl fdm=manual
 augroup END
 
 " " Plain text
