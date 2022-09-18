@@ -1826,7 +1826,37 @@ if s:plugged('rest.nvim')
         autocmd FileType http nmap <leader>sr <Plug>RestNvim
         autocmd FileType http nmap <leader>sp <Plug>RestNvimPreview
         autocmd FileType http nmap <leader>sL <Plug>RestNvimLast
+        autocmd BufEnter * if &filetype == 'httpResult' | call <SID>save_cookie() | endif
     augroup END
+
+    " Set g:http_response_header_uid, g:http_response_cookie_session in ~/.vimrc_private
+    function s:save_cookie() abort"{{{
+        let l:cookie = matchstr(getline(search('Set-Cookie:')), '\(' . g:http_response_cookie_session . '=\)\@<=\(.\{-}\)\(;\)\@=')
+
+        if l:cookie == ''
+            echoerr 'Cannot find a valid cookie.'
+            return
+        endif
+
+        let l:env_var_by_uid = {
+                    \"DiJeb7IQHo8FOFkXulieyA": "advisor",
+                    \"eS2wb1cSveE3LPm9G5Z49A": "superadmin",
+                    \}
+
+        let l:uid = matchstr(getline(search(g:http_response_header_uid . ':')), '\(' . g:http_response_header_uid . ': \)\@<=\(.*\)')
+
+        if !has_key(l:env_var_by_uid, l:uid)
+            echoerr 'Cannot find valid user ID.'
+            return
+        endif
+
+        let l:bak_file_ext_part = ''
+        if IsPlatform('mac')
+            let l:bak_file_ext_part = '""'
+        endif
+
+        call system('sed -i ' . l:bak_file_ext_part . ' "s/\(header_cookie_debug_' . l:env_var_by_uid[l:uid] . '_session=.*' . g:http_response_cookie_session . '=\)[0-9A-Za-z]*/\1' . l:cookie . '/" .env')
+    endfunction"}}}
 
 lua << EOF
 require("rest-nvim").setup({
