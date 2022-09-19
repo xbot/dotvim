@@ -1826,6 +1826,7 @@ if s:plugged('rest.nvim')
         autocmd FileType http nmap <leader>sr <Plug>RestNvim
         autocmd FileType http nmap <leader>sp <Plug>RestNvimPreview
         autocmd FileType http nmap <leader>sL <Plug>RestNvimLast
+        autocmd FileType httpResult setl fdm=indent
         autocmd BufEnter * if &filetype == 'httpResult' | call <SID>save_cookie() | endif
     augroup END
 
@@ -1843,7 +1844,7 @@ if s:plugged('rest.nvim')
                     \"eS2wb1cSveE3LPm9G5Z49A": "superadmin",
                     \}
 
-        let l:uid = matchstr(getline(search(g:http_response_header_uid . ':')), '\(' . g:http_response_header_uid . ': \)\@<=\(.*\)')
+        let l:uid = matchstr(getline(search(g:http_response_header_uid . ':\c')), '\(' . g:http_response_header_uid . ': \)\@<=\(.*\)')
 
         if !has_key(l:env_var_by_uid, l:uid)
             echoerr 'Cannot find valid user ID.'
