@@ -3613,6 +3613,7 @@ if s:plugged('coc.nvim')
         \'coc-markdownlint',
         \'coc-php-cs-fixer',
         \'coc-project',
+        \'coc-pyright',
         \'coc-snippets',
         \'coc-spell-checker',
         \'coc-ultisnips',
@@ -3739,7 +3740,7 @@ if s:plugged('coc.nvim')
 
     if g:colors_name == 'tokyonight' && &background == 'light'
         " Compatible to colorscheme tokyonight
-        highlight CocFloating guibg=#E1E2E6 guifg=#2D7DE8
+        highlight CocFloating guibg=#CDCFDF guifg=#2D7DE8
     else
         " Compatible to most colorschemes
         highlight CocFloating guibg=#99cccc guifg=#336699
