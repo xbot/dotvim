@@ -30,7 +30,7 @@
     "snippets.userSnippetsDirectory": "~/.vim/UltiSnips",
     "codeLens.enable": true,
     "intelephense.client.disableInlayHints": false,
-    "intelephense.diagnostics.enable": false,
+    "intelephense.diagnostics.enable": true,
     "intelephense.progress.enable": true,
     "intelephense.environment.phpVersion": "8.1.0",
     "intelephense.files.maxSize": 3000000,
