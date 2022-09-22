@@ -1687,7 +1687,6 @@ require("nvim-tree").setup {
         adaptive_size = true,
         centralize_selection = false,
         width = 50,
-        height = 50,
         hide_root_folder = false,
         side = "left",
         preserve_window_proportions = false,
