@@ -1825,6 +1825,7 @@ if s:plugged('rest.nvim')
         autocmd FileType http nmap <leader>sr <Plug>RestNvim
         autocmd FileType http nmap <leader>sp <Plug>RestNvimPreview
         autocmd FileType http nmap <leader>sL <Plug>RestNvimLast
+        autocmd FileType http set commentstring=\#%s
         autocmd FileType httpResult setl fdm=indent
         autocmd BufEnter * if &filetype == 'httpResult' | call <SID>save_cookie() | endif
     augroup END
