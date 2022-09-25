@@ -1829,8 +1829,8 @@ if s:plugged('rest.nvim')
         autocmd FileType http nmap <leader>sp <Plug>RestNvimPreview
         autocmd FileType http nmap <leader>sL <Plug>RestNvimLast
         autocmd FileType http set commentstring=\#%s
-        autocmd FileType httpResult setl fdm=indent
         autocmd BufEnter * if &filetype == 'httpResult' | call <SID>save_cookie() | endif
+        autocmd BufEnter * if &filetype == 'httpResult' | setl fdm=indent | setl fdl=1 | endif
     augroup END
 
     " Set g:http_response_header_uid, g:http_response_cookie_session in ~/.vimrc_private
