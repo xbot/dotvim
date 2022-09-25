@@ -33,7 +33,6 @@ Plug 'jiazhoulvke/jianfan'
 Plug 'jreybert/vim-largefile'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/vader.vim'
-Plug 'junegunn/vim-after-object'
 Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/vim-plug'
 Plug 'junkblocker/git-time-lapse'
@@ -179,6 +178,7 @@ Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-syntax'
 Plug 'glts/vim-textobj-comment'
 Plug 'Julian/vim-textobj-variable-segment'
+Plug 'junegunn/vim-after-object'
 " Plug 'kana/vim-textobj-underscore' " Also provided in targets.vim
 " Plug 'kentaro/vim-textobj-function-php' " Too old and 'if' works not as exptected in PHP syntax.
 
@@ -2265,12 +2265,21 @@ if s:plugged('vimspector')
                 \    'vimspectorPC':         999,
                 \ }
 
-    autocmd FileType php nmap <F3> :call MyVimspectorRun('stop')<CR>
-    autocmd FileType php nmap <F5> :call MyVimspectorRun('continue')<CR>
-    autocmd FileType php nmap <Leader>bp <Plug>VimspectorBreakpoints
-    autocmd FileType php nmap <leader><leader><F3> :call MyVimspectorRun('reset')<CR>
-    autocmd FileType php nmap <leader>di <Plug>VimspectorBalloonEval
-    autocmd FileType php xmap <leader>di <Plug>VimspectorBalloonEval
+    augroup vimspector_mappings
+        au!
+        autocmd FileType php nmap <F3>                 :call MyVimspectorRun('stop')<CR>
+        autocmd FileType php nmap <F5>                 :call MyVimspectorRun('continue')<CR>
+        autocmd FileType php nmap <Leader>bp           <Plug>VimspectorBreakpoints
+        autocmd FileType php nmap <leader><leader><F3> :call MyVimspectorRun('reset')<CR>
+        autocmd FileType php nmap <leader>di           <Plug>VimspectorBalloonEval
+        autocmd FileType php xmap <leader>di           <Plug>VimspectorBalloonEval
+    augroup END
+
+    augroup vimspector_ui_customization
+        au!
+        autocmd User VimspectorUICreated      call s:CustomiseUI()
+        autocmd User VimspectorTerminalOpened call s:SetUpTerminal()
+    augroup END
 
     function! MyVimspectorRun(command)"{{{
         if a:command == 'continue'
@@ -2311,11 +2320,6 @@ if s:plugged('vimspector')
         set norelativenumber nonumber
     endfunction"}}}
 
-    augroup MyVimspectorUICustomistaion
-        au!
-        autocmd User VimspectorUICreated call s:CustomiseUI()
-        autocmd User VimspectorTerminalOpened call s:SetUpTerminal()
-    augroup END
 endif
 
 " Far.vim settings
@@ -2812,8 +2816,22 @@ endif
 
 " vim-after-object settings
 if s:plugged('vim-after-object')
-    autocmd VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
+    augroup vim_after_object
+        au!
+        autocmd VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
+    augroup END
 endif
+
+" targets.vim settings
+if s:plugged('targets.vim')
+    augroup targets_textobj
+        au!
+        autocmd User targets#mappings#user call targets#mappings#extend({ 
+                    \ 'A': {'argument': [{'o': '[([]', 'c': '[])]', 's': ','}]}, 
+                    \ }) 
+    augroup END
+endif
+
 "}}}
 
 " ------------------------------ Key mappings -------------------------------"{{{
@@ -2968,14 +2986,7 @@ nnoremap vP V']
 nmap <leader><leader>cc :nohl<CR>
 
 " Search word
-" if has('gui_running')
-    " nmap <leader>/w /\<\>\C<left><left><left><left>
-" else
-    nmap <leader>/w /\<\>\C<left><left><left><left><left><left><left><left><left><left><left><left><left><left>
-" endif
-
-" Format JSON string
-nmap <leader><leader>json :%!python -m json.tool<CR>:set ft=json<CR>
+nmap <leader>/w /\<\>\C<left><left><left><left>
 
 " repeat last command
 nmap <leader>!! :<up><CR>
