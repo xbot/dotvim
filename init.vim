@@ -98,6 +98,7 @@ endif
 " LeaderF group
 Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
 Plug 'xbot/LeaderF-folder'
+Plug 'xbot/LeaderF-phpnamespace'
 " Plug 'HaomingJu/LeaderF-gitlab' " Does not work with the settings given by the document
 
 " Search plugins
@@ -918,6 +919,8 @@ if s:plugged('LeaderF')"{{{
     noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
     noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
     noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
+
+    noremap <leader>iu :<C-U><C-R>=printf("Leaderf phpns --input %s", expand("<cword>"))<CR><CR>
 
     function! s:flexible_leaderf_tag()"{{{
         let l:sub_cmd = 'tag'
@@ -2395,11 +2398,9 @@ if s:plugged('vim-php-namespace')
     augroup vim_php_namespace"{{{
         au!
         " do imports
-        autocmd FileType php inoremap <Leader>iu <Esc>:call IPhpInsertUse()<CR>
-        autocmd FileType php noremap  <Leader>iu :call PhpInsertUse()<CR>
+        autocmd FileType php noremap  <leader><leader>iu :call PhpInsertUse()<CR>
         " do expansions
-        autocmd FileType php inoremap <Leader>ec <Esc>:call IPhpExpandClass()<CR>
-        autocmd FileType php noremap  <Leader>ec :call PhpExpandClass()<CR>
+        autocmd FileType php noremap  <leader><leader>ec :call PhpExpandClass()<CR>
     augroup END"}}}
 endif
 
