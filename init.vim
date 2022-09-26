@@ -2455,8 +2455,10 @@ endif
 " nvim-treesitter settings
 if s:plugged('nvim-treesitter')
 
-    set foldmethod=expr
-    set foldexpr=nvim_treesitter#foldexpr()
+    augroup treesitter
+        au!
+        autocmd FileType bash,c,go,http,javascript,json,lua,php,python,vim,yaml setl foldmethod=expr | setl foldexpr=nvim_treesitter#foldexpr() | setl foldlevel=1
+    augroup END
 
 lua << EOF
 require'nvim-treesitter.configs'.setup {
@@ -2721,7 +2723,10 @@ function! JavaScriptFold()"{{{
 endfunction"}}}
 
 " Devilspie
-autocmd BufNewFile,BufRead *.ds set filetype=lisp
+augroup devilspie
+    au!
+    autocmd BufNewFile,BufRead *.ds set filetype=lisp
+augroup END
 
 " Markdown
 augroup markdown
@@ -2751,15 +2756,9 @@ augroup END
 let g:sh_fold_enabled=1
 augroup fold_method
     au!
-    autocmd FileType git        setl fdm=syntax
-    autocmd FileType http       setl fdm=marker
-    autocmd FileType java       setl fdl=1
-    autocmd FileType java       setl fdm=syntax
-    autocmd FileType javascript setl fdl=1
-    autocmd FileType php        setl fdm=syntax
-    autocmd FileType python     setl fdm=indent
-    autocmd FileType sh         setl fdm=syntax
-    autocmd FileType sql        setl fdm=manual
+    autocmd FileType git setl fdm=syntax
+    autocmd FileType sh  setl fdm=syntax
+    autocmd FileType sql setl fdm=manual
 augroup END
 
 " " Plain text
@@ -2949,7 +2948,7 @@ exec 'nmap <leader><leader>. :so '.gbl_vimrc_file.'<CR>'
 " Source vimrc after it is modified
 " exec 'autocmd! bufwritepost '.gbl_vimrc_name.' so '.gbl_vimrc_file
 " To fix the problem that the folding method remains to be 'syntax' when open the vimrc file in a php file
-exec 'autocmd! bufreadpre '.gbl_vimrc_name.' setl fdm=marker'
+exec 'autocmd! BufReadPre '.gbl_vimrc_name.' setl fdm=marker'
 
 " Show PWD
 nmap <leader>pwd :pwd<CR>
@@ -3422,25 +3421,6 @@ function! s:get_cword_safely()"{{{
 
     return l:cword
 endfunction"}}}
-"}}}
-
-" ------------------------------ Java -----------------------------{{{
-" Javadoc comments (/** and */ pairs) and code sections (marked by {} pairs) mark the start and end of folds. All other
-" lines simply take the fold level that is going so far.
-function! MyFoldLevel( lineNumber )
-    let thisLine = getline( a:lineNumber )
-    " If the entire Javadoc comment or the {} pair is on one line, then don't create a fold for it.
-    if ( thisLine =~? '\%(\%(/\*\*\).*\%(\*/\)\)\|\%({.*}\)' )
-        return '='
-    elseif ( thisLine =~? '\%(^\s*/\*\*\s*$\)\|{' )
-        return 'a1'
-    elseif ( thisLine =~? '\%(^\s*\*/\s*$\)\|}' )
-        return 's1'
-    endif
-    return '='
-endfunction
-" setlocal foldexpr=MyFoldLevel(v:lnum)
-" setlocal foldmethod=expr
 "}}}
 
 " ------------------------------ Python -----------------------------{{{
