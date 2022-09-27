@@ -2458,7 +2458,8 @@ if s:plugged('nvim-treesitter')
 
     augroup treesitter
         au!
-        autocmd FileType bash,c,go,javascript,json,lua,php,python,vim,yaml setl foldmethod=expr | setl foldexpr=nvim_treesitter#foldexpr() | setl foldlevel=1
+        autocmd FileType bash,c,go,javascript,json,lua,php,python,yaml setl foldmethod=expr | setl foldexpr=nvim_treesitter#foldexpr()
+        autocmd FileType json,php setl foldlevel=1
     augroup END
 
 lua << EOF
@@ -3517,7 +3518,6 @@ augroup php
     autocmd FileType php vnoremap <buffer> <A-F12> gq
     autocmd FileType php set keywordprg=:help
     autocmd FileType php set iskeyword=@,48-57,_,128-167,224-235
-    autocmd FileType php set fdl=10
 augroup END
 
 " pdv
