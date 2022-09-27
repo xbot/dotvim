@@ -2690,6 +2690,18 @@ if s:plugged('vim-illuminate')
 
 endif
 
+" pdv settings
+if s:plugged('pdv')
+
+    let g:pdv_template_dir=$HOME .'/.vim/plugged/pdv/templates_snip'
+
+    augroup pdv
+        au!
+        autocmd FileType php nnoremap <buffer> <leader>\\ :call pdv#DocumentWithSnip()<CR>
+    augroup END
+
+endif
+
 "}}}
 
 " ------------------------------ Auto Commands ------------------------------"{{{
@@ -3508,27 +3520,10 @@ endif
 "}}}
 
 " ------------------------------ PHP -----------------------------{{{
-" PHP folding method
-let php_folding    = 2
-let php_large_file = 0
-
-augroup php
-    au!
-    autocmd FileType php nnoremap <buffer> <A-F12> :call Preserve("normal! gggqG")<CR>
-    autocmd FileType php vnoremap <buffer> <A-F12> gq
-    autocmd FileType php set keywordprg=:help
-    autocmd FileType php set iskeyword=@,48-57,_,128-167,224-235
-augroup END
-
-" pdv
-let g:pdv_template_dir=$HOME .'/.vim/plugged/pdv/templates_snip'
-augroup pdv
-    au!
-    autocmd FileType php nnoremap <buffer> <leader>\\ :call pdv#DocumentWithSnip()<CR>
-augroup END
 
 " Open a temporary PHP file in a new window
-function! PHPSandBox()"{{{
+nmap <leader>sbph :call <SID>php_sandbox()<CR>
+function! s:php_sandbox()"{{{
     let tmpfile=tempname().'.php'
     exe 'new '.tmpfile
     call setline('.', '<?php')
@@ -3538,10 +3533,18 @@ function! PHPSandBox()"{{{
     " normal! k
     startinsert
 endfunction"}}}
-nmap <leader>sbph :call PHPSandBox()<CR>
 
-" 强制使用HTML的注释
-function! ForceHTMLComment(mode, type) range"{{{
+" Force creating comments in HTML format.{{{
+" augroup php_force_html_comment
+"     au!
+"     autocmd FileType php nmap <buffer> <leader>fhcc :call <SID>force_html_comment("n", "Comment")<CR>
+"     autocmd FileType php vmap <buffer> <leader>fhcc :call <SID>force_html_comment("x", "Comment")<CR>
+"     autocmd FileType php nmap <buffer> <leader>fhcs :call <SID>force_html_comment("n", "Sexy")<CR>
+"     autocmd FileType php vmap <buffer> <leader>fhcs :call <SID>force_html_comment("x", "Sexy")<CR>
+"     autocmd FileType php nmap <buffer> <leader>fhcu :call <SID>force_html_comment("n", "Uncomment")<CR>
+"     autocmd FileType php vmap <buffer> <leader>fhcu :call <SID>force_html_comment("x", "Uncomment")<CR>
+" augroup END
+function! s:force_html_comment(mode, type) range
     set ft=html
     if a:mode ==? 'x'
         execute a:firstline.','.a:lastline.'call NERDComment(\"x\", \"'.a:type.'\")'
@@ -3553,26 +3556,9 @@ function! ForceHTMLComment(mode, type) range"{{{
         endif
     endif
     set ft=php
-endfunction"}}}
-" augroup php_force_html_comment
-    " au!
-    " autocmd FileType php nmap <buffer> <leader>fhcc :call ForceHTMLComment("n", "Comment")<CR>
-    " autocmd FileType php vmap <buffer> <leader>fhcc :call ForceHTMLComment("x", "Comment")<CR>
-    " autocmd FileType php nmap <buffer> <leader>fhcs :call ForceHTMLComment("n", "Sexy")<CR>
-    " autocmd FileType php vmap <buffer> <leader>fhcs :call ForceHTMLComment("x", "Sexy")<CR>
-    " autocmd FileType php nmap <buffer> <leader>fhcu :call ForceHTMLComment("n", "Uncomment")<CR>
-    " autocmd FileType php vmap <buffer> <leader>fhcu :call ForceHTMLComment("x", "Uncomment")<CR>
-" augroup END
-
-function! PhpSyntaxOverride()
-    hi! def link phpDocTags  phpDefine
-    hi! def link phpDocParam phpType
 endfunction
+"}}}
 
-augroup phpSyntaxOverride
-    au!
-    autocmd FileType php call PhpSyntaxOverride()
-augroup END
 "}}}
 
 " ------------------------------ Lua -----------------------------{{{
