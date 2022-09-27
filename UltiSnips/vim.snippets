@@ -1,0 +1,60 @@
+# A valid snippet should starts with:
+#
+#		snippet trigger_word [ "description" [ options ] ]
+#
+# and end with:
+#
+#		endsnippet
+#
+# Snippet options:
+#
+#		b - Beginning of line.
+#		i - In-word expansion.
+#		w - Word boundary.
+#		r - Regular expression
+#		e - Custom context snippet
+#		A - Snippet will be triggered automatically, when condition matches.
+#
+# Basic example:
+#
+#		snippet emitter "emitter properties" b
+#		private readonly ${1} = new Emitter<$2>()
+#		public readonly ${1/^_(.*)/$1/}: Event<$2> = this.$1.event
+#		endsnippet
+#
+# Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
+snippet fpc "call writefile()" b
+call writefile([${1}], "/tmp/vimdbg.txt", "a")
+endsnippet
+
+snippet ldr "<leader>" i
+<leader>$0
+endsnippet
+
+snippet sid "<SID>" i
+<SID>$0
+endsnippet
+
+snippet si "<silent>" i
+<silent>
+endsnippet
+
+snippet cr "<CR>" i
+<CR>$0
+endsnippet
+
+snippet cmd "<Cmd>" i
+<Cmd>$0
+endsnippet
+
+snippet ifplg "if s:plugged()" b
+if s:plugged('${1:plugin}')
+    ${2}
+endif$0
+endsnippet
+
+snippet lua "Lua heredoc" b
+lua << EOF
+$0
+EOF
+endsnippet

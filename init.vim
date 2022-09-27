@@ -18,7 +18,6 @@ Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'Valloric/ListToggle'
 Plug 'adelarsq/vim-matchit'
 Plug 'aklt/plantuml-syntax'
-Plug 'andrejlevkovitch/vim-lua-format'
 Plug 'arecarn/vim-fold-cycle'
 Plug 'chrisbra/SudoEdit.vim'
 Plug 'christoomey/vim-sort-motion'
@@ -276,6 +275,7 @@ if has('nvim')
 else
 
     " vim plugins
+    Plug 'andrejlevkovitch/vim-lua-format'
     Plug 'chrisbra/Colorizer'
     Plug 'easymotion/vim-easymotion'
     Plug 'gcmt/taboo.vim' " Conflict with bufferline.nvim
@@ -2260,7 +2260,6 @@ endif
 
 " Vimspector settings
 if s:plugged('vimspector')
-    " let g:vimspector_bottombar_height = 0
 
     let g:vimspector_sign_priority = {
                 \    'vimspectorBP':         999,
@@ -2272,21 +2271,21 @@ if s:plugged('vimspector')
 
     augroup vimspector_mappings
         au!
-        autocmd FileType php nmap <F3>                 :call MyVimspectorRun('stop')<CR>
-        autocmd FileType php nmap <F5>                 :call MyVimspectorRun('continue')<CR>
+        autocmd FileType php nmap <F3>                 :call <SID>vimspector_exec('reset')<CR>
+        autocmd FileType php nmap <F5>                 :call <SID>vimspector_exec('continue')<CR>
         autocmd FileType php nmap <Leader>bp           <Plug>VimspectorBreakpoints
-        autocmd FileType php nmap <leader><leader><F3> :call MyVimspectorRun('reset')<CR>
+        autocmd FileType php nmap <leader><leader><F3> :call <SID>vimspector_exec('stop')<CR>
         autocmd FileType php nmap <leader>di           <Plug>VimspectorBalloonEval
         autocmd FileType php xmap <leader>di           <Plug>VimspectorBalloonEval
     augroup END
 
     augroup vimspector_ui_customization
         au!
-        autocmd User VimspectorUICreated      call s:CustomiseUI()
-        autocmd User VimspectorTerminalOpened call s:SetUpTerminal()
+        autocmd User VimspectorUICreated      call s:vimspector_customize_ui()
+        autocmd User VimspectorTerminalOpened call s:vimspector_customize_terminal()
     augroup END
 
-    function! MyVimspectorRun(command)"{{{
+    function! s:vimspector_exec(command)"{{{
         if a:command == 'continue'
             let g:vimspector_is_running = 1
         elseif exists('g:vimspector_is_running')
@@ -2305,7 +2304,7 @@ if s:plugged('vimspector')
         endif
     endfunction"}}}
 
-    function! s:CustomiseUI()"{{{
+    function! s:vimspector_customize_ui()"{{{
         call win_gotoid( g:vimspector_session_windows.variables )
         exe "normal \<C-W>_"
 
@@ -2318,7 +2317,7 @@ if s:plugged('vimspector')
         hide
     endfunction"}}}
 
-    function s:SetUpTerminal()"{{{
+    function s:vimspector_customize_terminal()"{{{
         " Customise the terminal window size/position
         " For some reasons terminal buffers in Neovim have line numbers
         call win_gotoid( g:vimspector_session_windows.terminal )
