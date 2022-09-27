@@ -96,8 +96,8 @@ endif
 
 " LeaderF group
 Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
-Plug 'git@github.com:xbot/Leaderf-folder.git'
-Plug 'git@github.com:xbot/Leaderf-phpnamespace.git'
+Plug 'git@github.com:xbot/LeaderF-folder.git'
+Plug 'git@github.com:xbot/LeaderF-phpnamespace.git'
 " Plug 'HaomingJu/LeaderF-gitlab' " Does not work with the settings given by the document
 
 " Search plugins
