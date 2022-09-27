@@ -921,6 +921,7 @@ if s:plugged('LeaderF')"{{{
     noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
 
     noremap <leader>iu :<C-U><C-R>=printf("Leaderf phpns --input %s", expand("<cword>"))<CR><CR>
+    noremap <leader>ec :<C-U><C-R>=printf("Leaderf phpns --input %s --expand", expand("<cword>"))<CR><CR>
 
     function! s:flexible_leaderf_tag()"{{{
         let l:sub_cmd = 'tag'
