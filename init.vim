@@ -2058,6 +2058,7 @@ EOF
 
     nnoremap <leader>dv :DiffviewOpen<CR>
     nnoremap <leader>df :DiffviewFileHistory %<CR>
+    nnoremap <leader>dh :call v:lua.diff_view_commit('HEAD')<CR>
 
     augroup diffview
         au!
