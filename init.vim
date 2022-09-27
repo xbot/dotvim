@@ -2671,7 +2671,21 @@ if s:plugged('open-browser.vim')
 
         let l:result = matchlist(l:selection, "^Plug\\s'\\([^']\\+\\)'.*$")
         if len(l:result) > 2
-            let l:plugin_name = l:result[1]
+            if stridx(l:result[1], ':') >= 0
+                let l:result2 = matchlist(l:result[1], '^.*:\(.*\)\.git$')
+                if len(l:result2) > 2
+                    let l:plugin_name = l:result2[1]
+                else
+                    echoerr 'Failed to find the plugin repo name.'
+                    return
+                endif
+            elseif strlen(matchstr(l:result[1], '^http[s]\?://')) > 0
+                exe 'OpenBrowser ' . substitute(l:result[1], '\.git$', '', '')
+                return
+            else
+                let l:plugin_name = l:result[1]
+            endif
+
             exe 'OpenBrowser https://github.com/' . l:plugin_name
             return
         endif
