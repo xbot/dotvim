@@ -1830,7 +1830,7 @@ if s:plugged('rest.nvim')
         autocmd FileType http nmap <leader>sp <Plug>RestNvimPreview
         autocmd FileType http nmap <leader>sL <Plug>RestNvimLast
         autocmd FileType http set commentstring=\#%s
-        autocmd BufEnter * if &filetype == 'httpResult' | call <SID>save_cookie() | endif
+        " autocmd BufEnter * if &filetype == 'httpResult' | call <SID>save_cookie() | endif
         autocmd BufEnter * if &filetype == 'httpResult' | setl fdm=indent | setl fdl=1 | endif
     augroup END
 
@@ -2459,7 +2459,7 @@ if s:plugged('nvim-treesitter')
 
     augroup treesitter
         au!
-        autocmd FileType bash,c,go,http,javascript,json,lua,php,python,vim,yaml setl foldmethod=expr | setl foldexpr=nvim_treesitter#foldexpr() | setl foldlevel=1
+        autocmd FileType bash,c,go,javascript,json,lua,php,python,vim,yaml setl foldmethod=expr | setl foldexpr=nvim_treesitter#foldexpr() | setl foldlevel=1
     augroup END
 
 lua << EOF
