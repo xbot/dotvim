@@ -68,7 +68,6 @@ Plug 'tpope/vim-dispatch',           { 'for': 'php'       }
 Plug 'tpope/vim-projectionist',      { 'for': 'php'       }
 Plug 'noahfrederick/vim-composer',   { 'for': 'php'       }
 Plug 'noahfrederick/vim-laravel',    { 'for': 'php'       }
-Plug 'arnaud-lb/vim-php-namespace',  { 'for': 'php'       }
 Plug 'dgryski/vim-godef',            { 'for': 'go'        }
 Plug 'fatih/vim-go',                 { 'for': 'go'        }
 Plug 'Blackrush/vim-gocode',         { 'for': 'go'        }
@@ -97,7 +96,7 @@ endif
 " LeaderF group
 Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
 Plug 'git@github.com:xbot/Leaderf-folder.git'
-Plug 'git@github.com:xbot/Leaderf-phpnamespace.git'
+Plug 'git@github.com:xbot/Leaderf-phpnamespace.git', { 'for': 'php' }
 " Plug 'HaomingJu/LeaderF-gitlab' " Does not work with the settings given by the document
 
 " Search plugins
@@ -893,7 +892,7 @@ if s:plugged('LeaderF')"{{{
     let g:Lf_RgConfig        = [
         \ "--hidden"
     \ ]
-    
+
     let g:Lf_GtagsAutoGenerate = 0
     let g:Lf_GtagsGutentags = 1
     let g:Lf_CacheDirectory = expand('~')
@@ -921,9 +920,6 @@ if s:plugged('LeaderF')"{{{
     noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
     noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
 
-    noremap <leader>iu :<C-U><C-R>=printf("Leaderf phpns --input %s", expand("<cword>"))<CR><CR>
-    noremap <leader>ec :<C-U><C-R>=printf("Leaderf phpns --input %s --expand", expand("<cword>"))<CR><CR>
-
     function! s:flexible_leaderf_tag()"{{{
         let l:sub_cmd = 'tag'
 
@@ -941,6 +937,17 @@ if s:plugged('LeaderF')"{{{
         exec l:cmd
     endfunction"}}}
 endif"}}}
+
+" Leaderf-phpnamespace settings
+if s:plugged('Leaderf-phpnamespace')
+
+    augroup leaderf_phpnamespace
+        au!
+        autocmd FileType php noremap <buffer> <leader>iu :<C-U><C-R>=printf("Leaderf phpns --input %s", expand("<cword>"))<CR><CR>
+        autocmd FileType php noremap <buffer> <leader>ec :<C-U><C-R>=printf("Leaderf phpns --input %s --expand", expand("<cword>"))<CR><CR>
+    augroup END
+
+endif
 
 " bufferline.nvim settings
 if s:plugged('bufferline.nvim')
@@ -1352,16 +1359,19 @@ endif
 
 " vim-test settings
 if s:plugged('vim-test')
+
     let g:test#runner_commands = ['PHPUnit']
+
     augroup vim_test"{{{
         au!
-        autocmd FileType php nnoremap <leader>tT :call MyTestRun('nothing')<CR>:PHPUnit <C-R>=expand('%:.')<CR> --filter '::test'<Left>
-        autocmd FileType php nnoremap <leader>tn :call MyTestRun('nearest')<CR>
-        autocmd FileType php nnoremap <leader>tL :call MyTestRun('last')<CR>
-        autocmd FileType php nnoremap <leader>tF :call MyTestRun('file')<CR>
-        autocmd FileType php nnoremap <leader>trbn :TestNearest -d rebase<CR>
-        autocmd FileType php nnoremap <leader>trbf :TestFile -d rebase<CR>
+        autocmd FileType php nnoremap <buffer> <leader>tT :call MyTestRun('nothing')<CR>:PHPUnit <C-R>=expand('%:.')<CR> --filter '::test'<Left>
+        autocmd FileType php nnoremap <buffer> <leader>tn :call MyTestRun('nearest')<CR>
+        autocmd FileType php nnoremap <buffer> <leader>tL :call MyTestRun('last')<CR>
+        autocmd FileType php nnoremap <buffer> <leader>tF :call MyTestRun('file')<CR>
+        autocmd FileType php nnoremap <buffer> <leader>trbn :TestNearest -d rebase<CR>
+        autocmd FileType php nnoremap <buffer> <leader>trbf :TestFile -d rebase<CR>
     augroup END"}}}
+
     function! MyTestRun(runner)"{{{
         if (exists('g:vimspector_is_running'))
             let g:test#php#phpunit#executable = 'env XDEBUG_SESSION=1 ./vendor/bin/phpunit'
@@ -1375,6 +1385,7 @@ if s:plugged('vim-test')
 
         call test#run(a:runner, [])
     endfunction"}}}
+
 endif
 
 if has('nvim')
@@ -1642,6 +1653,7 @@ endif
 
 " dirbuf.nvim settings
 if s:plugged('dirbuf.nvim')
+
     nmap _ <Plug>(dirbuf_up)
 
 lua << EOF
@@ -1651,16 +1663,22 @@ require("dirbuf").setup {
     sort_order   = "directories_first",
 }
 EOF
+
 endif
 
 " dirvish settings
 if s:plugged('vim-dirvish')
+
     let g:dirvish_mode = ':sort ,^\v(.*[\/])|\ze,'
     let g:dirvish_git_show_ignored = 0
 
     nmap <silent> <Space>- :Dirvish<CR>
     nmap <silent> _ :execute (@% == '' ? 'Dirvish' : 'Dirvish %')<CR>
-    autocmd FileType dirvish nmap <silent><buffer> _ <Plug>(dirvish_up)
+
+    augroup dirvish
+        au!
+        autocmd FileType dirvish nmap <silent><buffer> _ <Plug>(dirvish_up)
+    augroup END
 
     " --- dirvish-dovish settings ---{{{
     " unmap all default mappings
@@ -1679,6 +1697,7 @@ if s:plugged('vim-dirvish')
         autocmd FileType dirvish nmap <silent><buffer> P  <Plug>(dovish_move)
     augroup END
     " --- END ---}}}
+
 endif
 
 " nvim-tree.lua settings
@@ -1827,9 +1846,9 @@ if s:plugged('rest.nvim')
 
     augroup rest.nvim
         au!
-        autocmd FileType http nmap <leader>sr <Plug>RestNvim
-        autocmd FileType http nmap <leader>sp <Plug>RestNvimPreview
-        autocmd FileType http nmap <leader>sL <Plug>RestNvimLast
+        autocmd FileType http nmap <buffer> <leader>sr <Plug>RestNvim
+        autocmd FileType http nmap <buffer> <leader>sp <Plug>RestNvimPreview
+        autocmd FileType http nmap <buffer> <leader>sL <Plug>RestNvimLast
         autocmd FileType http set commentstring=\#%s
         " autocmd BufEnter * if &filetype == 'httpResult' | call <SID>save_cookie() | endif
         autocmd BufEnter * if &filetype == 'httpResult' | setl fdm=indent | setl fdl=1 | endif
@@ -2065,7 +2084,7 @@ EOF
     augroup diffview
         au!
         autocmd FileType    GV        call <SID>MapKeyBindingsForGv()
-        autocmd FileType    floggraph nnoremap vv <Esc>:call <SID>DiffviewCommitUnderCursorInFlog()<CR>
+        autocmd FileType    floggraph nnoremap <buffer> vv <Esc>:call <SID>DiffviewCommitUnderCursorInFlog()<CR>
         autocmd BufWinEnter diffview://*/log/*/commit_log nnoremap <buffer> q <Cmd>q<CR>
         if s:plugged('git-blame.nvim')
             autocmd User DiffviewViewEnter exec 'GitBlameDisable'
@@ -2103,7 +2122,11 @@ endif
 
 " Tabular settings
 if s:plugged('tabular')
-    autocmd FileType markdown inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+
+    augroup tabular
+        au!
+        autocmd FileType markdown inoremap <silent><buffer> <Bar> <Bar><Esc>:call <SID>align()<CR>a
+    augroup END
 
     function! s:align()"{{{
         let p = '^\s*|\s.*\s|\s*$'
@@ -2115,6 +2138,7 @@ if s:plugged('tabular')
             call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
         endif
     endfunction"}}}
+
 endif
 
 " vista settings
@@ -2272,12 +2296,12 @@ if s:plugged('vimspector')
 
     augroup vimspector_mappings
         au!
-        autocmd FileType php nmap <F3>                 :call <SID>vimspector_exec('reset')<CR>
-        autocmd FileType php nmap <F5>                 :call <SID>vimspector_exec('continue')<CR>
-        autocmd FileType php nmap <Leader>bp           <Plug>VimspectorBreakpoints
-        autocmd FileType php nmap <leader><leader><F3> :call <SID>vimspector_exec('stop')<CR>
-        autocmd FileType php nmap <leader>di           <Plug>VimspectorBalloonEval
-        autocmd FileType php xmap <leader>di           <Plug>VimspectorBalloonEval
+        autocmd FileType php nmap <buffer> <F3>                 :call <SID>vimspector_exec('reset')<CR>
+        autocmd FileType php nmap <buffer> <F5>                 :call <SID>vimspector_exec('continue')<CR>
+        autocmd FileType php nmap <buffer> <Leader>bp           <Plug>VimspectorBreakpoints
+        autocmd FileType php nmap <buffer> <leader><leader><F3> :call <SID>vimspector_exec('stop')<CR>
+        autocmd FileType php nmap <buffer> <leader>di           <Plug>VimspectorBalloonEval
+        autocmd FileType php xmap <buffer> <leader>di           <Plug>VimspectorBalloonEval
     augroup END
 
     augroup vimspector_ui_customization
@@ -2382,28 +2406,6 @@ if s:plugged('copilot.vim')
 
     imap <M-,> <Plug>(copilot-previous)
     imap <M-.> <Plug>(copilot-next)
-endif
-
-" vim-php-namespace settings
-if s:plugged('vim-php-namespace')
-    let g:php_namespace_sort_after_insert  = 1
-    let g:php_namespace_expand_to_absolute = 1
-
-    function! IPhpInsertUse()"{{{
-        call PhpInsertUse()
-        call feedkeys('a',  'n')
-    endfunction"}}}
-    function! IPhpExpandClass()"{{{
-        call PhpExpandClass()
-        call feedkeys('a', 'n')
-    endfunction"}}}
-    augroup vim_php_namespace"{{{
-        au!
-        " do imports
-        autocmd FileType php noremap  <leader><leader>iu :call PhpInsertUse()<CR>
-        " do expansions
-        autocmd FileType php noremap  <leader><leader>ec :call PhpExpandClass()<CR>
-    augroup END"}}}
 endif
 
 " NeoZoom settings
