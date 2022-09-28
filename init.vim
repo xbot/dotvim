@@ -3562,17 +3562,6 @@ function! s:get_cword_safely()"{{{
 endfunction"}}}
 "}}}
 
-" ------------------------------ Go -----------------------------{{{
-" augroup golang
-    " au!
-    " autocmd BufWritePre *.go :Fmt
-    " autocmd FileType go map <buffer> <C-CR> :silent write \| !go run %<CR>
-    " autocmd FileType go imap <buffer> <C-CR> <Esc><C-CR>
-" augroup END
-
-" let g:gofmt_command = 'goimports'
-"}}}
-
 " ------------------------------ PHP -----------------------------{{{
 
 " Open a temporary PHP file in a new window
