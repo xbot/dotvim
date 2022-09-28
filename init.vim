@@ -2394,6 +2394,7 @@ endif
 " Vimspector settings
 if s:plugged('vimspector')
 
+    let g:vimspector_install_gadgets = [ 'debugpy' ]
     let g:vimspector_sign_priority = {
                 \    'vimspectorBP':         999,
                 \    'vimspectorBPCond':     999,
