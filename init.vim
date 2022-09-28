@@ -163,7 +163,7 @@ else
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
-" textobj-user group
+" textobj plugins
 let g:textobj_lastpat_no_default_key_mappings=1
 Plug 'wellle/targets.vim'
 Plug 'kana/vim-textobj-user'
@@ -179,6 +179,7 @@ Plug 'kana/vim-textobj-syntax'
 Plug 'glts/vim-textobj-comment'
 Plug 'Julian/vim-textobj-variable-segment'
 Plug 'junegunn/vim-after-object'
+Plug 'machakann/vim-sandwich'
 " Plug 'kana/vim-textobj-underscore' " Also provided in targets.vim
 " Plug 'kentaro/vim-textobj-function-php' " Too old and 'if' works not as exptected in PHP syntax.
 
