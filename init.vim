@@ -766,25 +766,31 @@ let g:sql_type_default = 'sqlsvr'
 
 " NERD_commenter Settings
 if s:plugged('nerdcommenter')
-    let NERDSpaceDelims = 1
+
+    let NERDSpaceDelims           = 1
     let NERDCreateDefaultMappings = 0
+
     map <leader>cc <plug>NERDCommenterComment
     map <leader>cs <plug>NERDCommenterSexy
     map <leader>cu <plug>NERDCommenterUncomment
+
 endif
 
 " NERD Tree
 if s:plugged('nerdtree')
+
     nmap <leader>nt :NERDTreeToggle<CR>
     nmap <leader>nf :NERDTreeFind<CR>
     nmap <leader>nd :NERDTree %:h<CR>
 
     let NERDTreeIgnore      = ['\.scc$', '\.pyc$', '\~$']
     let NERDTreeNaturalSort = 1
+
 endif
 
 " TwitVim settings
 if s:plugged('twitvim')
+
     let twitvim_enable_python = 1
     " let twitvim_proxy         = '127.0.0.1:8123'
     let twitvim_browser_cmd   = 'open -a Safari'
@@ -797,6 +803,7 @@ if s:plugged('twitvim')
     nmap <leader>twmt :MentionsTwitter<CR>
     nmap <leader>twdm :DMTwitter<CR>
     nmap <leader>twre :RetweetedByMeTwitter<CR>
+
 endif
 
 if IsPlatform('win')
@@ -806,9 +813,6 @@ endif
 if IsPlatform('win')
     let g:pydoc_cmd = "python C:\\Python27\\Lib\\pydoc.py"
 endif
-
-" shell.vim
-let g:shell_mappings_enabled=0
 
 " DirDiff
 if s:plugged('vim-dirdiff')
@@ -853,20 +857,32 @@ if s:plugged('ale')"{{{
 endif"}}}
 
 " pdv settings
-let g:pdv_template_dir = $HOME .'/.vim/plugged/pdv/templates_snip'
-augroup pdv
-    au!
-    autocmd FileType php nnoremap <buffer> <leader>\\ :call pdv#DocumentWithSnip()<CR>
-augroup END
+if s:plugged('pdv')
+    
+    let g:pdv_template_dir = $HOME .'/.vim/plugged/pdv/templates_snip'
+
+    augroup pdv
+        au!
+        autocmd FileType php nnoremap <buffer> <leader>\\ :call pdv#DocumentWithSnip()<CR>
+    augroup END
+
+endif
 
 " easy-align settings
 if s:plugged('vim-easy-align')
+
     vmap <leader>al <Plug>(EasyAlign)
+
     let g:easy_align_ignore_groups = ['String']
+
 endif
 
 " vim-markdown
-let g:markdown_fenced_languages = ['html', 'python', 'ruby', 'vim', 'php', 'bash=sh']
+if s:plugged('vim-markdown')
+
+    let g:markdown_fenced_languages = ['html', 'python', 'ruby', 'vim', 'php', 'bash=sh']
+
+endif
 
 " leaderf settings
 if s:plugged('LeaderF')"{{{
@@ -951,6 +967,7 @@ endif
 
 " bufferline.nvim settings
 if s:plugged('bufferline.nvim')
+
     nnoremap L :BufferLineCycleNext<CR>
     nnoremap H :BufferLineCyclePrev<CR>
 
@@ -1029,10 +1046,12 @@ require("bufferline").setup({
     },
 })
 EOF
+
 endif
 
 " lualine settings
 if s:plugged('lualine.nvim')
+
 lua << END
 require('lualine').setup{
     options = {
@@ -1078,10 +1097,12 @@ require('lualine').setup{
     extensions = {'fugitive', 'nvim-tree', 'quickfix', 'toggleterm'},
 }
 END
+
 endif
 
 " airline settings
 if s:plugged('vim-airline')
+
     let g:airline_powerline_fonts = 1
     let g:airline#extensions#wordcount#enabled               = 1
     let g:airline#extensions#tabline#enabled                 = 1
@@ -1093,6 +1114,7 @@ if s:plugged('vim-airline')
     let g:airline#extensions#tabline#exclude_preview         = 1
     let g:airline#extensions#tabline#tab_nr_type             = 2
     let g:airline#extensions#tabline#buffer_idx_mode         = 1
+
     nmap <leader>1 <Plug>AirlineSelectTab1
     nmap <leader>2 <Plug>AirlineSelectTab2
     nmap <leader>3 <Plug>AirlineSelectTab3
@@ -1104,6 +1126,7 @@ if s:plugged('vim-airline')
     nmap <leader>9 <Plug>AirlineSelectTab9
     " nmap <leader>- <Plug>AirlineSelectPrevTab
     " nmap <leader>+ <Plug>AirlineSelectNextTab
+
     " let g:airline#extensions#xkblayout#enabled = 1
     " let g:XkbSwitchLib = '/usr/local/lib/libInputSourceSwitcher.dylib'
     call airline#parts#define_function('cwd', 'GetCWD')
@@ -1112,20 +1135,24 @@ if s:plugged('vim-airline')
     endfun"}}}
     " Options: ['cwd', 'mode', 'crypt', 'paste', 'keymap', 'spell', 'capslock', 'xkblayout', 'iminsert']
     let g:airline_section_a = airline#section#create_left(['cwd', 'crypt', 'paste', 'keymap', 'spell', 'capslock', 'xkblayout', 'iminsert'])
+
 endif
 
 " mason.nvim settings
 if s:plugged('mason.nvim')
+
 lua << EOF
 require("mason").setup()
 require("mason-lspconfig").setup({
     ensure_installed = { 'sumneko_lua', 'intelephense', 'bashls', 'grammarly', 'jsonls', 'vimls', 'yamlls' }
 })
 EOF
+
 endif
 
 " lspconfig settings
 if s:plugged('nvim-lspconfig')
+
 lua << EOF
 local lsp_defaults = {
     flags = {
@@ -1199,10 +1226,12 @@ lspconfig['sumneko_lua'].setup {
 -- }
 
 EOF
+
 endif
 
 " lspkind settings
 if s:plugged('lspkind.nvim')
+
 lua << EOF
 require('lspkind').init({
     -- DEPRECATED (use mode instead): enables text annotations
@@ -1254,10 +1283,12 @@ require('lspkind').init({
     },
 })
 EOF
+
 endif
 
 " nvim-cmp settings
 if s:plugged('nvim-cmp')
+
 lua << EOF
 local cmp = require('cmp')
 local ultisnips_mappings = require('cmp_nvim_ultisnips.mappings')
@@ -1307,10 +1338,12 @@ cmp.setup({
     }
 })
 EOF
+
 endif
 
 " lspsaga settings.
 if s:plugged('lspsaga.nvim')
+
 lua << EOF
 local opts = { noremap = true, silent = true }
 vim.keymap.set('n', '<A-K>',      '<Cmd>Lspsaga      hover_doc<CR>',            opts)
@@ -1330,31 +1363,41 @@ require('lspsaga').init_lsp_saga({
     show_diagnostic_source = true,
 })
 EOF
+
 endif
 
 " gitsigns.nvim settings
 if s:plugged('gitsigns.nvim')
+
 lua << EOF
 require('gitsigns').setup()
 EOF
+
 endif
 
 " spellsitter.nvim settings
 if s:plugged('spellsitter.nvim')
+
 lua << EOF
 require('spellsitter').setup()
 EOF
+
 endif
 
 " vim-choosewin
 if s:plugged('vim-choosewin')
+
     nmap - <Plug>(choosewin)
+
     let g:choosewin_overlay_enable = 0
+
 endif
 
 " wildfire
 if s:plugged('wildfire.vim')
+
     nmap <leader>vv <Plug>(wildfire-quick-select)
+
 endif
 
 " vim-test settings
@@ -1403,32 +1446,41 @@ endif
 
 " Git mappings, coc, fugitive settings
 if s:plugged('vim-fugitive')
+
     nnoremap <leader>gg  :tab G<CR>
     nnoremap <leader>gl  <Cmd>Git pull<CR>
     nnoremap <leader>gp  <Cmd>Git push<CR>
     nnoremap <leader>dgh <Cmd>diffget //2<CR>
     nnoremap <leader>dgl <Cmd>diffget //3<CR>
     nnoremap gb          <Cmd>Git blame<CR>
+
 endif
 if s:plugged('coc.nvim')
+
     nnoremap <leader>gb  <Cmd>CocList branches<CR>
     nnoremap <leader>gB  <Cmd>CocList branches -a<CR>
+
 endif
 " git-time-lapse settings
 if s:plugged('git-time-lapse')
+
     nnoremap <leader>gtl <Cmd>GitTimeLapse<CR>
+
 endif
 " vim-twiggy settings
 if s:plugged('vim-twiggy')
+
     nnoremap <leader>lb :Twiggy<CR>
 
     let g:twiggy_group_locals_by_slash = 0
     let g:twiggy_local_branch_sort     = 'mru'
     let g:twiggy_remote_branch_sort    = 'date'
     let g:twiggy_num_columns           = 50
+
 endif
 " git-conflict settings
 if s:plugged('git-conflict.nvim')
+
 lua << EOF
 require('git-conflict').setup({
     default_mappings = true,
@@ -1439,50 +1491,63 @@ require('git-conflict').setup({
     }
 })
 EOF
+
 endif
 
 " gv.vim settings
 if s:plugged('gv.vim')
+
     nnoremap <leader>gvl :GV  --pretty=%cd\ %h%d\ %s\ (%an,\ %ci) --date=format:%Y-%m-%d --abbrev-commit --no-merges<CR>
     nnoremap <leader>gvc :GV! --pretty=%cd\ %h%d\ %s\ (%an,\ %ci) --date=format:%Y-%m-%d --abbrev-commit --no-merges<CR>
     nnoremap <leader>gva :GV  --pretty=%cd\ %h%d\ %s\ (%an,\ %ci) --date=format:%Y-%m-%d --abbrev-commit --no-merges --author<space>
     nnoremap <leader>gvg :GV  --pretty=%cd\ %h%d\ %s\ (%an,\ %ci) --date=format:%Y-%m-%d --abbrev-commit --no-merges --grep<space>
     vnoremap <leader>gvc :GV!<CR>
+
     augroup gv
         autocmd FileType git set fdl=0
     augroup END
+
 endif
 
 " vim-flog settings
 if s:plugged('vim-flog')
+
     nnoremap <leader>gvv :Flog -all<CR>
 
     if s:plugged('AnsiEsc.vim')
         let g:flog_use_ansi_esc = 1
     endif
+
 endif
 
 " auto-pairs settings
 if s:plugged('auto-pairs')
+
     let g:AutoPairsMapCh = 0
+
 endif
 
 " Nord color scheme
 if s:plugged('nord-vim')
+
     let g:nord_italic = 1
     let g:nord_italic_comments = 1
+
 endif
 
 " vim-fontsize
 if s:plugged('vim-fontsize')
+
     nmap <silent> <Leader>=  <Plug>FontsizeBegin
     nmap <silent> <Leader>+  <Plug>FontsizeInc
     nmap <silent> <Leader>-  <Plug>FontsizeDec
     nmap <silent> <Leader>0  <Plug>FontsizeDefault
+
 endif
 
 " Toggle terminal
 if has('nvim') && s:plugged('toggleterm.nvim')
+
 lua << EOF
 require("toggleterm").setup{
     open_mapping    = [[<c-\>]],
@@ -1498,17 +1563,24 @@ require("toggleterm").setup{
     end,
 }
 EOF
+
 elseif has('nvim') && s:plugged('nvim-toggle-terminal')
+
     nnoremap <silent> <C-\> :ToggleTerminal<Enter>
     tnoremap <silent> <C-\> <C-\><C-n>:ToggleTerminal<Enter>
+
 elseif s:plugged('toggle-terminal')
+
     let g:toggle_terminal#command = 'zsh'
+
     nnoremap <silent> <C-\> :ToggleTerminal<CR>
     tnoremap <silent> <C-\> <C-w>:ToggleTerminal<CR>
+
 endif
 
 " startify settings
 if s:plugged('vim-startify')
+
     nnoremap <leader><leader>st :Startify<CR>
 
     let g:startify_change_to_vcs_root = 1
@@ -1521,6 +1593,7 @@ if s:plugged('vim-startify')
                 \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
                 \ { 'type': 'commands',  'header': ['   Commands']       },
                 \ ]
+
 endif
 
 " Gutentags settings
@@ -1576,16 +1649,21 @@ endif
 
 " undotree
 if s:plugged('undotree')
+
     nnoremap <leader>ut :UndotreeToggle<CR>
+
 endif
 
 " merginal settings
 if s:plugged('merginal')
+
     let g:merginal_splitType=''
+
 endif
 
 " defx settings
 if s:plugged('defx.nvim')
+
     call defx#custom#option('_', {
                 \ 'winwidth': 50,
                 \ 'split': 'vertical',
@@ -1613,7 +1691,10 @@ if s:plugged('defx.nvim')
     nnoremap <silent>sf :<C-u>Defx -listed -resume -buffer-name=tab`tabpagenr()` `expand('%:p:h')` -search=`expand('%:p')`<CR>
     nnoremap <silent><leader>fi :<C-u>Defx -new `expand('%:p:h')` -search=`expand('%:p')`<CR>
 
-    autocmd FileType defx call s:defx_mappings()
+    augroup defx
+        au!
+        autocmd FileType defx call s:defx_mappings()
+    augroup END
 
     function! s:defx_mappings() abort
         nnoremap <silent><buffer><expr> .     defx#do_action('toggle_ignored_files')
@@ -1633,22 +1714,27 @@ if s:plugged('defx.nvim')
         endif
         return defx#do_action('multi', ['drop'])
     endfunction
+
 endif
 
 " vim-clap
 if s:plugged('vim-clap')
+
     " let g:clap_theme = 'material_design_dark'
     " let g:clap_theme = { 'search_text': {'guifg': 'red', 'ctermfg': 'red'} }
     let g:clap_provider_grep_executable = 'rg'
     let g:clap_provider_grep_opts = '--no-ignore-vcs --vimgrep --no-heading --no-config --max-columns 4096 --ignore-case --follow'
+
 endif
 
 " unimpaired
 if s:plugged('vim-unimpaired')
+
     vmap <S-Up>    [egv
     vmap <S-Down>  ]egv
     vmap <S-Left>  <gv
     vmap <S-Right> >gv
+
 endif
 
 " dirbuf.nvim settings
@@ -1702,6 +1788,7 @@ endif
 
 " nvim-tree.lua settings
 if s:plugged('nvim-tree.lua')
+
     nnoremap <silent> <leader>tf :NvimTreeFindFileToggle<CR>
     nnoremap <silent> <leader>tt :NvimTreeToggle<CR>
 
@@ -1737,23 +1824,29 @@ require("nvim-tree").setup {
     hijack_directories = { enable = false },
 }
 EOF
+
 endif
 
 " sideways settings
 " Move items/parameters/arguments left or right.
 if s:plugged('sideways.vim')
+
     nnoremap <S-Left>  :SidewaysLeft<CR>
     nnoremap <S-Right> :SidewaysRight<CR>
+
 endif
 
 " vim-expand-region settings
 if s:plugged('vim-expand-region')
+
     vmap v <Plug>(expand_region_expand)
     vmap V <Plug>(expand_region_shrink)
+
 endif
 
 " vim-silicon settings
 if s:plugged('vim-silicon')
+
     let g:silicon = {
           \   'theme':              'Dracula',
           \   'font':                  'Hack',
@@ -1769,10 +1862,12 @@ if s:plugged('vim-silicon')
           \   'round-corner':          v:true,
           \   'window-controls':       v:false,
           \ }
+
 endif
 
 " which-key.nvim settings
 if s:plugged('which-key.nvim')
+
 lua << EOF
     require("which-key").setup {
         -- your configuration comes here
@@ -1780,26 +1875,34 @@ lua << EOF
         -- refer to the configuration section below
     }
 EOF
+
 endif
 
 " vim-which-key settings
 if s:plugged('vim-which-key')
+
     let g:mapleader = ','
     let g:maplocalleader = ','
     let g:which_key_vertical = 1
+
     nnoremap <silent> <leader>      :<c-u>WhichKey ','<CR>
     nnoremap <silent> <localleader> :<c-u>WhichKey ','<CR>
+
 endif
 
 " vim-fold-cycle settings
 if s:plugged('vim-fold-cycle')
+
     let g:fold_cycle_default_mapping = 0 "disable default mappings
+
     nmap <Right> <Plug>(fold-cycle-open)
     nmap <Left> <Plug>(fold-cycle-close)
+
 endif
 
 " vira settings
 if s:plugged('vira')
+
     " let g:vira_async_timer = 30000
     " let g:vira_async_timer_init = 30000
     let g:vira_config_file_servers  = $HOME . '/.config/vira/vira_servers.yaml'
@@ -1831,14 +1934,17 @@ if s:plugged('vira')
         let g:vira_active_issue = matchstr(l:current_branch_name, 'DEV-\d\+')
     endfunction"}}}
     call s:Vira_SetActiveIssueGivenCurrentGitBranch()
+
 endif
 
 " textobj settings
 if s:plugged('vim-textobj-lastpat')
+
     xmap an <Plug>(textobj-lastpat-n)
     omap an <Plug>(textobj-lastpat-n)
     xmap aN <Plug>(textobj-lastpat-N)
     omap aN <Plug>(textobj-lastpat-N)
+
 endif
 
 " rest.nvim settings
@@ -1934,12 +2040,14 @@ endif
 
 " nvim-colorizer settings
 if s:plugged('nvim-colorizer.lua')
+
 lua << EOF
 require('colorizer').setup {
     '*';
     '!vim-plug';
 }
 EOF
+
 endif
 
 " diffview settings
@@ -3454,77 +3562,6 @@ function! s:get_cword_safely()"{{{
 endfunction"}}}
 "}}}
 
-" ------------------------------ Python -----------------------------{{{
-augroup python
-    au!
-    autocmd filetype python map  <buffer> <F5>   :call StartPDB()<CR>
-    autocmd filetype python map  <buffer> <S-F5> :call StopPDB()<CR>
-    autocmd filetype python map  <buffer> <F6>   :Cstep<CR>
-    autocmd filetype python map  <buffer> <F7>   :Cnext<CR>
-    autocmd filetype python map  <buffer> <S-N>  :Cnext<CR>
-    autocmd FileType python map  <buffer> <A-CR> :python runScript()<CR>
-    autocmd filetype python nmap <buffer> <C-CR> :call ExecutePythonScript()<CR>
-    autocmd filetype python imap <buffer> <C-CR> <ESC><C-CR>
-    autocmd FileType python set  formatprg=PythonTidy.py
-    " autocmd FileType python autocmd BufWritePre <buffer> let s:saveview = winsaveview() | exe '%!PythonTidy.py' | call winrestview(s:saveview) | unlet s:saveview
-augroup END
-
-" Start pyclewn
-function! StartPDB()"{{{
-    Pyclewn pdb %:p
-    sleep 1100m
-    Cmapkeys
-endfunction"}}}
-
-" Stop pyclewn
-function! StopPDB()"{{{
-    Cunmapkeys
-    Cquit
-    sleep 100m
-    let nr = bufnr('(clewn)_console')
-    if nr>0
-        exec 'bdelete '.nr
-    endif
-    e
-endfunction"}}}
-
-" Run a python script
-function! ExecutePythonScript()"{{{
-    if &filetype !=? 'python'
-        echohl WarningMsg | echo 'This is not a Python file !' | echohl None
-        return
-    endif
-    if IsPlatform(['win','mac'])
-        setlocal makeprg=python\ -u\ %
-    else
-        setlocal makeprg=python2\ -u\ %
-    endif
-    set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-    echohl WarningMsg | echo 'Execution output:' | echohl None
-    if &modified == 1
-        silent write
-    endif
-    silent make
-    clist
-endfunction"}}}
-
-" Run python code snippets
-if has('python3')
-python3 <<EOF
-def runScript():
-    script="\n".join([line for line in vim.current.buffer])
-    exec(script)
-EOF
-elseif has('python')
-python <<EOF
-def runScript():
-    script="\n".join([line for line in vim.current.buffer])
-    exec(script)
-EOF
-endif
-
-"}}}
-
 " ------------------------------ Go -----------------------------{{{
 " augroup golang
     " au!
@@ -3622,9 +3659,9 @@ if s:plugged('coc.nvim')
 
     inoremap <silent><expr> <C-n>  coc#pum#visible() ? coc#pum#next(1)       : "\<C-n>"
     inoremap <silent><expr> <C-p>  coc#pum#visible() ? coc#pum#prev(1)       : "\<C-p>"
-    inoremap <silent><expr> <down> coc#pum#visible() ? coc#pum#next(0)       : "\<down>"
-    inoremap <silent><expr> <up>   coc#pum#visible() ? coc#pum#prev(0)       : "\<up>"
-    inoremap <expr>         <cr>   coc#pum#visible() ? coc#_select_confirm() : "\<CR>"
+    inoremap <silent><expr> <Down> coc#pum#visible() ? coc#pum#next(0)       : "\<Down>"
+    inoremap <silent><expr> <Up>   coc#pum#visible() ? coc#pum#prev(0)       : "\<Up>"
+    inoremap <expr>         <CR>   coc#pum#visible() ? coc#_select_confirm() : "\<CR>"
 
     " --- The COC implementation of <TAB> behavior ---
     inoremap <silent><expr> <TAB>
