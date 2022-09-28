@@ -62,3 +62,10 @@ lua << EOF
 $0
 EOF
 endsnippet
+
+snippet ag "augroup" b
+augroup ${1:group_name}
+	au!
+	${2}
+augroup END$0
+endsnippet
