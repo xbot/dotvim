@@ -705,8 +705,13 @@ endif"}}}
 " vim-grepper settings
 if s:plugged('vim-grepper')
 
-    nmap <leader>gs <plug>(GrepperOperator)
-    xmap <leader>gs <plug>(GrepperOperator)
+    runtime plugin/grepper.vim
+    let g:grepper.rg.grepprg .= ' --no-ignore-vcs --smart-case -g !vendor/composer/ -g !storage/ -g !node_modules/'
+
+    nnoremap <leader>gs <Plug>(GrepperOperator)
+    xnoremap <leader>gs <Plug>(GrepperOperator)
+    nnoremap <leader>gg <Cmd>Grepper<CR>
+    nnoremap <leader>gr :GrepperRg 
 
 endif
 
@@ -719,15 +724,15 @@ if s:plugged('ferret')"{{{
                 \   'ag': '--skip-vcs-ignores --ignore-dir=storage --vimgrep --width 4096 --follow --ignore-dir=vendor/composer --ignore-dir=storage',
                 \   'rg': '--no-ignore-vcs --vimgrep --no-heading --no-config --max-columns 4096 --follow -g !vendor/composer/ -g !storage/ -g !node_modules/'
                 \ }
-    let g:FerretQFHandler='botright copen 20'
-    let g:FerretLLHandler='botright lopen 20'
+    " let g:FerretQFHandler='botright copen 20'
+    " let g:FerretLLHandler='botright lopen 20'
 
     nmap <leader>ak  <Plug>(FerretAck)
     nmap <leader>lak <Plug>(FerretLack)
     nmap <leader>aw  <Plug>(FerretAckWord)
     nmap <leader>as  <Plug>(FerretAcks)
-    vmap <leader>ak  y:Ack <C-R>=<SID>escape_regex(@", 1)<CR>
-    vmap <leader>lak y:Lack <C-R>=<SID>escape_regex(@", 1)<CR>
+    vmap <leader>ak  y:Ack <C-R>=Escape_regex(@", 1)<CR>
+    vmap <leader>lak y:Lack <C-R>=Escape_regex(@", 1)<CR>
 
     " The patterns passed to the :Ack command may be not compatible with the
     " :Acks command, so we need to escape some characters in them additionally
@@ -758,7 +763,61 @@ if s:plugged('ListToggle')
 
     let g:lt_location_list_toggle_map = "<C-;>"
     let g:lt_quickfix_list_toggle_map = "<C-'>"
-    let g:lt_height = 20
+
+endif
+
+" nvim-bqf settings
+if s:plugged('nvim-bqf')
+
+    hi BqfPreviewBorder guifg=#50a14f ctermfg=71
+    hi link BqfPreviewRange Search
+
+lua << EOF
+local status, bqf = pcall(require, 'bqf')
+if not status then
+    return
+end
+
+bqf.setup({
+    auto_enable = true,
+    auto_resize_height = true, -- highly recommended enable
+    preview = {
+        win_height = 12,
+        win_vheight = 12,
+        delay_syntax = 80,
+        border_chars = {'┃', '┃', '━', '━', '┏', '┓', '┗', '┛', '█'},
+        show_title = false,
+        should_preview_cb = function(bufnr, qwinid)
+            local ret = true
+            local bufname = vim.api.nvim_buf_get_name(bufnr)
+            local fsize = vim.fn.getfsize(bufname)
+            if fsize > 100 * 1024 then
+                -- skip file size greater than 100k
+                ret = false
+            elseif bufname:match('^fugitive://') then
+                -- skip fugitive buffer
+                ret = false
+            end
+            return ret
+        end
+    },
+    -- make `drop` and `tab drop` to become preferred
+    func_map = {
+        drop = 'o',
+        openc = 'O',
+        split = '<C-s>',
+        tabdrop = '<C-t>',
+        tabc = '',
+        ptogglemode = 'z,',
+    },
+    filter = {
+        fzf = {
+            action_for = {['ctrl-s'] = 'split', ['ctrl-t'] = 'tab drop'},
+            extra_opts = {'--bind', 'ctrl-o:toggle-all', '--prompt', '> '}
+        }
+    }
+})
+EOF
 
 endif
 
@@ -1459,7 +1518,7 @@ endif
 " Git mappings, coc, fugitive settings
 if s:plugged('vim-fugitive')
 
-    nnoremap <leader>gg  :tab G<CR>
+    nnoremap <leader>g.  :tab G<CR>
     nnoremap <leader>gl  <Cmd>Git pull<CR>
     nnoremap <leader>gp  <Cmd>Git push<CR>
     nnoremap <leader>dgh <Cmd>diffget //2<CR>
@@ -3148,8 +3207,8 @@ vnoremap <M-j> <down>
 vnoremap <M-k> <up>
 
 " Delete lines which contain the current word or selected text.
-nnoremap <leader>dl yiw:call <SID>preserve("g/".<SID>escape_regex(@")."/d")<CR>
-vnoremap <leader>dl y:call   <SID>preserve("g/".<SID>escape_regex(@")."/d")<CR>
+nnoremap <leader>dl yiw:call <SID>preserve("g/".Escape_regex(@")."/d")<CR>
+vnoremap <leader>dl y:call   <SID>preserve("g/".Escape_regex(@")."/d")<CR>
 
 " Set TODO comments done.
 nnoremap <leader>dn :s/\(^\s*\/\/\s\)\@<=TODO\s\(lidong\\|donie\):\s//<CR>
@@ -3171,12 +3230,12 @@ nmap <leader>b2g <ESC>:call B2G()<CR>
 
 " Find and replace
 nmap <leader>// yiw/\<<C-R>"\>\C
-vmap <leader>// y/\m<C-R>=<SID>escape_regex(@")<CR>\C
+vmap <leader>// y/\m<C-R>=Escape_regex(@")<CR>\C
 " vmap <leader>// y/\V<C-R>=escape(@",'/\')<CR>
 nmap <leader>rr yiw:%s/\<<C-R>"\>\C//g<LEFT><LEFT>
-vmap <leader>rr y:%s/<C-R>=<SID>escape_regex(@")<CR>\C//g<LEFT><LEFT>
+vmap <leader>rr y:%s/<C-R>=Escape_regex(@")<CR>\C//g<LEFT><LEFT>
 nmap <leader>rl yiw:s/\<<C-R>"\>\C//g<LEFT><LEFT>
-vmap <leader>rl y:s/<C-R>=<SID>escape_regex(@")<CR>\C//g<LEFT><LEFT>
+vmap <leader>rl y:s/<C-R>=Escape_regex(@")<CR>\C//g<LEFT><LEFT>
 
 " " Convert between encodings.
 " nmap <leader>gbk  :set fenc=cp936<CR>
@@ -3237,9 +3296,9 @@ fun! s:get_visual_selection(type, ...)"{{{
 endfun"}}}
 
 if IsPlatform('win')
-    set diffexpr=<SID>my_diff()
+    set diffexpr=My_diff()
 endif
-function! s:my_diff()"{{{
+function! My_diff()"{{{
     let opt = '-a --binary '
     if &diffopt =~? 'icase' | let opt = opt . '-i ' | endif
     if &diffopt =~? 'iwhite' | let opt = opt . '-b ' | endif
@@ -3299,7 +3358,7 @@ augroup save_cfile_as_no_eof
     autocmd BufWriteCmd version*.txt call <SID>save_cfile_as_no_eof()
 augroup END
 function! s:save_cfile_as_no_eof()"{{{
-    call <SID>save_as_no_eof(bufname('%'))
+    call s:save_as_no_eof(bufname('%'))
 endfunction"}}}
 " Save the current buffer as a file with no EOF sign.
 function! s:save_as_no_eof(filename)"{{{
@@ -3406,7 +3465,7 @@ command! -nargs=0 ConvertTabToSpaces call <SID>preserve("%s/\\t/    /g")
 " 转义正则表达式特殊字符，以便在正则表达式中使用
 " a:1   是否转义为vimgrep的pattern格式，1，2
 " a:2   是否用shellescape()转义，1是转义，2是转义并去掉两侧单引号
-function! s:escape_regex(str, ...)"{{{
+function! Escape_regex(str, ...)"{{{
     let pattern = a:str
     let pattern = escape(pattern, '^$.*[]~"/\')
 
