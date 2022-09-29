@@ -659,13 +659,16 @@ endif
 
 " FencView settings
 if s:plugged('fencview')
+
     let g:fencview_autodetect    = 0
     let g:fencview_checklines    = 10
     let g:fencview_auto_patterns = '*.txt,*.htm{l\=},*.php,*.lib,*.inc,*.sql'
+
 endif
 
 " UltiSnips settings
-if s:plugged('ultisnips')
+if s:plugged('ultisnips')"{{{
+
     let g:UltiSnipsExpandTrigger                           = '<C-Tab>'
     let g:UltiSnipsJumpForwardTrigger                      = '<C-j>'
     let g:UltiSnipsJumpBackwardTrigger                     = '<C-k>'
@@ -696,17 +699,21 @@ if s:plugged('ultisnips')
             " endif
         " endif
     " endfunction"}}}
-endif
+
+endif"}}}
 
 " vim-grepper settings
 if s:plugged('vim-grepper')
+
     nmap <leader>gs <plug>(GrepperOperator)
     xmap <leader>gs <plug>(GrepperOperator)
+
 endif
 
 " Ferret settings
 " @see https://0x3f.org/posts/the-best-practice-of-searching-in-vim/
-if s:plugged('ferret')
+if s:plugged('ferret')"{{{
+
     let g:FerretExecutable='rg'
     let g:FerretExecutableArguments = {
                 \   'ag': '--skip-vcs-ignores --ignore-dir=storage --vimgrep --width 4096 --follow --ignore-dir=vendor/composer --ignore-dir=storage',
@@ -719,8 +726,8 @@ if s:plugged('ferret')
     nmap <leader>lak <Plug>(FerretLack)
     nmap <leader>aw  <Plug>(FerretAckWord)
     nmap <leader>as  <Plug>(FerretAcks)
-    vmap <leader>ak  y:Ack <C-R>=EscapeRegex(@", 1)<CR>
-    vmap <leader>lak y:Lack <C-R>=EscapeRegex(@", 1)<CR>
+    vmap <leader>ak  y:Ack <C-R>=<SID>escape_regex(@", 1)<CR>
+    vmap <leader>lak y:Lack <C-R>=<SID>escape_regex(@", 1)<CR>
 
     " The patterns passed to the :Ack command may be not compatible with the
     " :Acks command, so we need to escape some characters in them additionally
@@ -743,22 +750,27 @@ if s:plugged('ferret')
         autocmd Syntax * call matchadd('Todo',  '\W\zs\(TODO\|FIXME\|CHANGED\|BUG\|HACK\)')
         autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
     augroup END
-endif
+
+endif"}}}
 
 " ListToggle settings
 if s:plugged('ListToggle')
-    let g:lt_location_list_toggle_map = '<leader>lt'
-    let g:lt_quickfix_list_toggle_map = '<leader>ct'
+
+    let g:lt_location_list_toggle_map = "<C-;>"
+    let g:lt_quickfix_list_toggle_map = "<C-'>"
     let g:lt_height = 20
+
 endif
 
 " Pydiction Settings
 if s:plugged('Pydiction')
+
     if IsPlatform('win')
         let g:pydiction_location = 'D:/Program Files/vim/vimfiles/plugged/Pydiction/complete-dict'
     else
         let g:pydiction_location = '~/.vim/plugged/Pydiction/complete-dict'
     endif
+
 endif
 
 " SQL Type Default
@@ -2898,7 +2910,7 @@ if IsPlatform('win')
         autocmd VimEnter *.* cd %:h
     augroup END
 else
-    " autocmd GUIEnter * call MaximizeWindow()
+    " autocmd GUIEnter * call <SID>maximize_window()
 endif
 
 " Javascript filetype
@@ -3136,8 +3148,8 @@ vnoremap <M-j> <down>
 vnoremap <M-k> <up>
 
 " Delete lines which contain the current word or selected text.
-nnoremap <leader>dl yiw:call Preserve("g/".EscapeRegex(@")."/d")<CR>
-vnoremap <leader>dl y:call   Preserve("g/".EscapeRegex(@")."/d")<CR>
+nnoremap <leader>dl yiw:call <SID>preserve("g/".<SID>escape_regex(@")."/d")<CR>
+vnoremap <leader>dl y:call   <SID>preserve("g/".<SID>escape_regex(@")."/d")<CR>
 
 " Set TODO comments done.
 nnoremap <leader>dn :s/\(^\s*\/\/\s\)\@<=TODO\s\(lidong\\|donie\):\s//<CR>
@@ -3159,12 +3171,12 @@ nmap <leader>b2g <ESC>:call B2G()<CR>
 
 " Find and replace
 nmap <leader>// yiw/\<<C-R>"\>\C
-vmap <leader>// y/\m<C-R>=EscapeRegex(@")<CR>\C
+vmap <leader>// y/\m<C-R>=<SID>escape_regex(@")<CR>\C
 " vmap <leader>// y/\V<C-R>=escape(@",'/\')<CR>
 nmap <leader>rr yiw:%s/\<<C-R>"\>\C//g<LEFT><LEFT>
-vmap <leader>rr y:%s/<C-R>=EscapeRegex(@")<CR>\C//g<LEFT><LEFT>
+vmap <leader>rr y:%s/<C-R>=<SID>escape_regex(@")<CR>\C//g<LEFT><LEFT>
 nmap <leader>rl yiw:s/\<<C-R>"\>\C//g<LEFT><LEFT>
-vmap <leader>rl y:s/<C-R>=EscapeRegex(@")<CR>\C//g<LEFT><LEFT>
+vmap <leader>rl y:s/<C-R>=<SID>escape_regex(@")<CR>\C//g<LEFT><LEFT>
 
 " " Convert between encodings.
 " nmap <leader>gbk  :set fenc=cp936<CR>
@@ -3225,9 +3237,9 @@ fun! s:get_visual_selection(type, ...)"{{{
 endfun"}}}
 
 if IsPlatform('win')
-    set diffexpr=MyDiff()
+    set diffexpr=<SID>my_diff()
 endif
-function! MyDiff()"{{{
+function! s:my_diff()"{{{
     let opt = '-a --binary '
     if &diffopt =~? 'icase' | let opt = opt . '-i ' | endif
     if &diffopt =~? 'iwhite' | let opt = opt . '-b ' | endif
@@ -3251,20 +3263,8 @@ function! MyDiff()"{{{
     silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction"}}}
 
-" Open a temporary Python file in a new window
-function! PySandBox()"{{{
-    let tmpfile = tempname().'.py'
-    exe 'new '.tmpfile
-    call setline('.', '#!/usr/bin/python2')
-    normal! o
-    call setline('.', '# -*- coding: utf-8 -*-')
-    normal! o
-    startinsert
-endfunction"}}}
-nmap <leader>sbpy :call PySandBox()<CR>
-
 " @see https://vim.fandom.com/wiki/Different_syntax_highlighting_within_regions_of_a_file
-function! TextEnableCodeSnip(filetype, start, end, textSnipHl) abort"{{{
+function! s:text_enable_code_snippet(filetype, start, end, textSnipHl) abort"{{{
     let ft=toupper(a:filetype)
     let group='textGroup'.ft
     if exists('b:current_syntax')
@@ -3286,13 +3286,23 @@ function! TextEnableCodeSnip(filetype, start, end, textSnipHl) abort"{{{
     execute 'syntax region textSnip'.ft.' matchgroup='.a:textSnipHl.' start="'.a:start.'" end="'.a:end.'" contains=@'.group
 endfunction"}}}
 
-function! MaximizeWindow()"{{{
+function! s:maximize_window()"{{{
     "silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
     silent !wmctrl -r :ACTIVE: -b add,fullscreen
 endfunction"}}}
 
+" Save the current buffer and get rid of the EOF sign.
+command! -nargs=0 SaveNOEOF :call <SID>save_cfile_as_no_eof()
+command! -complete=file -nargs=1 SaveAsNOEOF :call <SID>save_as_no_eof(<q-args>)
+augroup save_cfile_as_no_eof
+    au!
+    autocmd BufWriteCmd version*.txt call <SID>save_cfile_as_no_eof()
+augroup END
+function! s:save_cfile_as_no_eof()"{{{
+    call <SID>save_as_no_eof(bufname('%'))
+endfunction"}}}
 " Save the current buffer as a file with no EOF sign.
-function! SaveAsNOEOF(filename)"{{{
+function! s:save_as_no_eof(filename)"{{{
     let a=getline(1,line('$')-1)
     let b=map(a, 'iconv(v:val,"'.&enc.'","'.&fenc.'") . nr2char(13)')
     call extend(b, getline('$', '$'))
@@ -3301,33 +3311,23 @@ function! SaveAsNOEOF(filename)"{{{
         set nomodified
     endif
 endfunction"}}}
-" Save the current buffer and get rid of the EOF sign.
-function! SaveNOEOF()"{{{
-    call SaveAsNOEOF(bufname('%'))
-endfunction"}}}
-command! -nargs=0 SaveNOEOF :call SaveNOEOF()
-command! -complete=file -nargs=1 SaveAsNOEOF :call SaveAsNOEOF(<q-args>)
-augroup save_no_eof
-    au!
-    autocmd BufWriteCmd version*.txt call SaveNOEOF()
-augroup END
 
 " Set the current buffer to use utf-8 encoding and unix format
-function! SetUnixFF()"{{{
+function! s:set_unix_ff()"{{{
     set fenc=utf-8
     set ff=unix
 endfunction"}}}
-command! -nargs=0 SetUnixFF call SetUnixFF()
+command! -nargs=0 SetUnixFF call <SID>set_unix_ff()
 " Set the current buffer to use GBK encoding and dos format
-function! SetDOSFF()"{{{
+function! s:set_dos_ff()"{{{
     set fenc=cp936
     set ff=dos
 endfunction"}}}
-command! -nargs=0 SetDOSFF call SetDOSFF()
+command! -nargs=0 SetDOSFF call <SID>set_unix_ff()
 
 " ptag wrapper
 " @see http://0x3f.org/posts/humanize-preview-window-in-vim/
-function! PTagIt()"{{{
+function! s:ptag_it()"{{{
     exec 'ptag '.expand('<cword>')
     let cwin = winnr()
     silent! wincmd P
@@ -3362,12 +3362,12 @@ function! PTagIt()"{{{
 
     exec cwin.'wincmd w'
 endfunction"}}}
-nmap <leader>pp :call PTagIt()<CR>
+nmap <leader>pp :call <SID>ptag_it()<CR>
 nmap <leader>pc :pclose<CR>
 
 " Wipe all buffers which are not active (i.e. not visible in a window/tab)
-command! -nargs=0 PruneBuffers call CloseFugitiveBuffers()
-function! CloseFugitiveBuffers()"{{{
+command! -nargs=0 PruneBuffers call <SID>close_fugitive_buffers()
+function! s:close_fugitive_buffers()"{{{
     let visible = {}
     for t in range(1, tabpagenr('$'))
         for b in tabpagebuflist(t)
@@ -3385,7 +3385,7 @@ function! CloseFugitiveBuffers()"{{{
 endfunction"}}}
 
 " 执行命令并回到原位置
-function! Preserve(command)"{{{
+function! s:preserve(command)"{{{
     " Preparation: save last search, and cursor position.
     let _s=@/
     let l = line('.')
@@ -3397,16 +3397,16 @@ function! Preserve(command)"{{{
     call cursor(l, c)
 endfunction"}}}
 " " 清除行尾空格
-command! -nargs=0 TrimLineEnds call Preserve("%s/\\s\\+$//e")
+command! -nargs=0 TrimLineEnds call <SID>preserve("%s/\\s\\+$//e")
 " " 美化缩进
-command! -nargs=0 ReIndentBuffer call Preserve("normal gg=G")
+command! -nargs=0 ReIndentBuffer call <SID>preserve("normal gg=G")
 " " 替换Tab为4个空格
-command! -nargs=0 ConvertTabToSpaces call Preserve("%s/\\t/    /g")
+command! -nargs=0 ConvertTabToSpaces call <SID>preserve("%s/\\t/    /g")
 
 " 转义正则表达式特殊字符，以便在正则表达式中使用
 " a:1   是否转义为vimgrep的pattern格式，1，2
 " a:2   是否用shellescape()转义，1是转义，2是转义并去掉两侧单引号
-function! EscapeRegex(str, ...)"{{{
+function! s:escape_regex(str, ...)"{{{
     let pattern = a:str
     let pattern = escape(pattern, '^$.*[]~"/\')
 
@@ -3432,7 +3432,11 @@ function! EscapeRegex(str, ...)"{{{
 endfunction"}}}
 
 " Display contents of the current fold in a balloon
-function! FoldSpellBalloon()"{{{
+if has('balloon_eval')
+    set balloonexpr=<SID>fold_spell_balloon()
+    set ballooneval
+endif
+function! s:fold_spell_balloon()"{{{
     let foldStart = foldclosed(v:beval_lnum)
     let foldEnd = foldclosedend(v:beval_lnum)
     let lines = []
@@ -3457,14 +3461,10 @@ function! FoldSpellBalloon()"{{{
     " return result
     return join( lines, has('balloon_multiline') ? '\n' : ' ' )
 endfunction"}}}
-if has('balloon_eval')
-    set balloonexpr=FoldSpellBalloon()
-    set ballooneval
-endif
 
 " Fold text
 set foldtext=CustomFoldText()
-fu! CustomFoldText()"{{{
+function! CustomFoldText()"{{{
     "get first non-blank line
     let fs = v:foldstart
     while getline(fs) =~? '^\s*$' | let fs = nextnonblank(fs + 1)
@@ -3486,16 +3486,16 @@ fu! CustomFoldText()"{{{
 endf"}}}
 
 " open an item in quickfix or location list in a new tab
-function! OpenQuickfixInNewTab()"{{{
+augroup quickfix_mapping
+    au!
+    autocmd BufWinEnter * if &buftype=='quickfix' | noremap <buffer> <C-T> <Cmd>call <SID>open_quickfix_item_in_new_tab()<CR> | endif
+augroup END
+function! s:open_quickfix_item_in_new_tab()"{{{
     let tmpSwitchbuf = &switchbuf
     set switchbuf=newtab
     exe "normal \<CR>"
     exe 'set switchbuf='.tmpSwitchbuf
 endfunction"}}}
-augroup quickfix_mapping
-    au!
-    autocmd BufWinEnter * if &buftype=='quickfix'|noremap <buffer> <C-T> :call OpenQuickfixInNewTab()<CR>|endif
-augroup END
 
 " translate the word under cursor
 fun! s:search_cursor_word()"{{{
@@ -3511,19 +3511,19 @@ endfun"}}}
 " vnoremap <Leader>df :<C-U>call <SID>search_selected_word()<CR>
 
 " remap n/N to nzz/Nzz in a nice way
-function! s:nice_next(cmd)
+nnoremap <silent> n :call <SID>nice_next('n')<CR>
+nnoremap <silent> N :call <SID>nice_next('N')<CR>
+function! s:nice_next(cmd)"{{{
     let view = winsaveview()
     execute 'normal! ' . a:cmd
     if view.topline != winsaveview().topline
         normal! zz
     endif
-endfunction
-
-nnoremap <silent> n :call <SID>nice_next('n')<CR>
-nnoremap <silent> N :call <SID>nice_next('N')<CR>
+endfunction"}}}
 
 " Reset environment
-function! ResetIDE()
+nnoremap <leader><leader>rs <Cmd>call <SID>reset_ide()<CR>
+function! s:reset_ide()"{{{
     " Refresh leaderf cache
     if exists('g:Lf_py') && !has('nvim')
         exec g:Lf_py "jumpsExplManager.refresh()"
@@ -3533,8 +3533,7 @@ function! ResetIDE()
 
     " Restart COC
     call coc#rpc#restart()
-endfunction
-nnoremap <leader><leader>rs :call ResetIDE()<CR>
+endfunction"}}}
 
 " Copy relative path of current file.
 command! CopyRelativeFilePath let @+=expand('%:.') | if s:plugged('vim-oscyank') | execute 'OSCYankReg +' | endif | echo 'File path copied.'
@@ -3542,9 +3541,9 @@ command! CopyAbsoluteFilePath let @+=expand('%:p') | if s:plugged('vim-oscyank')
 
 " Copy fully qualified class & method name in php files
 " @see https://github.com/tyru/current-func-info.vim
-autocmd filetype php command! CopyFQCN let @+=GetFullyQualifiedClassNameForPhp()  | if s:plugged('vim-oscyank') | execute 'OSCYankReg +' | endif | echo @+ . ' copied.'
-autocmd filetype php command! CopyFQMN let @+=GetFullyQualifiedMethodNameForPhp() | if s:plugged('vim-oscyank') | execute 'OSCYankReg +' | endif | echo @+ . ' copied.'
-function! GetFullyQualifiedClassNameForPhp()"{{{
+autocmd FileType php command! CopyFQCN let @+=<SID>get_php_fqcn()  | if s:plugged('vim-oscyank') | execute 'OSCYankReg +' | endif | echo @+ . ' copied.'
+autocmd FileType php command! CopyFQMN let @+=<SID>get_php_fqmn() | if s:plugged('vim-oscyank') | execute 'OSCYankReg +' | endif | echo @+ . ' copied.'
+function! s:get_php_fqcn()"{{{
     " Save some registers
     let l:r_a = @a
     let l:r_b = @b
@@ -3576,8 +3575,8 @@ function! GetFullyQualifiedClassNameForPhp()"{{{
     return l:full_class_name
 endfunction"}}}
 " This function should be triggered when the cursor is on the method name
-function! GetFullyQualifiedMethodNameForPhp()"{{{
-    let l:full_class_name = GetFullyQualifiedClassNameForPhp()
+function! s:get_php_fqmn()"{{{
+    let l:full_class_name = <SID>get_php_fqcn()
 
     if s:plugged('vista.vim')
         let l:is_vista_initially_openned = vista#sidebar#IsOpen()
@@ -3676,6 +3675,22 @@ augroup END
 if s:plugged('stylua-nvim')
     command! -nargs=0 LuaFormat lua require("stylua-nvim").format_file()
 endif
+
+"}}}
+
+" ------------------------------ Python -----------------------------{{{
+
+" Open a temporary Python file in a new window
+nmap <leader>sbpy <Cmd>call <SID>py_sandbox()<CR>
+function! s:py_sandbox()"{{{
+    let tmpfile = tempname().'.py'
+    exe 'new '.tmpfile
+    call setline('.', '#!/usr/bin/python')
+    normal! o
+    call setline('.', '# -*- coding: utf-8 -*-')
+    normal! o
+    startinsert
+endfunction"}}}
 
 "}}}
 
