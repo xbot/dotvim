@@ -262,14 +262,10 @@ if has('nvim')
     Plug 'mfussenegger/nvim-dap'
     Plug 'rcarriga/nvim-dap-ui'
     Plug 'theHamsta/nvim-dap-virtual-text'
+    Plug 'jbyuki/one-small-step-for-vimkind'
 
     " Plug 'caenrique/nvim-toggle-terminal'
     " Plug 'tveskag/nvim-blame-line' " Has performance problem
-
-    " " one-small-step-for-vimkind requires vim has no output on startup,
-    " " which is too strict to be satisfied since there is always some output,
-    " " e.x. when restoring sessions
-    " Plug 'jbyuki/one-small-step-for-vimkind'
 
     " " defx group
     " " This plugin has been stopped developing, see ddu.vim and ddu-ui-filer
