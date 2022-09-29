@@ -2507,15 +2507,9 @@ dap.configurations.lua = {
         type = 'nlua',
         request = 'attach',
         name = "Attach to running Neovim instance",
-        host = function()
-            local value = vim.fn.input('Host [127.0.0.1]: ')
-            if value ~= "" then
-                return value
-            end
-            return '127.0.0.1'
-        end,
+        host = function() return vim.fn.input('Remote IP: ', '127.0.0.1') end,
         port = function()
-            local val = tonumber(vim.fn.input('Port: '))
+            local val = tonumber(vim.fn.input('Port: ', 4444))
             assert(val, "Please provide a port number")
             return val
         end,
@@ -2523,6 +2517,24 @@ dap.configurations.lua = {
 }
 dap.adapters.nlua = function(callback, config)
     callback({ type = 'server', host = config.host, port = config.port })
+end
+
+-- Python debug settings
+dap.configurations.python = {
+    {
+        type = 'remote_python',
+        request = 'attach',
+        name = "Attach to a running python program",
+        host = function() return vim.fn.input('Remote IP: ', '127.0.0.1') end,
+        port = function()
+            local val = tonumber(vim.fn.input('Port: ', 4444))
+            assert(val, "Please provide a port number")
+            return val
+        end,
+    },
+}
+dap.adapters.remote_python = function(callback, config)
+    callback({ type = 'server', host = config.host, port = config.port; })
 end
 
 dapui.setup()
