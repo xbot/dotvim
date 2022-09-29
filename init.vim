@@ -2463,15 +2463,15 @@ endif"}}}
 " nvim-dap settings{{{
 if s:plugged('nvim-dap')
 
-    nnoremap <leader><leader>dbb <Cmd>lua require("dap").toggle_breakpoint()<CR>
-    nnoremap <leader><leader>dbc <Cmd>lua require("dap").continue()<CR>
-    nnoremap <leader><leader>dbs <Cmd>lua require("dap").step_over()<CR>
-    nnoremap <leader><leader>dbi <Cmd>lua require("dap").step_into()<CR>
-    nnoremap <leader><leader>dbo <Cmd>lua require("dap").step_out()<CR>
-    nnoremap <leader><leader>dbh <Cmd>lua require("dap").run_to_cursor()<CR>
-    nnoremap <leader><leader>dbq <Cmd>lua require("dap").terminate()<CR>
-    vnoremap <leader><leader>dbe <Cmd>lua require("dapui").eval()<CR>
-    nnoremap <leader><leader>dbQ <Cmd>lua require("dapui").close()<CR>
+    nnoremap <leader>dbb <Cmd>lua require("dap").toggle_breakpoint()<CR>
+    nnoremap <leader>dbc <Cmd>lua require("dap").continue()<CR>
+    nnoremap <leader>dbs <Cmd>lua require("dap").step_over()<CR>
+    nnoremap <leader>dbi <Cmd>lua require("dap").step_into()<CR>
+    nnoremap <leader>dbo <Cmd>lua require("dap").step_out()<CR>
+    nnoremap <leader>dbh <Cmd>lua require("dap").run_to_cursor()<CR>
+    nnoremap <leader>dbq <Cmd>lua require("dap").terminate()<CR>
+    vnoremap <leader>dbe <Cmd>lua require("dapui").eval()<CR>
+    nnoremap <leader>dbQ <Cmd>lua require("dapui").close()<CR>
 
 lua << EOF
 
