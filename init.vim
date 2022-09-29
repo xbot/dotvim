@@ -258,6 +258,11 @@ if has('nvim')
     Plug 'kyazdani42/nvim-web-devicons' " optional, for file icons
     Plug 'kyazdani42/nvim-tree.lua'
 
+    " nvim-dap group
+    Plug 'mfussenegger/nvim-dap'
+    Plug 'rcarriga/nvim-dap-ui'
+    Plug 'theHamsta/nvim-dap-virtual-text'
+
     " Plug 'caenrique/nvim-toggle-terminal'
     " Plug 'tveskag/nvim-blame-line' " Has performance problem
 
@@ -265,7 +270,6 @@ if has('nvim')
     " " which is too strict to be satisfied since there is always some output,
     " " e.x. when restoring sessions
     " Plug 'jbyuki/one-small-step-for-vimkind'
-    " Plug 'mfussenegger/nvim-dap'
 
     " " defx group
     " " This plugin has been stopped developing, see ddu.vim and ddu-ui-filer
@@ -2391,7 +2395,7 @@ if s:plugged('gist-vim')
     nnoremap <leader><leader>gb :Gist -b<CR>
 endif
 
-" Vimspector settings
+" vimspector settings{{{
 if s:plugged('vimspector')
 
     let g:vimspector_install_gadgets = [ 'debugpy' ]
@@ -2458,7 +2462,85 @@ if s:plugged('vimspector')
         set norelativenumber nonumber
     endfunction"}}}
 
-endif
+endif"}}}
+
+" nvim-dap settings{{{
+if s:plugged('nvim-dap')
+
+    nnoremap <leader><leader>dbb <Cmd>lua require("dap").toggle_breakpoint()<CR>
+    nnoremap <leader><leader>dbc <Cmd>lua require("dap").continue()<CR>
+    nnoremap <leader><leader>dbs <Cmd>lua require("dap").step_over()<CR>
+    nnoremap <leader><leader>dbi <Cmd>lua require("dap").step_into()<CR>
+    nnoremap <leader><leader>dbo <Cmd>lua require("dap").step_out()<CR>
+    nnoremap <leader><leader>dbh <Cmd>lua require("dap").run_to_cursor()<CR>
+    nnoremap <leader><leader>dbq <Cmd>lua require("dap").terminate()<CR>
+    vnoremap <leader><leader>dbe <Cmd>lua require("dapui").eval()<CR>
+    nnoremap <leader><leader>dbQ <Cmd>lua require("dapui").close()<CR>
+
+lua << EOF
+
+-- https://github.com/xdebug/vscode-php-debug/releases
+-- Extract the vsix content
+local dap, dapui = require("dap"), require("dapui")
+
+-- PHP debug settings
+dap.configurations.php = {
+    {
+        type = 'php',
+        request = 'launch',
+        name = 'Listen for xdebug',
+        port = '9003',
+        log = true,
+        serverSourceRoot = '/app',
+        localSourceRoot = "${workspaceFolder}",
+    },
+}
+dap.adapters.php = {
+    type = 'executable',
+    command = 'node',
+    args = {os.getenv('HOME') .. "/Projects/3rd-party/vscode-php-debug/out/phpDebug.js"},
+}
+
+-- Lua debug settings
+dap.configurations.lua = {
+    {
+        type = 'nlua',
+        request = 'attach',
+        name = "Attach to running Neovim instance",
+        host = function()
+            local value = vim.fn.input('Host [127.0.0.1]: ')
+            if value ~= "" then
+                return value
+            end
+            return '127.0.0.1'
+        end,
+        port = function()
+            local val = tonumber(vim.fn.input('Port: '))
+            assert(val, "Please provide a port number")
+            return val
+        end,
+    }
+}
+dap.adapters.nlua = function(callback, config)
+    callback({ type = 'server', host = config.host, port = config.port })
+end
+
+dapui.setup()
+
+dap.listeners.after.event_initialized["dapui_config"] = function()
+    dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+    dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+    dapui.close()
+end
+
+require("nvim-dap-virtual-text").setup()
+EOF
+
+endif"}}}
 
 " Far.vim settings
 if s:plugged('far.vim')
@@ -2477,36 +2559,6 @@ endif
 " Fine-cmdline settings
 if s:plugged('fine-cmdline.nvim')
     nnoremap <leader>fc <cmd>FineCmdline<CR>
-endif
-
-" nvim-dap settings
-if s:plugged('nvim-dap')
-lua << END
-local dap = require"dap"
-dap.configurations.lua = {
-  {
-    type = 'nlua',
-    request = 'attach',
-    name = "Attach to running Neovim instance",
-    host = function()
-      local value = vim.fn.input('Host [127.0.0.1]: ')
-      if value ~= "" then
-        return value
-      end
-      return '127.0.0.1'
-    end,
-    port = function()
-      local val = tonumber(vim.fn.input('Port: '))
-      assert(val, "Please provide a port number")
-      return val
-    end,
-  }
-}
-
-dap.adapters.nlua = function(callback, config)
-  callback({ type = 'server', host = config.host, port = config.port })
-end
-END
 endif
 
 " copilot.vim settings
