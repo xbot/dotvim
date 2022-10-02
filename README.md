@@ -37,6 +37,7 @@ ln -s ~/Dropbox/Mackup/.vim/ftdetect .
 ln -s ~/Dropbox/Mackup/.vim/ftplugin .
 ln -s ~/Dropbox/Mackup/.vim/indent .
 ln -s ~/Dropbox/Mackup/.vim/init.vim .
+ln -s ~/Dropbox/Mackup/.vim/lua .
 ln -s ~/Dropbox/Mackup/.vim/spell .
 ln -s ~/Dropbox/Mackup/.vim/syntax .
 ln -s ~/Dropbox/Mackup/.vim/plugin.lock .
@@ -75,6 +76,7 @@ name = dotvim
 .vim/ftplugin
 .vim/indent
 .vim/init.vim
+.vim/lua
 .vim/spell
 .vim/syntax
 .vim/plugin.lock

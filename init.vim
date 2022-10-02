@@ -110,7 +110,7 @@ endif
 Plug 'dhruvasagar/vim-zoom'
 
 " vimspector group
-let g:vimspector_enable_mappings = 'HUMAN'
+" let g:vimspector_enable_mappings = 'HUMAN'
 Plug 'puremourning/vimspector'
 
 " fugitive group
@@ -163,6 +163,7 @@ else
 endif
 
 " textobj plugins
+let g:textobj_diff_no_default_key_mappings=1
 let g:textobj_lastpat_no_default_key_mappings=1
 Plug 'wellle/targets.vim'
 Plug 'kana/vim-textobj-user'
@@ -2458,8 +2459,10 @@ endif
 
 " gist-vim settings
 if s:plugged('gist-vim')
-    nnoremap <Leader><Leader>gl :Gist -l<CR>
-    nnoremap <Leader><Leader>gb :Gist -b<CR>
+
+    nnoremap <Leader><Leader>gl <Cmd>Gist -l<CR>
+    nnoremap <Leader><Leader>gb <Cmd>Gist -b<CR>
+
 endif
 
 " vimspector settings{{{
@@ -2476,19 +2479,83 @@ if s:plugged('vimspector')
 
     augroup vimspector_mappings
         au!
-        autocmd FileType php nmap <buffer> <F3>                 :call <SID>vimspector_exec('reset')<CR>
-        autocmd FileType php nmap <buffer> <F5>                 :call <SID>vimspector_exec('continue')<CR>
-        autocmd FileType php nmap <buffer> <Leader>bp           <Plug>VimspectorBreakpoints
-        autocmd FileType php nmap <buffer> <Leader><Leader><F3> :call <SID>vimspector_exec('stop')<CR>
-        autocmd FileType php nmap <buffer> <Leader>di           <Plug>VimspectorBalloonEval
-        autocmd FileType php xmap <buffer> <Leader>di           <Plug>VimspectorBalloonEval
+        autocmd FileType php nmap <silent> <buffer> <F5>         <Cmd>call <SID>vimspector_exec('continue')<CR>
+        autocmd FileType php nmap <silent> <buffer> <F9>         <Plug>VimspectorToggleBreakpoint
+        autocmd FileType php nmap <silent> <buffer> <Leader><F9> <Plug>VimspectorToggleConditionalBreakpoint
     augroup END
 
     augroup vimspector_ui_customization
         au!
-        autocmd User VimspectorUICreated      call s:vimspector_customize_ui()
-        autocmd User VimspectorTerminalOpened call s:vimspector_customize_terminal()
+        autocmd User VimspectorUICreated               call s:vimspector_customize_ui()
+        autocmd User VimspectorTerminalOpened          call s:vimspector_customize_terminal()
+        autocmd User VimspectorJumpedToFrame           call s:vimspector_on_jump_to_frame()
+        autocmd User VimspectorDebugEnded     ++nested call s:vimspector_on_debug_end()
     augroup END
+
+    let s:vimspector_mapped = {}
+
+    function! s:vimspector_on_jump_to_frame() abort"{{{
+        if has_key(s:vimspector_mapped, string(bufnr()))
+            return
+        endif
+
+        nmap <silent> <buffer> <F3>                 <Cmd>call <SID>vimspector_exec('reset')<CR>
+        nmap <silent> <buffer> <F4>                 <Plug>VimspectorRestart
+        nmap <silent> <buffer> <F8>                 <Plug>VimspectorRunToCursor
+        nmap <silent> <buffer> <F10>                <Plug>VimspectorStepOver
+        nmap <silent> <buffer> <F11>                <Plug>VimspectorStepInto
+        nmap <silent> <buffer> <F12>                <Plug>VimspectorStepOut
+        nmap <silent> <buffer> <Leader>bp           <Plug>VimspectorBreakpoints
+        nmap <silent> <buffer> <Leader><Leader><F3> <Cmd>call <SID>vimspector_exec('stop')<CR>
+        nmap <silent> <buffer> <Leader>die          <Cmd>call vimspector#Evaluate(input('[Expression] > '))<CR>
+        nmap <silent> <buffer> <Leader>diw          <Plug>VimspectorBalloonEval
+        xmap <silent> <buffer> <Leader>di           <Plug>VimspectorBalloonEval
+        nmap <silent> <buffer> <Leader>dwe          <Cmd>call vimspector#AddWatch(input('[Expression] > '))<CR>
+
+        let s:vimspector_mapped[string(bufnr())] = { 'modifiable': &modifiable }
+
+        setlocal nomodifiable
+    endfunction"}}}
+
+    function! s:vimspector_on_debug_end() abort"{{{
+        let original_buf = bufnr()
+        let hidden = &hidden
+
+        augroup VimspectorSwapExists
+            au!
+            autocmd SwapExists * let v:swapchoice='o'
+        augroup END
+
+        try
+            set hidden
+            for bufnr in keys( s:vimspector_mapped )
+                try
+                    execute 'buffer' bufnr
+                    silent! nunmap <buffer> <F3>
+                    silent! nunmap <buffer> <F4>
+                    silent! nunmap <buffer> <F8>
+                    silent! nunmap <buffer> <F10>
+                    silent! nunmap <buffer> <F11>
+                    silent! nunmap <buffer> <F12>
+                    silent! nunmap <buffer> <Leader>bp
+                    silent! nunmap <buffer> <Leader><Leader><F3>
+                    silent! nunmap <buffer> <Leader>die
+                    silent! nunmap <buffer> <Leader>diw
+                    silent! xunmap <buffer> <Leader>di
+                    silent! nunmap <buffer> <Leader>dwe
+
+                    let &l:modifiable = s:vimspector_mapped[bufnr]['modifiable']
+                endtry
+            endfor
+        finally
+            execute 'noautocmd buffer' original_buf
+            let &hidden = hidden
+        endtry
+
+        au! VimspectorSwapExists
+
+        let s:vimspector_mapped = {}
+    endfunction"}}}
 
     function! s:vimspector_exec(command)"{{{
         if a:command == 'continue'
@@ -2534,28 +2601,55 @@ endif"}}}
 " nvim-dap settings{{{
 if s:plugged('nvim-dap')
 
-    nnoremap <Leader>dbb <Cmd>lua require("dap").toggle_breakpoint()<CR>
-    nnoremap <Leader>dbc <Cmd>lua require("dap").continue()<CR>
-    nnoremap <Leader>dbs <Cmd>lua require("dap").step_over()<CR>
-    nnoremap <Leader>dbi <Cmd>lua require("dap").step_into()<CR>
-    nnoremap <Leader>dbo <Cmd>lua require("dap").step_out()<CR>
-    nnoremap <Leader>dbh <Cmd>lua require("dap").run_to_cursor()<CR>
-    nnoremap <Leader>dbq <Cmd>lua require("dap").terminate()<CR>
-    vnoremap <Leader>dbe <Cmd>lua require("dapui").eval()<CR>
-    nnoremap <Leader>dbQ <Cmd>lua require("dapui").close()<CR>
+    augroup nvim_dap_mappings
+        au!
+        autocmd FileType lua,php,python nnoremap <silent> <buffer> <Leader>dbb <Cmd>lua require('dap').toggle_breakpoint()<CR>
+        autocmd FileType lua,php,python nnoremap <silent> <buffer> <Leader>dbB <Cmd>lua require('dap').set_breakpoint(vim.fn.input('[Condition] > '))<CR>
+        autocmd FileType lua,php,python nnoremap <silent> <buffer> <Leader>dbr <Cmd>lua require('dap').continue()<CR>
+    augroup END
 
 lua << EOF
 
 -- https://github.com/xdebug/vscode-php-debug/releases
 -- Extract the vsix content
-local dap, dapui = require("dap"), require("dapui")
+local dap, dapui = require('dap'), require('dapui')
+
+function dap_keybind(dap_action, key)
+    if require('dap').session() then
+        dap_action()
+    else
+        vim.cmd('normal! ' .. key)
+    end
+end
+
+local map = require('user.utils').map
+map('n', '<F3>',                 function () dap_keybind(function() dap.terminate(); dapui.close() end, '<F3>') end)
+map('n', '<F4>',                 function () dap_keybind(dap.run_last, '<F4>') end)
+map('n', '<F5>',                 function () dap_keybind(dap.continue, '<F5>') end)
+map('n', '<F8>',                 function () dap_keybind(dap.run_to_cursor, '<F8>') end)
+map('n', '<F10>',                function () dap_keybind(dap.step_over, '<F10>') end)
+map('n', '<F11>',                function () dap_keybind(dap.step_into, '<F11>') end)
+map('n', '<F12>',                function () dap_keybind(dap.step_out, '<F12>') end)
+map('n', '<Leader>bp',           function () dap_keybind(dap.list_breakpoints, '<Leader>bp') end)
+map('n', '<Leader><Leader><F3>', function () dap_keybind(dap.close, '<Leader><Leader><F3>') end)
+map('n', '<Leader>die',          function () dap_keybind(function() dapui.eval(vim.fn.input('[Expression] > ')) end, '<Leader>die') end)
+map('n', '<Leader>diw',          function () dap_keybind(require'dap.ui.widgets'.hover, '<Leader>diw') end)
+map('x', '<Leader>di',           function () dap_keybind(dapui.eval, '<Leader>di') end)
+map('n', '<Leader>dwe',          function () dap_keybind(function() print('Adding watches not implemented yet.') end, '<Leader>dwe') end)
 
 -- PHP debug settings
 dap.configurations.php = {
     {
         type = 'php',
         request = 'launch',
-        name = 'Listen for xdebug',
+        name = 'local',
+        port = '9001',
+        log = true,
+    },
+    {
+        type = 'php',
+        request = 'launch',
+        name = 'docker',
         port = '9003',
         log = true,
         serverSourceRoot = '/app',
@@ -2959,6 +3053,17 @@ if s:plugged('pdv')
 
 endif
 
+" vim-maximizer settings
+if s:plugged('vim-maximizer')
+
+    let g:maximizer_set_default_mapping = 0
+
+    nnoremap <Leader>mm :MaximizerToggle<CR>
+    vnoremap <Leader>mm :MaximizerToggle<CR>gv
+    inoremap <Leader>mm <C-o>:MaximizerToggle<CR>
+
+endif
+
 "}}}
 
 " ------------------------------ Auto Commands ------------------------------"{{{
@@ -3146,11 +3251,6 @@ nnoremap <Leader>oo <C-w><C-o>
 inoremap <Leader>oo <ESC><C-w><C-o>a
 nmap <Leader>hs :sp<CR><C-W>_
 nmap <Leader>vs :vsp<CR><C-W>_
-if s:plugged('vim-maximizer')
-    nnoremap <Leader>mm :MaximizerToggle<CR>
-    vnoremap <Leader>mm :MaximizerToggle<CR>gv
-    inoremap <Leader>mm <C-o>:MaximizerToggle<CR>
-endif
 
 " Jump to next window and maximize it.
 " Notice that <TAB> is equivalent to <C-I> in some conditions,
