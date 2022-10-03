@@ -2614,28 +2614,21 @@ lua << EOF
 -- Extract the vsix content
 local dap, dapui = require('dap'), require('dapui')
 
-function dap_keybind(dap_action, key)
-    if require('dap').session() then
-        dap_action()
-    else
-        vim.cmd('normal! ' .. key)
-    end
-end
-
-local map = require('user.utils').map
-map('n', '<F3>',                 function () dap_keybind(function() dap.terminate(); dapui.close() end, '<F3>') end)
-map('n', '<F4>',                 function () dap_keybind(dap.run_last, '<F4>') end)
-map('n', '<F5>',                 function () dap_keybind(dap.continue, '<F5>') end)
-map('n', '<F8>',                 function () dap_keybind(dap.run_to_cursor, '<F8>') end)
-map('n', '<F10>',                function () dap_keybind(dap.step_over, '<F10>') end)
-map('n', '<F11>',                function () dap_keybind(dap.step_into, '<F11>') end)
-map('n', '<F12>',                function () dap_keybind(dap.step_out, '<F12>') end)
-map('n', '<Leader>bp',           function () dap_keybind(dap.list_breakpoints, '<Leader>bp') end)
-map('n', '<Leader><Leader><F3>', function () dap_keybind(dap.close, '<Leader><Leader><F3>') end)
-map('n', '<Leader>die',          function () dap_keybind(function() dapui.eval(vim.fn.input('[Expression] > ')) end, '<Leader>die') end)
-map('n', '<Leader>diw',          function () dap_keybind(require'dap.ui.widgets'.hover, '<Leader>diw') end)
-map('x', '<Leader>di',           function () dap_keybind(dapui.eval, '<Leader>di') end)
-map('n', '<Leader>dwe',          function () dap_keybind(function() print('Adding watches not implemented yet.') end, '<Leader>dwe') end)
+local nvim_dap_keymap = {
+    { mode='n', key='<F3>',                 callback=function() dap.terminate(); dapui.close(); nvim_dap_on_terminated() end },
+    { mode='n', key='<F4>',                 callback=dap.run_last },
+    { mode='n', key='<F5>',                 callback=dap.continue },
+    { mode='n', key='<F8>',                 callback=dap.run_to_cursor },
+    { mode='n', key='<F10>',                callback=dap.step_over },
+    { mode='n', key='<F11>',                callback=dap.step_into },
+    { mode='n', key='<F12>',                callback=dap.step_out },
+    { mode='n', key='<Leader>bp',           callback=dap.list_breakpoints },
+    { mode='n', key='<Leader><Leader><F3>', callback=dap.close },
+    { mode='n', key='<Leader>die',          callback=function() dapui.eval(vim.fn.input('[Expression] > ')) end },
+    { mode='n', key='<Leader>diw',          callback=require'dap.ui.widgets'.hover },
+    { mode='x', key='<Leader>di',           callback=dapui.eval },
+    { mode='n', key='<Leader>dwe',          callback=function() print('Adding watches not implemented yet.') end },
+}
 
 -- PHP debug settings
 dap.configurations.php = {
@@ -2700,14 +2693,45 @@ end
 
 dapui.setup()
 
+local nvim_dap_mapped = {}
+
+function nvim_dap_on_initialized()--{{{
+    if nvim_dap_mapped[tostring(vim.fn.bufnr())] ~= nil then
+        return
+    end
+
+    for i=1, #nvim_dap_keymap do
+        vim.keymap.set(nvim_dap_keymap[i]['mode'], nvim_dap_keymap[i]['key'], nvim_dap_keymap[i]['callback'], { silent=true, buffer=true })
+    end
+
+    nvim_dap_mapped[tostring(vim.fn.bufnr())] = { modifiable = vim.api.nvim_buf_get_option(0, 'modifiable') }
+
+    vim.api.nvim_buf_set_option(0, 'modifiable', false)
+end--}}}
+
+function nvim_dap_on_terminated()--{{{
+    for key, val in pairs(nvim_dap_mapped) do
+        for i=1, #nvim_dap_keymap do
+            vim.keymap.del(nvim_dap_keymap[i]['mode'], nvim_dap_keymap[i]['key'], { buffer=tonumber(key) })
+        end
+
+        vim.api.nvim_buf_set_option(tonumber(key), 'modifiable', val['modifiable'])
+    end
+
+    nvim_dap_mapped = {}
+end--}}}
+
 dap.listeners.after.event_initialized["dapui_config"] = function()
     dapui.open()
+    nvim_dap_on_initialized()
 end
 dap.listeners.before.event_terminated["dapui_config"] = function()
     dapui.close()
+    nvim_dap_on_terminated()
 end
 dap.listeners.before.event_exited["dapui_config"] = function()
     dapui.close()
+    nvim_dap_on_terminated()
 end
 
 require("nvim-dap-virtual-text").setup()
