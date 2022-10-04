@@ -2479,38 +2479,45 @@ if s:plugged('vimspector')
 
     augroup vimspector_mappings
         au!
-        autocmd FileType php nmap <silent> <buffer> <F5>         <Cmd>call <SID>vimspector_exec('continue')<CR>
+        autocmd FileType php nmap <silent> <buffer> <F5>         <Plug>VimspectorContinue
         autocmd FileType php nmap <silent> <buffer> <F9>         <Plug>VimspectorToggleBreakpoint
         autocmd FileType php nmap <silent> <buffer> <Leader><F9> <Plug>VimspectorToggleConditionalBreakpoint
     augroup END
 
+    let s:vimspector_keymaps = [
+                \{ 'mode': 'n', 'key': '<F3>',                 'callback': '<Cmd>call vimspector#Reset()<CR>' },
+                \{ 'mode': 'n', 'key': '<F4>',                 'callback': '<Plug>VimspectorRestart' },
+                \{ 'mode': 'n', 'key': '<F8>',                 'callback': '<Plug>VimspectorRunToCursor' },
+                \{ 'mode': 'n', 'key': '<F10>',                'callback': '<Plug>VimspectorStepOver' },
+                \{ 'mode': 'n', 'key': '<F11>',                'callback': '<Plug>VimspectorStepInto' },
+                \{ 'mode': 'n', 'key': '<F12>',                'callback': '<Plug>VimspectorStepOut' },
+                \{ 'mode': 'n', 'key': '<Leader>bp',           'callback': '<Plug>VimspectorBreakpoints' },
+                \{ 'mode': 'n', 'key': '<Leader><Leader><F3>', 'callback': '<Plug>VimspectorStop' },
+                \{ 'mode': 'n', 'key': '<Leader>die',          'callback': "<Cmd>call vimspector#Evaluate(input('[Expression] > '))<CR>" },
+                \{ 'mode': 'n', 'key': '<Leader>diw',          'callback': '<Plug>VimspectorBalloonEval' },
+                \{ 'mode': 'x', 'key': '<Leader>di',           'callback': '<Plug>VimspectorBalloonEval' },
+                \{ 'mode': 'n', 'key': '<Leader>dwe',          'callback': "<Cmd>call vimspector#AddWatch(input('[Expression] > '))<CR>" },
+                \]
+
     augroup vimspector_ui_customization
         au!
-        autocmd User VimspectorUICreated               call s:vimspector_customize_ui()
+        autocmd User VimspectorUICreated               call s:vimspector_customize_ui() | call s:vimspector_customize_buffer() | let g:vimspector_is_running = 1
         autocmd User VimspectorTerminalOpened          call s:vimspector_customize_terminal()
-        autocmd User VimspectorJumpedToFrame           call s:vimspector_on_jump_to_frame()
-        autocmd User VimspectorDebugEnded     ++nested call s:vimspector_on_debug_end()
+        autocmd User VimspectorJumpedToFrame           call s:vimspector_customize_buffer()
+        autocmd User VimspectorDebugEnded     ++nested call s:vimspector_on_debug_end() | unlet g:vimspector_is_running
     augroup END
 
     let s:vimspector_mapped = {}
 
-    function! s:vimspector_on_jump_to_frame() abort"{{{
+    function! s:vimspector_customize_buffer() abort"{{{
         if has_key(s:vimspector_mapped, string(bufnr()))
             return
         endif
 
-        nmap <silent> <buffer> <F3>                 <Cmd>call <SID>vimspector_exec('reset')<CR>
-        nmap <silent> <buffer> <F4>                 <Plug>VimspectorRestart
-        nmap <silent> <buffer> <F8>                 <Plug>VimspectorRunToCursor
-        nmap <silent> <buffer> <F10>                <Plug>VimspectorStepOver
-        nmap <silent> <buffer> <F11>                <Plug>VimspectorStepInto
-        nmap <silent> <buffer> <F12>                <Plug>VimspectorStepOut
-        nmap <silent> <buffer> <Leader>bp           <Plug>VimspectorBreakpoints
-        nmap <silent> <buffer> <Leader><Leader><F3> <Cmd>call <SID>vimspector_exec('stop')<CR>
-        nmap <silent> <buffer> <Leader>die          <Cmd>call vimspector#Evaluate(input('[Expression] > '))<CR>
-        nmap <silent> <buffer> <Leader>diw          <Plug>VimspectorBalloonEval
-        xmap <silent> <buffer> <Leader>di           <Plug>VimspectorBalloonEval
-        nmap <silent> <buffer> <Leader>dwe          <Cmd>call vimspector#AddWatch(input('[Expression] > '))<CR>
+        for keymap in s:vimspector_keymaps
+            exec keymap['mode'] . 'map <silent> <buffer> ' . keymap['key'] . ' ' . keymap['callback']
+            unlet keymap
+        endfor
 
         let s:vimspector_mapped[string(bufnr())] = { 'modifiable': &modifiable }
 
@@ -2531,18 +2538,21 @@ if s:plugged('vimspector')
             for bufnr in keys( s:vimspector_mapped )
                 try
                     execute 'buffer' bufnr
-                    silent! nunmap <buffer> <F3>
-                    silent! nunmap <buffer> <F4>
-                    silent! nunmap <buffer> <F8>
-                    silent! nunmap <buffer> <F10>
-                    silent! nunmap <buffer> <F11>
-                    silent! nunmap <buffer> <F12>
-                    silent! nunmap <buffer> <Leader>bp
-                    silent! nunmap <buffer> <Leader><Leader><F3>
-                    silent! nunmap <buffer> <Leader>die
-                    silent! nunmap <buffer> <Leader>diw
-                    silent! xunmap <buffer> <Leader>di
-                    silent! nunmap <buffer> <Leader>dwe
+                    for keymap in s:vimspector_keymaps
+                        exec 'silent! ' . keymap['mode'] . 'unmap <buffer> ' . keymap['key']
+                        unlet keymap
+                    endfor
+                    " silent! nunmap <buffer> <F4>
+                    " silent! nunmap <buffer> <F8>
+                    " silent! nunmap <buffer> <F10>
+                    " silent! nunmap <buffer> <F11>
+                    " silent! nunmap <buffer> <F12>
+                    " silent! nunmap <buffer> <Leader>bp
+                    " silent! nunmap <buffer> <Leader><Leader><F3>
+                    " silent! nunmap <buffer> <Leader>die
+                    " silent! nunmap <buffer> <Leader>diw
+                    " silent! xunmap <buffer> <Leader>di
+                    " silent! nunmap <buffer> <Leader>dwe
 
                     let &l:modifiable = s:vimspector_mapped[bufnr]['modifiable']
                 endtry
@@ -2555,25 +2565,6 @@ if s:plugged('vimspector')
         au! VimspectorSwapExists
 
         let s:vimspector_mapped = {}
-    endfunction"}}}
-
-    function! s:vimspector_exec(command)"{{{
-        if a:command == 'continue'
-            let g:vimspector_is_running = 1
-        elseif exists('g:vimspector_is_running')
-            unlet g:vimspector_is_running
-        endif
-
-        if a:command == 'stop'
-            call vimspector#Stop()
-        elseif a:command == 'reset'
-            call vimspector#Reset()
-        elseif a:command == 'continue'
-            call vimspector#Continue()
-        else
-            echoerr 'Unsupported command!'
-            return
-        endif
     endfunction"}}}
 
     function! s:vimspector_customize_ui()"{{{
