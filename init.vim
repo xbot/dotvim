@@ -2693,10 +2693,31 @@ end
 
 dapui.setup()
 
-local nvim_dap_mapped = {}
+local nvim_dap_mapped_buffers = {}
+local nvim_dap_mapped_windows = {}
+
+local nvim_dap_initialize_buffer_augroup = vim.api.nvim_create_augroup('nvim_dap_initialize_buffer_augroup', { clear=true })
+vim.api.nvim_create_autocmd({'BufEnter'}, {
+    pattern = {'*'},
+    callback = function()
+        if nvim_dap_mapped_windows[tostring(vim.fn.win_getid())] ~= nil then
+            nvim_dap_initialize_buffer()
+        end
+    end
+})
 
 function nvim_dap_on_initialized()--{{{
-    if nvim_dap_mapped[tostring(vim.fn.bufnr())] ~= nil then
+    if nvim_dap_mapped_buffers[tostring(vim.fn.bufnr())] == nil then
+        nvim_dap_initialize_buffer()
+    end
+
+    if nvim_dap_mapped_windows[tostring(vim.fn.win_getid())] == nil then
+        nvim_dap_mapped_windows[tostring(vim.fn.win_getid())] = true
+    end
+end--}}}
+
+function nvim_dap_initialize_buffer()--{{{
+    if nvim_dap_mapped_buffers[tostring(vim.fn.bufnr())] ~= nil then
         return
     end
 
@@ -2704,13 +2725,13 @@ function nvim_dap_on_initialized()--{{{
         vim.keymap.set(nvim_dap_keymap[i]['mode'], nvim_dap_keymap[i]['key'], nvim_dap_keymap[i]['callback'], { silent=true, buffer=true })
     end
 
-    nvim_dap_mapped[tostring(vim.fn.bufnr())] = { modifiable = vim.api.nvim_buf_get_option(0, 'modifiable') }
+    nvim_dap_mapped_buffers[tostring(vim.fn.bufnr())] = { modifiable = vim.api.nvim_buf_get_option(0, 'modifiable') }
 
     vim.api.nvim_buf_set_option(0, 'modifiable', false)
 end--}}}
 
 function nvim_dap_on_terminated()--{{{
-    for key, val in pairs(nvim_dap_mapped) do
+    for key, val in pairs(nvim_dap_mapped_buffers) do
         for i=1, #nvim_dap_keymap do
             vim.keymap.del(nvim_dap_keymap[i]['mode'], nvim_dap_keymap[i]['key'], { buffer=tonumber(key) })
         end
@@ -2718,7 +2739,8 @@ function nvim_dap_on_terminated()--{{{
         vim.api.nvim_buf_set_option(tonumber(key), 'modifiable', val['modifiable'])
     end
 
-    nvim_dap_mapped = {}
+    nvim_dap_mapped_buffers = {}
+    nvim_dap_mapped_windows = {}
 end--}}}
 
 dap.listeners.after.event_initialized["dapui_config"] = function()
