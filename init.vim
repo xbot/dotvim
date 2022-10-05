@@ -191,28 +191,6 @@ Plug 'xbot/gtags.vim'
 " offline plugins
 Plug '~/.vim/plugged/confluencewiki'
 
-" LSP group
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-if has('nvim') && !s:plugged('coc.nvim')
-    " Experimental replacements of coc.nvim
-    Plug 'williamboman/mason.nvim'
-    Plug 'williamboman/mason-lspconfig.nvim'
-    Plug 'neovim/nvim-lspconfig'
-    Plug 'glepnir/lspsaga.nvim', { 'branch': 'main' }
-    Plug 'onsails/lspkind.nvim'
-    Plug 'sbdchd/neoformat'
-    Plug 'hrsh7th/cmp-nvim-lsp'
-    Plug 'hrsh7th/cmp-buffer'
-    Plug 'hrsh7th/cmp-copilot'
-    Plug 'quangnguyen30192/cmp-nvim-ultisnips'
-    Plug 'hrsh7th/nvim-cmp'
-    Plug 'lewis6991/gitsigns.nvim'
-    Plug 'airblade/vim-rooter'
-    Plug 'lewis6991/spellsitter.nvim'
-    " Plug 'phpactor/phpactor', {'for': 'php', 'tag': '*', 'do': 'composer install --no-dev -o'}
-    " Plug 'https://git.sr.ht/~whynothugo/lsp_lines.nvim' " Experience needs to be improved.
-endif
-
 " neovim plugins
 if has('nvim')
 
@@ -231,6 +209,10 @@ if has('nvim')
     Plug 'phaazon/hop.nvim'
     Plug 'rcarriga/nvim-notify'
     Plug 'simnalamburt/vim-mundo'
+
+    " mason group
+    Plug 'williamboman/mason.nvim'
+    Plug 'WhoIsSethDaniel/mason-tool-installer.nvim'
 
     " fine-cmdline group
     Plug 'MunifTanjim/nui.nvim'
@@ -296,6 +278,27 @@ endif
 
 if has('gui_running')
     Plug 'drmikehenry/vim-fontsize'
+endif
+
+" LSP group
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+if has('nvim') && !s:plugged('coc.nvim')
+    " Experimental replacements of coc.nvim
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'glepnir/lspsaga.nvim', { 'branch': 'main' }
+    Plug 'onsails/lspkind.nvim'
+    Plug 'sbdchd/neoformat'
+    Plug 'hrsh7th/cmp-nvim-lsp'
+    Plug 'hrsh7th/cmp-buffer'
+    Plug 'hrsh7th/cmp-copilot'
+    Plug 'quangnguyen30192/cmp-nvim-ultisnips'
+    Plug 'hrsh7th/nvim-cmp'
+    Plug 'lewis6991/gitsigns.nvim'
+    Plug 'airblade/vim-rooter'
+    Plug 'lewis6991/spellsitter.nvim'
+    Plug 'williamboman/mason-lspconfig.nvim'
+    " Plug 'phpactor/phpactor', {'for': 'php', 'tag': '*', 'do': 'composer install --no-dev -o'}
+    " Plug 'https://git.sr.ht/~whynothugo/lsp_lines.nvim' " Experience needs to be improved.
 endif
 
 " Plug 'dense-analysis/ale'
@@ -1215,9 +1218,51 @@ if s:plugged('mason.nvim')
 
 lua << EOF
 require("mason").setup()
+EOF
+
+endif
+
+" mason-lspconfig.nvim settings
+if s:plugged('mason-lspconfig.nvim')
+
+lua << EOF
 require("mason-lspconfig").setup({
     ensure_installed = { 'sumneko_lua', 'intelephense', 'bashls', 'grammarly', 'jsonls', 'vimls', 'yamlls' }
 })
+EOF
+
+endif
+
+" mason-tool-installer.nvim settings
+if s:plugged('mason-tool-installer.nvim')
+
+lua << EOF
+require('mason-tool-installer').setup {
+
+  -- a list of all tools you want to ensure are installed upon
+  -- start; they should be the names Mason uses for each tool
+  ensure_installed = {
+      'php-debug-adapter'
+  },
+
+  -- if set to true this will check each tool for updates. If updates
+  -- are available the tool will be updated. This setting does not
+  -- affect :MasonToolsUpdate or :MasonToolsInstall.
+  -- Default: false
+  auto_update = false,
+
+  -- automatically install / update on startup. If set to false nothing
+  -- will happen on startup. You can use :MasonToolsInstall or
+  -- :MasonToolsUpdate to install tools and check for updates.
+  -- Default: true
+  run_on_start = true,
+
+  -- set a delay (in ms) before the installation starts. This is only
+  -- effective if run_on_start is set to true.
+  -- e.g.: 5000 = 5 second delay, 10000 = 10 second delay, etc...
+  -- Default: 0
+  start_delay = 3000, -- 3 second delay
+}
 EOF
 
 endif
@@ -2642,8 +2687,7 @@ dap.configurations.php = {
 }
 dap.adapters.php = {
     type = 'executable',
-    command = 'node',
-    args = {os.getenv('HOME') .. "/Projects/3rd-party/vscode-php-debug/out/phpDebug.js"},
+    command = vim.fn.stdpath('data') .. '/mason/bin/php-debug-adapter',
 }
 
 -- Lua debug settings
