@@ -3932,6 +3932,9 @@ function! s:py_sandbox()"{{{
     startinsert
 endfunction"}}}
 
+" Start debugging vim plugins written in python
+command! -nargs=* Debugpy py3 import debugpy; debugpy.listen(4444); debugpy.wait_for_client()
+
 "}}}
 
 " ------------------------------ COC settings -----------------------------{{{
