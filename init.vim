@@ -2695,10 +2695,10 @@ dap.configurations.lua = {
     {
         type = 'nlua',
         request = 'attach',
-        name = "Attach to running Neovim instance",
+        name = "Attach to a running Neovim instance",
         host = function() return vim.fn.input('Remote IP: ', '127.0.0.1') end,
         port = function()
-            local val = tonumber(vim.fn.input('Port: ', 4444))
+            local val = tonumber(vim.fn.input('Port: ', 28086))
             assert(val, "Please provide a port number")
             return val
         end,
@@ -2795,6 +2795,13 @@ require("nvim-dap-virtual-text").setup()
 EOF
 
 endif"}}}
+
+" one-small-step-for-vimkind settings
+if s:plugged('one-small-step-for-vimkind')
+
+    command! -nargs=0 DebugNLua lua require('osv').launch({port = 28086})
+
+endif
 
 " Far.vim settings
 if s:plugged('far.vim')
@@ -3933,7 +3940,7 @@ function! s:py_sandbox()"{{{
 endfunction"}}}
 
 " Start debugging vim plugins written in python
-command! -nargs=* Debugpy py3 import debugpy; debugpy.listen(4444); debugpy.wait_for_client()
+command! -nargs=* DebugPy py3 import debugpy; debugpy.listen(4444); debugpy.wait_for_client()
 
 "}}}
 
