@@ -418,6 +418,7 @@ set autoindent
 set cedit=\<C-Y>
 set cindent
 set clipboard+=unnamed
+set cmdheight=0
 set confirm
 set cursorcolumn
 set cursorline
@@ -2524,9 +2525,9 @@ if s:plugged('vimspector')
 
     augroup vimspector_mappings
         au!
-        autocmd FileType php nmap <silent> <buffer> <F5>         <Plug>VimspectorContinue
-        autocmd FileType php nmap <silent> <buffer> <F9>         <Plug>VimspectorToggleBreakpoint
-        autocmd FileType php nmap <silent> <buffer> <Leader><F9> <Plug>VimspectorToggleConditionalBreakpoint
+        autocmd FileType lua,php,python nmap <silent> <buffer> <F5>         <Plug>VimspectorContinue
+        autocmd FileType lua,php,python nmap <silent> <buffer> <F9>         <Plug>VimspectorToggleBreakpoint
+        autocmd FileType lua,php,python nmap <silent> <buffer> <Leader><F9> <Plug>VimspectorToggleConditionalBreakpoint
     augroup END
 
     let s:vimspector_keymaps = [

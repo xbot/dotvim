@@ -172,6 +172,7 @@
       "Macbook",
       "Magisk",
       "Spatie",
+      "Surfingkeys",
       "Underlayed",
       "Unprocessable",
       "Unraid",
@@ -186,12 +187,14 @@
       "gearshape",
       "leaderf",
       "lidong",
+      "mapkey",
       "omnifocus",
       "opentelemetry",
       "phpstan",
       "phpunit",
       "realworld",
       "unmanaged",
+      "unmap",
       "volatilities"
     ],
     "cSpell.ignorePaths": [
