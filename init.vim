@@ -51,7 +51,6 @@ Plug 'terryma/vim-expand-region'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'twitvim/twitvim'
 Plug 'tyru/open-browser.vim'
@@ -180,6 +179,7 @@ Plug 'glts/vim-textobj-comment'
 Plug 'Julian/vim-textobj-variable-segment'
 Plug 'junegunn/vim-after-object'
 Plug 'machakann/vim-sandwich'
+" Plug 'tpope/vim-surround'
 " Plug 'kana/vim-textobj-underscore' " Also provided in targets.vim
 " Plug 'kentaro/vim-textobj-function-php' " Too old and 'if' works not as exptected in PHP syntax.
 
@@ -3295,6 +3295,29 @@ if s:plugged('targets.vim')
                     \ 'A': {'argument': [{'o': '[([]', 'c': '[])]', 's': ','}]}, 
                     \ }) 
     augroup END
+endif
+
+" vim-sandwich settings
+if s:plugged('vim-sandwich')
+
+    runtime macros/sandwich/keymap/surround.vim
+
+	omap ib <Plug>(textobj-sandwich-auto-i)
+	xmap ib <Plug>(textobj-sandwich-auto-i)
+	omap ab <Plug>(textobj-sandwich-auto-a)
+	xmap ab <Plug>(textobj-sandwich-auto-a)
+
+	omap is <Plug>(textobj-sandwich-query-i)
+	xmap is <Plug>(textobj-sandwich-query-i)
+	omap as <Plug>(textobj-sandwich-query-a)
+	xmap as <Plug>(textobj-sandwich-query-a)
+
+    let g:sandwich#recipes += [
+        \ {'buns': ["( ", " )"], 'nesting': 1, 'match_syntax': 1, 'input': ['('] },
+        \ {'buns': ["[ ", " ]"], 'nesting': 1, 'match_syntax': 1, 'input': ['['] },
+        \ {'buns': ["{ ", " }"], 'nesting': 1, 'match_syntax': 1, 'input': ['{'] },
+        \ ]
+
 endif
 
 "}}}
