@@ -2963,16 +2963,32 @@ endif
 " nvim-hlslens settings
 if s:plugged('nvim-hlslens')
 lua << EOF
+
 local kopts = {noremap = true, silent = true}
 
-vim.api.nvim_set_keymap('n', 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
-vim.api.nvim_set_keymap('n', 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
-vim.api.nvim_set_keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], kopts)
-vim.api.nvim_set_keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
-vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
-vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', 'n',  [[<Cmd>call NiceNext(v:count1 . 'nzv')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', 'N',  [[<Cmd>call NiceNext(v:count1 . 'Nzv')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', '*',  [[*zv<Cmd>lua require('hlslens').start()<CR>]],                                      kopts)
+vim.api.nvim_set_keymap('n', '#',  [[#zv<Cmd>lua require('hlslens').start()<CR>]],                                      kopts)
+vim.api.nvim_set_keymap('n', 'g*', [[g*zv<Cmd>lua require('hlslens').start()<CR>]],                                     kopts)
+vim.api.nvim_set_keymap('n', 'g#', [[g#zv<Cmd>lua require('hlslens').start()<CR>]],                                     kopts)
+
 EOF
+else
+
+    " remap n/N to nzz/Nzz in a nice way
+    nnoremap <silent> n <Cmd>call NiceNext(v:count1 . 'nzv')<CR>
+    nnoremap <silent> N <Cmd>call NiceNext(v:count1 . 'Nzv')<CR>
+
 endif
+
+function! NiceNext(cmd)"{{{
+    let view = winsaveview()
+    execute 'normal! ' . a:cmd
+    if view.topline != winsaveview().topline
+        normal! zz
+    endif
+endfunction"}}}
 
 " wilder settings
 if s:plugged('wilder.nvim')
@@ -3797,17 +3813,6 @@ fun! s:search_selected_word()"{{{
 endfun"}}}
 " nnoremap <Leader>df :call <SID>search_cursor_word()<CR>
 " vnoremap <Leader>df :<C-U>call <SID>search_selected_word()<CR>
-
-" remap n/N to nzz/Nzz in a nice way
-nnoremap <silent> n :call <SID>nice_next('n')<CR>
-nnoremap <silent> N :call <SID>nice_next('N')<CR>
-function! s:nice_next(cmd)"{{{
-    let view = winsaveview()
-    execute 'normal! ' . a:cmd
-    if view.topline != winsaveview().topline
-        normal! zz
-    endif
-endfunction"}}}
 
 " Reset environment
 nnoremap <Leader><Leader>rs <Cmd>call <SID>reset_ide()<CR>
