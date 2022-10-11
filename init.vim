@@ -418,7 +418,7 @@ set autoindent
 set cedit=\<C-Y>
 set cindent
 set clipboard+=unnamed
-set cmdheight=0
+set cmdheight=1
 set confirm
 set cursorcolumn
 set cursorline
@@ -766,8 +766,8 @@ endif"}}}
 " ListToggle settings
 if s:plugged('ListToggle')
 
-    let g:lt_location_list_toggle_map = "<C-;>"
-    let g:lt_quickfix_list_toggle_map = "<C-'>"
+    let g:lt_location_list_toggle_map = "<C-'>"
+    let g:lt_quickfix_list_toggle_map = "<C-;>"
 
 endif
 
@@ -2543,6 +2543,8 @@ if s:plugged('vimspector')
                 \{ 'mode': 'n', 'key': '<Leader>diw',          'callback': '<Plug>VimspectorBalloonEval' },
                 \{ 'mode': 'x', 'key': '<Leader>di',           'callback': '<Plug>VimspectorBalloonEval' },
                 \{ 'mode': 'n', 'key': '<Leader>dwe',          'callback': "<Cmd>call vimspector#AddWatch(input('[Expression] > '))<CR>" },
+                \{ 'mode': 'n', 'key': '<S-j>',                'callback': '<Plug>VimspectorDownFrame' },
+                \{ 'mode': 'n', 'key': '<S-k>',                'callback': '<Plug>VimspectorUpFrame' },
                 \]
 
     augroup vimspector_ui_customization
@@ -2554,6 +2556,7 @@ if s:plugged('vimspector')
     augroup END
 
     let s:vimspector_mapped = {}
+    let s:vimspector_foldopen_holder = ''
 
     function! s:vimspector_customize_buffer() abort"{{{
         if has_key(s:vimspector_mapped, string(bufnr()))
@@ -2611,6 +2614,12 @@ if s:plugged('vimspector')
         au! VimspectorSwapExists
 
         let s:vimspector_mapped = {}
+
+        " Restore the foldopen option
+        if s:vimspector_foldopen_holder != ''
+            exec 'set foldopen=' . s:vimspector_foldopen_holder
+            let s:vimspector_foldopen_holder = ''
+        endif
     endfunction"}}}
 
     function! s:vimspector_customize_ui()"{{{
@@ -2624,6 +2633,10 @@ if s:plugged('vimspector')
         " Close the output window
         call win_gotoid( g:vimspector_session_windows.output )
         hide
+
+        " Store the foldopen option value
+        let s:vimspector_foldopen_holder = &foldopen
+        set foldopen=all
     endfunction"}}}
 
     function s:vimspector_customize_terminal()"{{{
@@ -2825,10 +2838,12 @@ endif
 
 " copilot.vim settings
 if s:plugged('copilot.vim')
+
     let g:copilot_node_command = "~/.nvm/versions/node/v16.15.0/bin/node"
 
     imap <M-,> <Plug>(copilot-previous)
     imap <M-.> <Plug>(copilot-next)
+
 endif
 
 " NeoZoom settings
@@ -2840,6 +2855,7 @@ endif
 
 " smart-splits.nvim settings
 if s:plugged('smart-splits.nvim')
+
     nmap <A-Left>  :SmartResizeLeft<CR>
     nmap <A-Right> :SmartResizeRight<CR>
     nmap <A-Up>    :SmartResizeUp<CR>
@@ -2848,6 +2864,7 @@ if s:plugged('smart-splits.nvim')
     nmap <C-l>     :SmartCursorMoveRight<CR>
     nmap <C-j>     :SmartCursorMoveDown<CR>
     nmap <C-k>     :SmartCursorMoveUp<CR>
+
 endif
 
 " lsp_lines.nvim settings
@@ -3466,7 +3483,7 @@ nnoremap vp `[v`]
 nnoremap vP V']
 
 " Clear highlighting of the last search
-nmap <Leader><Leader>cc :nohl<CR>
+nmap <Space><Space> :nohl<CR>
 
 " Search word
 nmap <Leader>/w /\<\>\C<left><left><left><left>
