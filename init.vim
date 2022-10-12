@@ -1698,7 +1698,7 @@ endif
 if s:plugged('vim-floaterm')
     
     if g:colors_name == 'tokyonight' && &background == 'light'
-        hi FloatermBorder guibg=#CDCFDF
+        hi FloatermBorder guibg=#E0E2E6
     endif
 
 endif
@@ -4149,7 +4149,7 @@ if s:plugged('coc.nvim')
 
     if g:colors_name == 'tokyonight' && &background == 'light'
         " Compatible to colorscheme tokyonight
-        highlight CocFloating guibg=#CDCFDF guifg=#2D7DE8
+        highlight CocFloating guibg=#E0E2E6 guifg=#2D7DE8
     else
         " Compatible to most colorschemes
         highlight CocFloating guibg=#99cccc guifg=#336699
