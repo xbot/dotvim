@@ -56,6 +56,7 @@ Plug 'twitvim/twitvim'
 Plug 'tyru/open-browser.vim'
 Plug 'vim-scripts/Align'
 Plug 'vim-scripts/SQLUtilities'
+Plug 'voldikss/vim-floaterm'
 Plug 'weirongxu/plantuml-previewer.vim'
 
 Plug 'peterhoeg/vim-qml',            { 'for': 'qml'       }
@@ -452,6 +453,7 @@ set vb t_vb=
 set viminfo+=!
 set wildignore=*.class,*.pyc
 set wildmenu " Type :help and press <TAB> , so that's the effect .
+set winblend=20
 set winminheight=1
 
 if has('nvim')
@@ -1523,6 +1525,15 @@ if s:plugged('vim-test')
 
     let g:test#runner_commands = ['PHPUnit']
 
+    if has('nvim')
+        " let test#strategy = 'neovim'
+        " let test#strategy = 'toggleterm'
+        let test#strategy = 'floaterm'
+    else
+        " let test#strategy = 'vimterminal'
+        let test#strategy = 'floaterm'
+    endif
+
     augroup vim_test"{{{
         au!
         autocmd FileType php nnoremap <buffer> <Leader>tT :call MyTestRun('nothing')<CR>:PHPUnit <C-R>=expand('%:.')<CR> --filter '::test'<Left>
@@ -1547,19 +1558,6 @@ if s:plugged('vim-test')
         call test#run(a:runner, [])
     endfunction"}}}
 
-endif
-
-if has('nvim')
-    " let test#strategy = 'asyncrun'
-    " let test#strategy = 'make'
-    " let test#strategy = 'dispatch'
-    " let test#strategy = 'vimproc'
-    let test#strategy = 'neovim'
-else
-    " let test#strategy = 'asyncrun'
-    " let test#strategy = 'dispatch'
-    let test#strategy = 'vimterminal'
-    " let test#vim#term_position = "topleft"
 endif
 
 " Git mappings, coc, fugitive settings
@@ -1693,6 +1691,15 @@ elseif s:plugged('toggle-terminal')
 
     nnoremap <silent> <C-\> :ToggleTerminal<CR>
     tnoremap <silent> <C-\> <C-w>:ToggleTerminal<CR>
+
+endif
+
+" floaterm settings
+if s:plugged('vim-floaterm')
+    
+    if g:colors_name == 'tokyonight' && &background == 'light'
+        hi FloatermBorder guibg=#CDCFDF
+    endif
 
 endif
 
