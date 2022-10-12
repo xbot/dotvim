@@ -1842,7 +1842,7 @@ if s:plugged('defx.nvim')
 
 endif
 
-" vim-clap
+" vim-clap settings
 if s:plugged('vim-clap')
 
     " let g:clap_theme = 'material_design_dark'
@@ -1852,13 +1852,16 @@ if s:plugged('vim-clap')
 
 endif
 
-" unimpaired
+" unimpaired settings
 if s:plugged('vim-unimpaired')
 
     vmap <S-Up>    [egv
     vmap <S-Down>  ]egv
     vmap <S-Left>  <gv
     vmap <S-Right> >gv
+
+    nnoremap ]n <Cmd>call NiceNext('<Plug>(unimpaired-context-next)zv')<CR>
+    nnoremap [n <Cmd>call NiceNext('<Plug>(unimpaired-context-previous)zv')<CR>
 
 endif
 
@@ -3520,6 +3523,10 @@ nmap <silent> <Leader><Leader>ds <Plug>DashSearch
 " Open MR of the current branch in web browser
 nmap <Leader><Leader>mr :AsyncRun glab mr view -w<CR>
 
+" navigating changes in the diff view
+nnoremap ]c <Cmd>call NiceNext(v:count1 . ']c')<CR>
+nnoremap [c <Cmd>call NiceNext(v:count1 . '[c')<CR>
+
 "}}}
 
 " ------------------------------ Functions -----------------------------{{{
@@ -4096,23 +4103,24 @@ if s:plugged('coc.nvim')
 
     " Mappings using CoCList:
     " Show all diagnostics.
-    nnoremap <silent> <space>a  :<C-u>CocList diagnostics<CR>
+    nnoremap <silent> <space>a  <Cmd>CocList diagnostics<CR>
     " Manage extensions.
-    nnoremap <silent> <space>e  :<C-u>CocList extensions<CR>
+    nnoremap <silent> <space>e  <Cmd>CocList extensions<CR>
     " Show commands.
-    nnoremap <silent> <space>c  :<C-u>CocList commands<CR>
+    nnoremap <silent> <space>c  <Cmd>CocList commands<CR>
     " Search workspace symbols.
-    nnoremap <silent> <Leader>cocs  :<C-u>CocList -I symbols<CR>
+    nnoremap <silent> <Leader>cocs  <Cmd>CocList -I symbols<CR>
     " Do default action for next item.
-    nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+    " nnoremap <silent> <space>j  <Cmd>CocNext<CR><Cmd>sleep 100m<CR>zv
+    nnoremap <silent> <space>j  <Cmd>CocNext<CR><Cmd>sleep 10m<CR>zv
     " Do default action for previous item.
-    nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+    nnoremap <silent> <space>k  <Cmd>CocPrev<CR><Cmd>sleep 10m<CR>zv
     " Resume latest coc list.
-    nnoremap <silent> <Leader>cocp  :<C-u>CocListResume<CR>
-    nnoremap <Leader>sy :<C-u>CocList -A --normal yank<CR>
-    nnoremap <Leader>op :<C-u>CocList project<CR>
-    nnoremap <Leader>sC :<C-u>let v:this_session=''<CR>:echo 'Session closed.'<CR>
-    nnoremap <Leader>sl :<C-u>CocList -A snippets<CR>
+    nnoremap <silent> <Leader>cocp  <Cmd>CocListResume<CR>
+    nnoremap <Leader>sy <Cmd>CocList -A --normal yank<CR>
+    nnoremap <Leader>op <Cmd>CocList project<CR>
+    nnoremap <Leader>sC <Cmd>let v:this_session=''<CR>:echo 'Session closed.'<CR>
+    nnoremap <Leader>sl <Cmd>CocList -A snippets<CR>
     xnoremap <Leader>cs <Plug>(coc-convert-snippet)
 
     " navigate chunks of current buffer
