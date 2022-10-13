@@ -48,6 +48,7 @@ Plug 'skywind3000/asyncrun.vim'
 Plug 'szw/vim-maximizer'
 Plug 't9md/vim-choosewin'
 Plug 'terryma/vim-expand-region'
+Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
@@ -3302,6 +3303,7 @@ augroup END
 
 " Markdown
 augroup markdown
+    au!
     autocmd BufNewFile,BufRead *.mkd,*.md set filetype=markdown
     " autocmd BufNewFile,BufRead *.mkd set wrap
     autocmd FileType markdown set wrap
@@ -3427,6 +3429,11 @@ if s:plugged('vim-sandwich')
 	omap as <Plug>(textobj-sandwich-query-a)
 	xmap as <Plug>(textobj-sandwich-query-a)
 
+    xmap im <Plug>(textobj-sandwich-literal-query-i)
+    xmap am <Plug>(textobj-sandwich-literal-query-a)
+    omap im <Plug>(textobj-sandwich-literal-query-i)
+    omap am <Plug>(textobj-sandwich-literal-query-a)
+
     let g:sandwich#recipes += [
         \ {'buns': ["( ", " )"], 'nesting': 1, 'match_syntax': 1, 'input': ['('] },
         \ {'buns': ["[ ", " ]"], 'nesting': 1, 'match_syntax': 1, 'input': ['['] },
@@ -3515,7 +3522,7 @@ nmap <Leader><Leader>D   <Cmd>e <C-R>=expand("%:p:~:h").'/'<CR>
 nmap <Leader><Leader>rn  <Cmd>Rename <C-R>=expand('%:t')<CR>
 nmap <Leader><Leader>mv  <Cmd>Move <C-R>=expand('%:.')<CR>
 nmap <Leader><Leader>rm  :Delete
-nmap <Leader><Leader>duf <Cmd>saveas <C-R>=expand('%:.')<CR>
+nmap <Leader><Leader>duf :saveas <C-R>=expand('%:.')<CR>
 
 " Navigating long lines
 nnoremap <M-h> <left>
