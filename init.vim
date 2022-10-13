@@ -511,7 +511,7 @@ if has('gui_running')
 
     " Toggle menu bar
     if !IsPlatform('mac')
-        map <silent> <C-S-F2> :if &guioptions =~# 'm' <Bar>
+        map <silent> <C-S-F2> <Cmd>if &guioptions =~# 'm' <Bar>
                     \set guioptions-=m <bar>
                     \else <Bar>
                     \set guioptions+=m <Bar>
@@ -857,9 +857,9 @@ endif
 " NERD Tree
 if s:plugged('nerdtree')
 
-    nmap <Leader>nt :NERDTreeToggle<CR>
-    nmap <Leader>nf :NERDTreeFind<CR>
-    nmap <Leader>nd :NERDTree %:h<CR>
+    nmap <Leader>nt <Cmd>NERDTreeToggle<CR>
+    nmap <Leader>nf <Cmd>NERDTreeFind<CR>
+    nmap <Leader>nd <Cmd>NERDTree %:h<CR>
 
     let NERDTreeIgnore      = ['\.scc$', '\.pyc$', '\~$']
     let NERDTreeNaturalSort = 1
@@ -874,13 +874,13 @@ if s:plugged('twitvim')
     let twitvim_browser_cmd   = 'open -a Safari'
     " let twitvim_browser_cmd = '/usr/bin/google-chrome-stable'
     let twitvim_count = 30
-    nmap <Leader>twit :PosttoTwitter<CR>
-    nmap <Leader>twmy :UserTwitter<CR>
-    nmap <Leader>twls :FriendsTwitter<CR>
-    nmap <Leader>twpb :PublicTwitter<CR>
-    nmap <Leader>twmt :MentionsTwitter<CR>
-    nmap <Leader>twdm :DMTwitter<CR>
-    nmap <Leader>twre :RetweetedByMeTwitter<CR>
+    nmap <Leader>twit <Cmd>PosttoTwitter<CR>
+    nmap <Leader>twmy <Cmd>UserTwitter<CR>
+    nmap <Leader>twls <Cmd>FriendsTwitter<CR>
+    nmap <Leader>twpb <Cmd>PublicTwitter<CR>
+    nmap <Leader>twmt <Cmd>MentionsTwitter<CR>
+    nmap <Leader>twdm <Cmd>DMTwitter<CR>
+    nmap <Leader>twre <Cmd>RetweetedByMeTwitter<CR>
 
 endif
 
@@ -926,10 +926,10 @@ if s:plugged('ale')"{{{
     nmap sp <Plug>(ale_previous_wrap)
     nmap sn <Plug>(ale_next_wrap)
     " 触发/关闭语法检查
-    nmap <Leader>at :ALEToggle<CR>
+    nmap <Leader>at <Cmd>ALEToggle<CR>
     " 查看错误或警告的详细信息
-    nmap <Leader>ad :ALEDetail<CR>
-    nmap <Leader>af :ALEFix<CR>
+    nmap <Leader>ad <Cmd>ALEDetail<CR>
+    nmap <Leader>af <Cmd>ALEFix<CR>
 
     " autocmd FileType php let b:ale_disable_lsp = 1
 endif"}}}
@@ -941,7 +941,7 @@ if s:plugged('pdv')
 
     augroup pdv
         au!
-        autocmd FileType php nnoremap <buffer> <Leader>\\ :call pdv#DocumentWithSnip()<CR>
+        autocmd FileType php nnoremap <buffer> <Leader>\\ <Cmd>call pdv#DocumentWithSnip()<CR>
     augroup END
 
 endif
@@ -997,16 +997,16 @@ if s:plugged('LeaderF')"{{{
 
     " autocmd FileType leaderf setlocal signcolumn=no
 
-    nmap <Leader>be  :LeaderfBuffer<CR>
-    nmap <Leader>bf  :LeaderfFunction<CR>
-    nmap <Leader>bt  :LeaderfBufTag<CR>
-    nmap <Leader>cl  :LeaderfColorscheme<CR>
-    nmap <Leader>cm  :LeaderfCommand<CR>
-    nmap <Leader>fh  :LeaderfHistoryCmd<CR>
-    nmap <Leader>fl  :LeaderfLine<CR>
-    nmap <Leader>hp  :LeaderfHelp<CR>
-    nmap <Leader>mru :LeaderfMru<CR>
-    nmap <Leader>ot  :call <SID>flexible_leaderf_tag()<CR>
+    nmap <Leader>be  <Cmd>LeaderfBuffer<CR>
+    nmap <Leader>bf  <Cmd>LeaderfFunction<CR>
+    nmap <Leader>bt  <Cmd>LeaderfBufTag<CR>
+    nmap <Leader>cl  <Cmd>LeaderfColorscheme<CR>
+    nmap <Leader>cm  <Cmd>LeaderfCommand<CR>
+    nmap <Leader>fh  <Cmd>LeaderfHistoryCmd<CR>
+    nmap <Leader>fl  <Cmd>LeaderfLine<CR>
+    nmap <Leader>hp  <Cmd>LeaderfHelp<CR>
+    nmap <Leader>mru <Cmd>LeaderfMru<CR>
+    nmap <Leader>ot  <Cmd>call <SID>flexible_leaderf_tag()<CR>
 
     noremap <Leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
     noremap <Leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
@@ -1046,11 +1046,11 @@ endif
 " bufferline.nvim settings
 if s:plugged('bufferline.nvim')
 
-    nnoremap L :BufferLineCycleNext<CR>
-    nnoremap H :BufferLineCyclePrev<CR>
+    nnoremap L <Cmd>BufferLineCycleNext<CR>
+    nnoremap H <Cmd>BufferLineCyclePrev<CR>
 
-    nnoremap <silent><A-L> :BufferLineMoveNext<CR>
-    nnoremap <silent><A-H> :BufferLineMovePrev<CR>
+    nnoremap <silent><A-L> <Cmd>BufferLineMoveNext<CR>
+    nnoremap <silent><A-H> <Cmd>BufferLineMovePrev<CR>
 
     nnoremap <silent><Leader>1 <Cmd>BufferLineGoToBuffer 1<CR>
     nnoremap <silent><Leader>2 <Cmd>BufferLineGoToBuffer 2<CR>
@@ -1063,7 +1063,13 @@ if s:plugged('bufferline.nvim')
     nnoremap <silent><Leader>9 <Cmd>BufferLineGoToBuffer 9<CR>
     nnoremap <silent><Leader>0 <Cmd>BufferLineGoToBuffer -1<CR>
 
-    autocmd TabNewEntered * BufferLineSortByTabs
+    nnoremap <Leader>bo <Cmd>BufferLineCloseLeft<CR><Cmd>BufferLineCloseRight<CR>
+    inoremap <Leader>bo <Cmd>BufferLineCloseLeft<CR><Cmd>BufferLineCloseRight<CR>
+
+    augroup bufferline
+        au!
+        autocmd TabNewEntered * BufferLineSortByTabs
+    augroup END
 
 lua << EOF
 require("bufferline").setup({
@@ -1466,14 +1472,14 @@ if s:plugged('lspsaga.nvim')
 
 lua << EOF
 local opts = { noremap = true, silent = true }
-vim.keymap.set('n', '<A-K>',      '<Cmd>Lspsaga      hover_doc<CR>',            opts)
-vim.keymap.set("n", "<Leader>ca", "<cmd>Lspsaga      code_action<CR>",          opts)
-vim.keymap.set("v", "<Leader>ca", "<cmd><C-U>Lspsaga range_code_action<CR>",    opts)
-vim.keymap.set("n", "<Leader>sh", "<Cmd>Lspsaga      signature_help<CR>",       opts)
-vim.keymap.set("n", "<Leader>pd", "<cmd>Lspsaga      preview_definition<CR>",   opts)
-vim.keymap.set("n", "]E",         "<cmd>Lspsaga      diagnostic_jump_next<CR>", opts)
-vim.keymap.set("n", "[E",         "<cmd>Lspsaga      diagnostic_jump_prev<CR>", opts)
-vim.keymap.set('n', '<Space>gr',  '<Cmd>Lspsaga      lsp_finder<CR>',           opts)
+vim.keymap.set('n', '<A-K>',      '<Cmd>Lspsaga hover_doc<CR>',            opts)
+vim.keymap.set("n", "<Leader>ca", "<Cmd>Lspsaga code_action<CR>",          opts)
+vim.keymap.set("v", "<Leader>ca", "<Cmd>Lspsaga range_code_action<CR>",    opts)
+vim.keymap.set("n", "<Leader>sh", "<Cmd>Lspsaga signature_help<CR>",       opts)
+vim.keymap.set("n", "<Leader>pd", "<Cmd>Lspsaga preview_definition<CR>",   opts)
+vim.keymap.set("n", "]E",         "<Cmd>Lspsaga diagnostic_jump_next<CR>", opts)
+vim.keymap.set("n", "[E",         "<Cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
+vim.keymap.set('n', '<Space>gr',  '<Cmd>Lspsaga lsp_finder<CR>',           opts)
 -- vim.keymap.set('n', 'gr', '<Cmd>Lspsaga rename<CR>', opts)
 
 require('lspsaga').init_lsp_saga({
@@ -1539,12 +1545,12 @@ if s:plugged('vim-test')
 
     augroup vim_test"{{{
         au!
-        autocmd FileType php nnoremap <buffer> <Leader>tT :call MyTestRun('nothing')<CR>:PHPUnit <C-R>=expand('%:.')<CR> --filter '::test'<Left>
-        autocmd FileType php nnoremap <buffer> <Leader>tn :call MyTestRun('nearest')<CR>
-        autocmd FileType php nnoremap <buffer> <Leader>tL :call MyTestRun('last')<CR>
-        autocmd FileType php nnoremap <buffer> <Leader>tF :call MyTestRun('file')<CR>
-        autocmd FileType php nnoremap <buffer> <Leader>trbn :TestNearest -d rebase<CR>
-        autocmd FileType php nnoremap <buffer> <Leader>trbf :TestFile -d rebase<CR>
+        autocmd FileType php nnoremap <buffer> <Leader>tT   <Cmd>call MyTestRun('nothing')<CR>:PHPUnit <C-R>=expand('%:.')<CR> --filter '::test'<Left>
+        autocmd FileType php nnoremap <buffer> <Leader>tn   <Cmd>call MyTestRun('nearest')<CR>
+        autocmd FileType php nnoremap <buffer> <Leader>tL   <Cmd>call MyTestRun('last')<CR>
+        autocmd FileType php nnoremap <buffer> <Leader>tF   <Cmd>call MyTestRun('file')<CR>
+        autocmd FileType php nnoremap <buffer> <Leader>trbn <Cmd>TestNearest -d rebase<CR>
+        autocmd FileType php nnoremap <buffer> <Leader>trbf <Cmd>TestFile -d rebase<CR>
     augroup END"}}}
 
     function! MyTestRun(runner)"{{{
@@ -1566,7 +1572,7 @@ endif
 " Git mappings, coc, fugitive settings
 if s:plugged('vim-fugitive')
 
-    nnoremap <Leader>g.  :tab G<CR>
+    nnoremap <Leader>g.  <Cmd>tab G<CR>
     nnoremap <Leader>gl  <Cmd>Git pull<CR>
     nnoremap <Leader>gp  <Cmd>Git push<CR>
     nnoremap <Leader>dgh <Cmd>diffget //2<CR>
@@ -1589,7 +1595,7 @@ endif
 " vim-twiggy settings
 if s:plugged('vim-twiggy')
 
-    nnoremap <Leader>lb :Twiggy<CR>
+    nnoremap <Leader>lb <Cmd>Twiggy<CR>
 
     let g:twiggy_group_locals_by_slash = 0
     let g:twiggy_local_branch_sort     = 'mru'
@@ -1616,13 +1622,14 @@ endif
 " gv.vim settings
 if s:plugged('gv.vim')
 
-    nnoremap <Leader>gvl :GV  --pretty=%cd\ %h%d\ %s\ (%an,\ %ci) --date=format:%Y-%m-%d --abbrev-commit --no-merges<CR>
-    nnoremap <Leader>gvc :GV! --pretty=%cd\ %h%d\ %s\ (%an,\ %ci) --date=format:%Y-%m-%d --abbrev-commit --no-merges<CR>
-    nnoremap <Leader>gva :GV  --pretty=%cd\ %h%d\ %s\ (%an,\ %ci) --date=format:%Y-%m-%d --abbrev-commit --no-merges --author<space>
-    nnoremap <Leader>gvg :GV  --pretty=%cd\ %h%d\ %s\ (%an,\ %ci) --date=format:%Y-%m-%d --abbrev-commit --no-merges --grep<space>
-    vnoremap <Leader>gvc :GV!<CR>
+    nnoremap <Leader>gva :GV --pretty=%cd\ %h%d\ %s\ (%an,\ %ci) --date=format:%Y-%m-%d --abbrev-commit --no-merges --author<Space>
+    nnoremap <Leader>gvc <Cmd>GV! --pretty=%cd\ %h%d\ %s\ (%an,\ %ci) --date=format:%Y-%m-%d --abbrev-commit --no-merges<CR>
+    nnoremap <Leader>gvg :GV --pretty=%cd\ %h%d\ %s\ (%an,\ %ci) --date=format:%Y-%m-%d --abbrev-commit --no-merges --grep<Space>
+    nnoremap <Leader>gvl <Cmd>GV --pretty=%cd\ %h%d\ %s\ (%an,\ %ci) --date=format:%Y-%m-%d --abbrev-commit --no-merges<CR>
+    vnoremap <Leader>gvc <Cmd>GV!<CR>
 
     augroup gv
+        au!
         autocmd FileType git set fdl=0
     augroup END
 
@@ -1631,7 +1638,7 @@ endif
 " vim-flog settings
 if s:plugged('vim-flog')
 
-    nnoremap <Leader>gvv :Flog -all<CR>
+    nnoremap <Leader>gvv <Cmd>Flog -all<CR>
 
     if s:plugged('AnsiEsc.vim')
         let g:flog_use_ansi_esc = 1
@@ -1657,10 +1664,10 @@ endif
 " vim-fontsize
 if s:plugged('vim-fontsize')
 
-    nmap <silent> <Leader>=  <Plug>FontsizeBegin
-    nmap <silent> <Leader>+  <Plug>FontsizeInc
-    nmap <silent> <Leader>-  <Plug>FontsizeDec
-    nmap <silent> <Leader>0  <Plug>FontsizeDefault
+    nmap <silent> <Leader>= <Plug>FontsizeBegin
+    nmap <silent> <Leader>+ <Plug>FontsizeInc
+    nmap <silent> <Leader>- <Plug>FontsizeDec
+    nmap <silent> <Leader>0 <Plug>FontsizeDefault
 
 endif
 
@@ -1685,15 +1692,15 @@ EOF
 
 elseif has('nvim') && s:plugged('nvim-toggle-terminal')
 
-    nnoremap <silent> <C-\> :ToggleTerminal<Enter>
-    tnoremap <silent> <C-\> <C-\><C-n>:ToggleTerminal<Enter>
+    nnoremap <silent> <C-\> <Cmd>ToggleTerminal<CR>
+    tnoremap <silent> <C-\> <C-\><C-n><Cmd>ToggleTerminal<CR>
 
 elseif s:plugged('toggle-terminal')
 
     let g:toggle_terminal#command = 'zsh'
 
-    nnoremap <silent> <C-\> :ToggleTerminal<CR>
-    tnoremap <silent> <C-\> <C-w>:ToggleTerminal<CR>
+    nnoremap <silent> <C-\> <Cmd>ToggleTerminal<CR>
+    tnoremap <silent> <C-\> <C-w><Cmd>ToggleTerminal<CR>
 
 endif
 
@@ -1709,7 +1716,7 @@ endif
 " startify settings
 if s:plugged('vim-startify')
 
-    nnoremap <Leader><Leader>st :Startify<CR>
+    nnoremap <Leader><Leader>st <Cmd>Startify<CR>
 
     let g:startify_change_to_vcs_root = 1
     let g:startify_session_dir = '~/.vim/sessions'
@@ -1767,9 +1774,9 @@ if s:plugged('gtags.vim')
 
     augroup gtags
         au!
-        autocmd FileType php,python,c,cpp,javascript,go map <buffer> <C-]> :Gtags<CR><CR>
+        autocmd FileType php,python,c,cpp,javascript,go map <buffer> <C-]> <Cmd>Gtags<CR><CR>
         if has('gui_running')
-            autocmd FileType php,python,c,cpp,javascript,go map <buffer> <C-S-]> :Gtags -r<CR><CR>
+            autocmd FileType php,python,c,cpp,javascript,go map <buffer> <C-S-]> <Cmd>Gtags -r<CR><CR>
         endif
     augroup END
 
@@ -1778,7 +1785,7 @@ endif
 " undotree
 if s:plugged('undotree')
 
-    nnoremap <Leader>ut :UndotreeToggle<CR>
+    nnoremap <Leader>ut <Cmd>UndotreeToggle<CR>
 
 endif
 
@@ -1815,9 +1822,9 @@ if s:plugged('defx.nvim')
                 \ 'selected_icon': '✓',
                 \ })
 
-    nnoremap <silent> <Leader>dt :<C-U>Defx<CR>
-    nnoremap <silent>sf :<C-u>Defx -listed -resume -buffer-name=tab`tabpagenr()` `expand('%:p:h')` -search=`expand('%:p')`<CR>
-    nnoremap <silent><Leader>fi :<C-u>Defx -new `expand('%:p:h')` -search=`expand('%:p')`<CR>
+    nnoremap <silent> <Leader>dt <Cmd>Defx<CR>
+    nnoremap <silent> sf         <Cmd>Defx -listed -resume -buffer-name=tab`tabpagenr()` `expand('%:p:h')` -search=`expand('%:p')`<CR>
+    nnoremap <silent> <Leader>fi <Cmd>Defx -new `expand('%:p:h')` -search=`expand('%:p')`<CR>
 
     augroup defx
         au!
@@ -1889,8 +1896,8 @@ if s:plugged('vim-dirvish')
     let g:dirvish_mode = ':sort ,^\v(.*[\/])|\ze,'
     let g:dirvish_git_show_ignored = 0
 
-    nmap <silent> <Space>- :Dirvish<CR>
-    nmap <silent> _ :execute (@% == '' ? 'Dirvish' : 'Dirvish %')<CR>
+    nmap <silent> <Space>- <Cmd>Dirvish<CR>
+    nmap <silent> _        <Cmd>execute (@% == '' ? 'Dirvish' : 'Dirvish %')<CR>
 
     augroup dirvish
         au!
@@ -1920,8 +1927,8 @@ endif
 " nvim-tree.lua settings
 if s:plugged('nvim-tree.lua')
 
-    nnoremap <silent> <Leader>tf :NvimTreeFindFileToggle<CR>
-    nnoremap <silent> <Leader>tt :NvimTreeToggle<CR>
+    nnoremap <silent> <Leader>tf <Cmd>NvimTreeFindFileToggle<CR>
+    nnoremap <silent> <Leader>tt <Cmd>NvimTreeToggle<CR>
 
 lua << EOF
 require("nvim-tree").setup {
@@ -1962,8 +1969,8 @@ endif
 " Move items/parameters/arguments left or right.
 if s:plugged('sideways.vim')
 
-    nnoremap <S-Left>  :SidewaysLeft<CR>
-    nnoremap <S-Right> :SidewaysRight<CR>
+    nnoremap <S-Left>  <Cmd>SidewaysLeft<CR>
+    nnoremap <S-Right> <Cmd>SidewaysRight<CR>
 
 endif
 
@@ -2016,8 +2023,8 @@ if s:plugged('vim-which-key')
     let g:maplocalleader = ','
     let g:which_key_vertical = 1
 
-    nnoremap <silent> <Leader>      :<c-u>WhichKey ','<CR>
-    nnoremap <silent> <localleader> :<c-u>WhichKey ','<CR>
+    nnoremap <silent> <Leader>      <Cmd>WhichKey ','<CR>
+    nnoremap <silent> <localleader> <Cmd>WhichKey ','<CR>
 
 endif
 
@@ -2040,26 +2047,26 @@ if s:plugged('vira')
     let g:vira_config_file_projects = $HOME . '/.config/vira/vira_projects.yaml'
     let g:vira_menu_height          = 50
 
-    nnoremap <silent> <Leader>va  :ViraSetActiveTicket<space>
-    nnoremap <silent> <Leader>vb  :ViraBrowse<CR>
-    nnoremap <silent> <Leader>vc  :ViraComment<CR>
-    nnoremap <silent> <Leader>ved :ViraEditDescription<CR>
-    nnoremap <silent> <Leader>vfR :ViraFilterReset<CR>
-    nnoremap <silent> <Leader>vfe :ViraFilterEdit<CR>
-    nnoremap <silent> <Leader>vfr :ViraFilterReporter<CR>
-    nnoremap <silent> <Leader>vfs :ViraFilterStatuses<CR>
-    nnoremap <silent> <Leader>vi  :ViraIssues<CR>
-    nnoremap <silent> <Leader>vq  :ViraQuit<CR>
-    nnoremap <silent> <Leader>vr  :ViraReport<CR>
-    nnoremap <silent> <Leader>vsa :ViraSetAssignee<CR>
+    nnoremap <silent> <Leader>va  :ViraSetActiveTicket<Space>
+    nnoremap <silent> <Leader>vb  <Cmd>ViraBrowse<CR>
+    nnoremap <silent> <Leader>vc  <Cmd>ViraComment<CR>
+    nnoremap <silent> <Leader>ved <Cmd>ViraEditDescription<CR>
+    nnoremap <silent> <Leader>vfR <Cmd>ViraFilterReset<CR>
+    nnoremap <silent> <Leader>vfe <Cmd>ViraFilterEdit<CR>
+    nnoremap <silent> <Leader>vfr <Cmd>ViraFilterReporter<CR>
+    nnoremap <silent> <Leader>vfs <Cmd>ViraFilterStatuses<CR>
+    nnoremap <silent> <Leader>vi  <Cmd>ViraIssues<CR>
+    nnoremap <silent> <Leader>vq  <Cmd>ViraQuit<CR>
+    nnoremap <silent> <Leader>vr  <Cmd>ViraReport<CR>
+    nnoremap <silent> <Leader>vsa <Cmd>ViraSetAssignee<CR>
 
-    command! -nargs=1 ViraSetActiveIssue :call s:Vira_SetActiveIssue(<q-args>)
+    command! -nargs=1 ViraSetActiveIssue call s:Vira_SetActiveIssue(<q-args>)
     function! s:Vira_SetActiveIssue(ticket_number)"{{{
         let g:vira_active_issue = 'DEV-' .. a:ticket_number
         ViraReport
     endfunction"}}}
 
-    command! -nargs=0 ViraInitActiveIssue :call s:Vira_SetActiveIssueGivenCurrentGitBranch()
+    command! -nargs=0 ViraInitActiveIssue call s:Vira_SetActiveIssueGivenCurrentGitBranch()
     function! s:Vira_SetActiveIssueGivenCurrentGitBranch()"{{{
         let l:current_branch_name = system("git branch --show-current")
         let g:vira_active_issue = matchstr(l:current_branch_name, 'DEV-\d\+')
@@ -2316,14 +2323,14 @@ end
 EOF
 "}}}
 
-    nnoremap <Leader>dv :DiffviewOpen<CR>
-    nnoremap <Leader>df :DiffviewFileHistory %<CR>
-    nnoremap <Leader>dh :call v:lua.diff_view_commit('HEAD')<CR>
+    nnoremap <Leader>dv <Cmd>DiffviewOpen<CR>
+    nnoremap <Leader>df <Cmd>DiffviewFileHistory %<CR>
+    nnoremap <Leader>dh <Cmd>call v:lua.diff_view_commit('HEAD')<CR>
 
     augroup diffview
         au!
         autocmd FileType    GV        call <SID>MapKeyBindingsForGv()
-        autocmd FileType    floggraph nnoremap <buffer> vv <Esc>:call <SID>DiffviewCommitUnderCursorInFlog()<CR>
+        autocmd FileType    floggraph nnoremap <buffer> vv <Cmd>call <SID>DiffviewCommitUnderCursorInFlog()<CR>
         autocmd BufWinEnter diffview://*/log/*/commit_log nnoremap <buffer> q <Cmd>q<CR>
         if s:plugged('git-blame.nvim')
             autocmd User DiffviewViewEnter exec 'GitBlameDisable'
@@ -2332,8 +2339,8 @@ EOF
     augroup END
 
     function! s:MapKeyBindingsForGv()
-        exec 'nnoremap ri <Esc>:call <SID>RebaseInteractivelySinceCommitUnderCursorInGv()<CR>'
-        exec 'nnoremap vv <Esc>:call <SID>DiffviewCommitUnderCursorInGv()<CR>'
+        exec 'nnoremap ri <Cmd>call <SID>RebaseInteractivelySinceCommitUnderCursorInGv()<CR>'
+        exec 'nnoremap vv <Cmd>call <SID>DiffviewCommitUnderCursorInGv()<CR>'
     endfunction
 
     function! s:RebaseInteractivelySinceCommitUnderCursorInGv()
@@ -2383,7 +2390,7 @@ endif
 " vista settings
 if s:plugged('vista.vim')
 
-    nnoremap <silent> <Leader>tb :Vista!!<CR>
+    nnoremap <silent> <Leader>tb <Cmd>Vista!!<CR>
 
     let g:vista_ignore_kinds = ['Variable', 'Function']
     let g:vista_sidebar_position = 'vertical botright'
@@ -2464,8 +2471,8 @@ if s:plugged('auto-session')
 
     let g:auto_session_pre_save_cmds = ["call CleanupBeforeSaveSession()"]
 
-    nnoremap <Leader>os :<C-u>SearchSession<CR>
-    nnoremap <Leader>ss :<C-u>SaveSession<CR>
+    nnoremap <Leader>os <Cmd>SearchSession<CR>
+    nnoremap <Leader>ss <Cmd>SaveSession<CR>
 
 lua << EOF
 require('auto-session').setup {
@@ -2512,7 +2519,7 @@ endif
 " vim-lua-format settings
 if s:plugged('vim-lua-format')
     " TODO: Choose a proper key binding "
-    " autocmd FileType lua nnoremap <buffer> <c-k> :call LuaFormat()<CR>
+    " autocmd FileType lua nnoremap <buffer> <c-k> <Cmd>call LuaFormat()<CR>
     " autocmd BufWrite *.lua call LuaFormat()
 endif
 
@@ -2838,15 +2845,15 @@ if s:plugged('far.vim')
 
     let g:far#source = 'rg'
 
-    nnoremap <silent> <Leader>ff :Farf<CR>
-    vnoremap <silent> <Leader>ff :Farf<CR>
-    nnoremap <silent> <Leader>fr :Farr<CR>
-    vnoremap <silent> <Leader>fr :Farr<CR>
+    nnoremap <silent> <Leader>ff <Cmd>Farf<CR>
+    vnoremap <silent> <Leader>ff <Cmd>Farf<CR>
+    nnoremap <silent> <Leader>fr <Cmd>Farr<CR>
+    vnoremap <silent> <Leader>fr <Cmd>Farr<CR>
 endif
 
 " Fine-cmdline settings
 if s:plugged('fine-cmdline.nvim')
-    nnoremap <Leader>fc <cmd>FineCmdline<CR>
+    nnoremap <Leader>fc <Cmd>FineCmdline<CR>
 endif
 
 " copilot.vim settings
@@ -3183,7 +3190,7 @@ if s:plugged('pdv')
 
     augroup pdv
         au!
-        autocmd FileType php nnoremap <buffer> <Leader>\\ :call pdv#DocumentWithSnip()<CR>
+        autocmd FileType php nnoremap <buffer> <Leader>\\ <Cmd>call pdv#DocumentWithSnip()<CR>
     augroup END
 
 endif
@@ -3193,9 +3200,16 @@ if s:plugged('vim-maximizer')
 
     let g:maximizer_set_default_mapping = 0
 
-    nnoremap <Leader>mm :MaximizerToggle<CR>
-    vnoremap <Leader>mm :MaximizerToggle<CR>gv
+    nnoremap <Leader>mm <Cmd>MaximizerToggle<CR>
+    vnoremap <Leader>mm <Cmd>MaximizerToggle<CR>gv
     inoremap <Leader>mm <C-o>:MaximizerToggle<CR>
+
+endif
+
+" dash.vim settings
+if s:plugged('dash.vim')
+    
+    nmap <silent> <Leader><Leader>ds <Plug>DashSearch
 
 endif
 
@@ -3306,7 +3320,14 @@ augroup quickfix
     " autocmd WinLeave * if &buftype=='quickfix' | lclose | endif
     autocmd FileType qf nnoremap <buffer> <Leader><CR> <C-w><Enter>
     autocmd FileType qf nnoremap <buffer> <CR> <CR><Cmd>call NiceNext('zv')<CR>
+    autocmd BufWinEnter * if &buftype=='quickfix' | noremap <buffer> <C-T> <Cmd>call <SID>open_quickfix_item_in_new_tab()<CR> | endif
 augroup END
+function! s:open_quickfix_item_in_new_tab()"{{{
+    let tmpSwitchbuf = &switchbuf
+    set switchbuf=newtab
+    exe "normal \<CR>"
+    exe 'set switchbuf='.tmpSwitchbuf
+endfunction"}}}
 
 " vim help
 augroup vim_help
@@ -3371,45 +3392,43 @@ endif
 
 " ------------------------------ Key mappings -------------------------------"{{{
 " Quit mappings
-nmap <Leader><Leader>q :q<CR>
-imap <Leader><Leader>q <ESC>:q<CR>
-nmap <Leader>aq :qa<CR>
-imap <Leader>aq <ESC>:qa<CR>
-nmap <Leader>Q  :q!<CR>
-imap <Leader>Q  <ESC>:q!<CR>
-nmap <Leader>aQ :qa!<CR>
-imap <Leader>aQ <ESC>:qa!<CR>
+nmap <Leader>q  <Cmd>q<CR>
+imap <Leader>q  <Cmd>q<CR>
+nmap <Leader>aq <Cmd>qa<CR>
+imap <Leader>aq <Cmd>qa<CR>
+nmap <Leader>Q  <Cmd>q!<CR>
+imap <Leader>Q  <Cmd>q!<CR>
+nmap <Leader>aQ <Cmd>qa!<CR>
+imap <Leader>aQ <Cmd>qa!<CR>
 
 " Edit mappings
-nmap <Leader>w :up<CR>
-nmap <Leader>W :SudoWrite<CR>
-imap <Leader>w <ESC>:up<CR>
-imap <Leader>W <ESC>:SudoWrite<CR>
-nmap <Leader>x :x<CR>
-imap <Leader>x <ESC>:x<CR>
-imap <Leader>u <C-O>:normal u<CR>
-imap <Leader>o <C-O>:normal o<CR>
-imap <Leader>O <C-O>:normal O<CR>
+nmap <Leader>w <Cmd>up<CR>
+nmap <Leader>W <Cmd>SudoWrite<CR>
+imap <Leader>w <Cmd>up<CR>
+imap <Leader>W <Cmd>SudoWrite<CR>
+nmap <Leader>x <Cmd>x<CR>
+imap <Leader>x <Cmd>x<CR>
+imap <Leader>u <Cmd>normal u<CR>
+imap <Leader>o <Cmd>normal o<CR>
+imap <Leader>O <Cmd>normal O<CR>
 xnoremap <expr> p '"_d"'.v:register.'P'
 imap <C-e> <ESC>A
 
 " Tab, buffer and window mappings
-nmap <C-T><C-T> :tabnew<CR>
-imap <C-T><C-T> <ESC>:tabnew<CR>
-nmap <Leader>tc :tabc<CR>
-imap <Leader>tc <ESC>:tabc<CR>
-nmap <Leader>to :tabo<CR>
-nmap <Leader><Leader>dut :tab sp<CR>
+nmap <C-T><C-T>          <Cmd>tabnew<CR>
+imap <C-T><C-T>          <Cmd>tabnew<CR>
+nmap <Leader>tc          <Cmd>tabc<CR>
+imap <Leader>tc          <Cmd>tabc<CR>
+nmap <Leader>to          <Cmd>tabo<CR>
+nmap <Leader><Leader>dut <Cmd>tab sp<CR>
 
-nmap <Leader>bc :bdelete<CR>
-imap <Leader>bc <ESC>:bdelete<CR>
-nmap <Leader>bo :BufferLineCloseLeft<CR>:BufferLineCloseRight<CR>
-imap <Leader>bo <ESC>:BufferLineCloseLeft<CR><ESC>:BufferLineCloseRight<CR>a
+nmap <Leader>bc <Cmd>bdelete<CR>
+imap <Leader>bc <Cmd>bdelete<CR>
 
 nnoremap <Leader>oo <C-w><C-o>
 inoremap <Leader>oo <ESC><C-w><C-o>a
-nmap <Leader>hs :sp<CR><C-W>_
-nmap <Leader>vs :vsp<CR><C-W>_
+nmap     <Leader>hs <Cmd>sp<CR><C-W>_
+nmap     <Leader>vs <Cmd>vsp<CR><C-W>_
 
 " Jump to next window and maximize it.
 " Notice that <TAB> is equivalent to <C-I> in some conditions,
@@ -3430,8 +3449,8 @@ nnoremap gH H
 nnoremap gM M
 nnoremap gL L
 if !s:plugged('bufferline.nvim')
-    nnoremap H  :tabp<CR>
-    nnoremap L  :tabn<CR>
+    nnoremap H  <Cmd>tabp<CR>
+    nnoremap L  <Cmd>tabn<CR>
 endif
 
 " Move focus among windows
@@ -3444,12 +3463,12 @@ if !has('nvim')
 endif
 
 " Current file or path related mappings
-nmap <Leader><Leader>O   :e <C-R>=expand("%:p:~")<CR>
-nmap <Leader><Leader>D   :e <C-R>=expand("%:p:~:h").'/'<CR>
-nmap <Leader><Leader>rn  :Rename <C-R>=expand('%:t')<CR>
-nmap <Leader><Leader>mv  :Move <C-R>=expand('%:.')<CR>
+nmap <Leader><Leader>O   <Cmd>e <C-R>=expand("%:p:~")<CR>
+nmap <Leader><Leader>D   <Cmd>e <C-R>=expand("%:p:~:h").'/'<CR>
+nmap <Leader><Leader>rn  <Cmd>Rename <C-R>=expand('%:t')<CR>
+nmap <Leader><Leader>mv  <Cmd>Move <C-R>=expand('%:.')<CR>
 nmap <Leader><Leader>rm  :Delete
-nmap <Leader><Leader>duf :saveas <C-R>=expand('%:.')<CR>
+nmap <Leader><Leader>duf <Cmd>saveas <C-R>=expand('%:.')<CR>
 
 " Navigating long lines
 nnoremap <M-h> <left>
@@ -3466,26 +3485,26 @@ vnoremap <M-j> <down>
 vnoremap <M-k> <up>
 
 " Delete lines which contain the current word or selected text.
-nnoremap <Leader>dl yiw:call <SID>preserve("g/".Escape_regex(@")."/d")<CR>
-vnoremap <Leader>dl y:call   <SID>preserve("g/".Escape_regex(@")."/d")<CR>
+nnoremap <Leader>dl yiw<Cmd>call <SID>preserve("g/".Escape_regex(@")."/d")<CR>
+vnoremap <Leader>dl y<Cmd>call   <SID>preserve("g/".Escape_regex(@")."/d")<CR>
 
 " Set TODO comments done.
-nnoremap <Leader>dn :s/\(^\s*\/\/\s\)\@<=TODO\s\(lidong\\|donie\):\s//<CR>
+nnoremap <Leader>dn <Cmd>s/\(^\s*\/\/\s\)\@<=TODO\s\(lidong\\|donie\):\s//<CR>
 
 " Edit & source vimrc
-exec 'nmap <Leader><Leader>, :tabnew '.gbl_vimrc_file.'<CR><C-W>_'
-exec 'nmap <Leader><Leader>. :so '.gbl_vimrc_file.'<CR>'
+exec 'nmap <Leader><Leader>, <Cmd>tabnew '.gbl_vimrc_file.'<CR><C-W>_'
+exec 'nmap <Leader><Leader>. <Cmd>so '.gbl_vimrc_file.'<CR>'
 " Source vimrc after it is modified
 " exec 'autocmd! bufwritepost '.gbl_vimrc_name.' so '.gbl_vimrc_file
 " To fix the problem that the folding method remains to be 'syntax' when open the vimrc file in a php file
 exec 'autocmd! BufReadPre '.gbl_vimrc_name.' setl fdm=marker'
 
 " Show PWD
-nmap <Leader>pwd :pwd<CR>
+nmap <Leader>pwd <Cmd>pwd<CR>
 
 " Convert between traditional and simplified chinese characters.
-nmap <Leader>g2b <ESC>:call G2B()<CR>
-nmap <Leader>b2g <ESC>:call B2G()<CR>
+nmap <Leader>g2b <Cmd>call G2B()<CR>
+nmap <Leader>b2g <Cmd>call B2G()<CR>
 
 " Find and replace
 nmap <Leader>// yiw/\<<C-R>"\>\C
@@ -3497,15 +3516,15 @@ nmap <Leader>rl yiw:s/\<<C-R>"\>\C//g<LEFT><LEFT>
 vmap <Leader>rl y:s/<C-R>=Escape_regex(@")<CR>\C//g<LEFT><LEFT>
 
 " " Convert between encodings.
-" nmap <Leader>gbk  :set fenc=cp936<CR>
-" nmap <Leader>utf8 :set fenc=utf-8<CR>
-" nmap <Leader>fdos :set ff=dos<CR>
-" nmap <Leader>edos :e   ++ff=dos<CR>
-" nmap <Leader>unix :set ff=unix<CR>
+" nmap <Leader>gbk  <Cmd>set fenc=cp936<CR>
+" nmap <Leader>utf8 <Cmd>set fenc=utf-8<CR>
+" nmap <Leader>fdos <Cmd>set ff=dos<CR>
+" nmap <Leader>edos <Cmd>e   ++ff=dos<CR>
+" nmap <Leader>unix <Cmd>set ff=unix<CR>
 
-" 为xbindkeys捕获热键
+" capture hotkey for xbindkeys
 if has('unix') && executable('xbindkeys')
-    nmap <Leader>key :let @+=system('xbindkeys -k\|tail -n 1')<CR>
+    nmap <Leader>key <Cmd>let @+=system('xbindkeys -k\|tail -n 1')<CR>
 endif
 
 " Select the last pasted area
@@ -3513,19 +3532,16 @@ nnoremap vp `[v`]
 nnoremap vP V']
 
 " Clear highlighting of the last search
-nmap <Space><Space> :nohl<CR>
+nmap <Space><Space> <Cmd>nohl<CR>
 
 " Search word
 nmap <Leader>/w /\<\>\C<left><left><left><left>
 
 " repeat last command
-nmap <Leader>!! :<up><CR>
-
-" dash
-nmap <silent> <Leader><Leader>ds <Plug>DashSearch
+nmap <Leader>!! <Cmd><up><CR>
 
 " Open MR of the current branch in web browser
-nmap <Leader><Leader>mr :AsyncRun glab mr view -w<CR>
+nmap <Leader><Leader>mr <Cmd>AsyncRun glab mr view -w<CR>
 
 " navigating changes in the diff view
 nnoremap ]c <Cmd>call NiceNext(v:count1 . ']c')<CR>
@@ -3684,8 +3700,8 @@ function! s:ptag_it()"{{{
 
     exec cwin.'wincmd w'
 endfunction"}}}
-nmap <Leader>pp :call <SID>ptag_it()<CR>
-nmap <Leader>pc :pclose<CR>
+nmap <Leader>pp <Cmd>call <SID>ptag_it()<CR>
+nmap <Leader>pc <Cmd>pclose<CR>
 
 " Wipe all buffers which are not active (i.e. not visible in a window/tab)
 command! -nargs=0 PruneBuffers call <SID>close_fugitive_buffers()
@@ -3807,18 +3823,6 @@ function! CustomFoldText()"{{{
     return line . expansionString . foldSizeStr . foldPercentage . foldLevelStr
 endf"}}}
 
-" open an item in quickfix or location list in a new tab
-augroup quickfix_mapping
-    au!
-    autocmd BufWinEnter * if &buftype=='quickfix' | noremap <buffer> <C-T> <Cmd>call <SID>open_quickfix_item_in_new_tab()<CR> | endif
-augroup END
-function! s:open_quickfix_item_in_new_tab()"{{{
-    let tmpSwitchbuf = &switchbuf
-    set switchbuf=newtab
-    exe "normal \<CR>"
-    exe 'set switchbuf='.tmpSwitchbuf
-endfunction"}}}
-
 " translate the word under cursor
 fun! s:search_cursor_word()"{{{
     echo system('ydcv --', expand('<cword>'))
@@ -3936,7 +3940,7 @@ endfunction"}}}
 " ------------------------------ PHP -----------------------------{{{
 
 " Open a temporary PHP file in a new window
-nmap <Leader>sbph :call <SID>php_sandbox()<CR>
+nmap <Leader>sbph <Cmd>call <SID>php_sandbox()<CR>
 function! s:php_sandbox()"{{{
     let tmpfile=tempname().'.php'
     exe 'new '.tmpfile
@@ -4034,13 +4038,16 @@ if s:plugged('coc.nvim')
         \'coc-yank',
         \]
 
-    nnoremap <Leader>cocc :tabnew<CR>:CocConfig<CR>
+    nnoremap <Leader>cocc <Cmd>tabnew<CR><Cmd>CocConfig<CR>
 
     inoremap <silent><expr> <C-n>  coc#pum#visible() ? coc#pum#next(1)       : "\<C-n>"
     inoremap <silent><expr> <C-p>  coc#pum#visible() ? coc#pum#prev(1)       : "\<C-p>"
+    inoremap <silent><expr> <C-j>  coc#pum#visible() ? coc#pum#next(1)       : "\<C-j>"
+    inoremap <silent><expr> <C-k>  coc#pum#visible() ? coc#pum#prev(1)       : "\<C-k>"
     inoremap <silent><expr> <Down> coc#pum#visible() ? coc#pum#next(0)       : "\<Down>"
     inoremap <silent><expr> <Up>   coc#pum#visible() ? coc#pum#prev(0)       : "\<Up>"
     inoremap <expr>         <CR>   coc#pum#visible() ? coc#_select_confirm() : "\<CR>"
+    inoremap <silent><expr> <C-c>  coc#pum#visible() ? coc#pum#stop()        : "\<C-c>"
 
     " --- The COC implementation of <TAB> behavior ---
     inoremap <silent><expr> <TAB>
