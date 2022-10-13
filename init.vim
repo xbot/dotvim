@@ -1504,7 +1504,7 @@ EOF
 
 endif
 
-" vim-choosewin
+" vim-choosewin settings
 if s:plugged('vim-choosewin')
 
     nmap - <Plug>(choosewin)
@@ -1513,10 +1513,13 @@ if s:plugged('vim-choosewin')
 
 endif
 
-" wildfire
+" wildfire settings
 if s:plugged('wildfire.vim')
 
     nmap <Leader>vv <Plug>(wildfire-quick-select)
+
+    " the default mapping '<CR>' messes with that of opening an item in the quickfix window.
+    let g:wildfire_fuel_map = '<C-Enter>'
 
 endif
 
@@ -2866,14 +2869,14 @@ endif
 " smart-splits.nvim settings
 if s:plugged('smart-splits.nvim')
 
-    nmap <A-Left>  :SmartResizeLeft<CR>
-    nmap <A-Right> :SmartResizeRight<CR>
-    nmap <A-Up>    :SmartResizeUp<CR>
-    nmap <A-Down>  :SmartResizeDown<CR>
-    nmap <C-h>     :SmartCursorMoveLeft<CR>
-    nmap <C-l>     :SmartCursorMoveRight<CR>
-    nmap <C-j>     :SmartCursorMoveDown<CR>
-    nmap <C-k>     :SmartCursorMoveUp<CR>
+    nmap <silent> <A-Left>  <Cmd>SmartResizeLeft<CR>
+    nmap <silent> <A-Right> <Cmd>SmartResizeRight<CR>
+    nmap <silent> <A-Up>    <Cmd>SmartResizeUp<CR>
+    nmap <silent> <A-Down>  <Cmd>SmartResizeDown<CR>
+    nmap <silent> <C-h>     <Cmd>SmartCursorMoveLeft<CR>
+    nmap <silent> <C-l>     <Cmd>SmartCursorMoveRight<CR>
+    nmap <silent> <C-j>     <Cmd>SmartCursorMoveDown<CR>
+    nmap <silent> <C-k>     <Cmd>SmartCursorMoveUp<CR>
 
 endif
 
@@ -3301,7 +3304,8 @@ augroup END
 augroup quickfix
     au!
     " autocmd WinLeave * if &buftype=='quickfix' | lclose | endif
-    autocmd FileType qf nnoremap <buffer> <Leader><Enter> <C-w><Enter>
+    autocmd FileType qf nnoremap <buffer> <Leader><CR> <C-w><Enter>
+    autocmd FileType qf nnoremap <buffer> <CR> <CR><Cmd>call NiceNext('zv')<CR>
 augroup END
 
 " vim help
