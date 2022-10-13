@@ -2259,6 +2259,7 @@ require'diffview'.setup {
             ["<C-w>gf"]    = actions.goto_file,     -- Open the file in a new tabpage
             ["<Leader>e"]  = actions.focus_files,       -- Bring focus to the files panel
             ["<Leader>b"]  = actions.toggle_files,      -- Toggle the files panel.
+            ["gq"]         = function() vim.api.nvim_command('DiffviewClose') end,
         },
         file_panel = {
             ["j"]             = actions.next_entry,         -- Bring the cursor to the next file entry
@@ -2271,7 +2272,30 @@ require'diffview'.setup {
             ["-"]             = actions.toggle_stage_entry, -- Stage / unstage the selected entry.
             ["S"]             = actions.stage_all,          -- Stage all entries.
             ["U"]             = actions.unstage_all,        -- Unstage all entries.
-            ["X"]             = actions.restore_entry,      -- Restore entry to the state on the left side.
+            ["X"]             = function()
+                local lazy = require("diffview.lazy")
+                local lib = lazy.require("diffview.lib")
+                local view = lib.get_current_view()
+                local RevType = lazy.access("diffview.git.rev", "RevType")
+                local utils = lazy.require("diffview.utils")
+                local git = lazy.require("diffview.git.utils")
+
+                if view.right.type == RevType.LOCAL then
+                    actions.restore_entry()
+                else
+                    local file = view:infer_cur_file()
+                    if file then
+                        local bufid = utils.find_file_buffer(file.path)
+                        if bufid and vim.bo[bufid].modified then
+                            utils.err("The file is open with unsaved changes! Aborting file restoration.")
+                            return
+                        end
+                        git.restore_file(view.git_ctx.toplevel, file.path, file.kind, view.left.commit, function()
+                            view:update_files()
+                        end)
+                    end
+                end
+            end,
             ["R"]             = actions.refresh_files,      -- Update stats and entries in the file list.
             ["I"]             = actions.open_commit_log,    -- Open the commit log panel.
             ["<c-b>"]         = actions.scroll_view(-0.25), -- Scroll the view up
@@ -2285,6 +2309,7 @@ require'diffview'.setup {
             ["f"]             = actions.toggle_flatten_dirs,  -- Flatten empty subdirectories in tree listing style.
             ["<Leader>e"]     = actions.focus_files,
             ["<Leader>b"]     = actions.toggle_files,
+            ["gq"]            = function() vim.api.nvim_command('DiffviewClose') end,
         },
         file_history_panel = {
             ["g!"]            = actions.options,          -- Open the option panel
@@ -2309,6 +2334,28 @@ require'diffview'.setup {
             ["<C-w>gf"]       = actions.goto_file,
             ["<Leader>e"]     = actions.focus_files,
             ["<Leader>b"]     = actions.toggle_files,
+            ["gq"]            = function() vim.api.nvim_command('DiffviewClose') end,
+            ["X"]             = function()
+                local lazy = require("diffview.lazy")
+                local lib = lazy.require("diffview.lib")
+                local view = lib.get_current_view()
+                local RevType = lazy.access("diffview.git.rev", "RevType")
+                local utils = lazy.require("diffview.utils")
+                local git = lazy.require("diffview.git.utils")
+
+                local file = view:infer_cur_file()
+                if file then
+                    local bufid = utils.find_file_buffer(file.path)
+                    if bufid and vim.bo[bufid].modified then
+                        utils.err("The file is open with unsaved changes! Aborting file restoration.")
+                        return
+                    end
+                    local item = view.panel:get_item_at_cursor()
+                    git.restore_file(view.git_ctx.toplevel, file.path, file.kind, item.commit.hash .. '~1', function()
+                        -- do nothing for now
+                    end)
+                end
+            end,
         },
         option_panel = {
             ["<tab>"] = actions.select_entry,
@@ -2329,8 +2376,8 @@ EOF
 
     augroup diffview
         au!
-        autocmd FileType    GV        call <SID>MapKeyBindingsForGv()
-        autocmd FileType    floggraph nnoremap <buffer> vv <Cmd>call <SID>DiffviewCommitUnderCursorInFlog()<CR>
+        autocmd FileType    GV        call <SID>map_key_bindings_for_gv()
+        autocmd FileType    floggraph nnoremap <buffer> vv <Cmd>call <SID>diffview_commit_under_cursor_in_flog()<CR>
         autocmd BufWinEnter diffview://*/log/*/commit_log nnoremap <buffer> q <Cmd>q<CR>
         if s:plugged('git-blame.nvim')
             autocmd User DiffviewViewEnter exec 'GitBlameDisable'
@@ -2338,22 +2385,22 @@ EOF
         endif
     augroup END
 
-    function! s:MapKeyBindingsForGv()
-        exec 'nnoremap ri <Cmd>call <SID>RebaseInteractivelySinceCommitUnderCursorInGv()<CR>'
-        exec 'nnoremap vv <Cmd>call <SID>DiffviewCommitUnderCursorInGv()<CR>'
+    function! s:map_key_bindings_for_gv()
+        exec 'nnoremap ri <Cmd>call <SID>rebase_interactively_since_commit_under_cursor_in_gv()<CR>'
+        exec 'nnoremap vv <Cmd>call <SID>diffview_commit_under_cursor_in_gv()<CR>'
     endfunction
 
-    function! s:RebaseInteractivelySinceCommitUnderCursorInGv()
+    function! s:rebase_interactively_since_commit_under_cursor_in_gv()
         normal! ^2f w
         exec 'Git rebase --interactive ' . expand('<cword>') . '~1'
     endfunction
 
-    function! s:DiffviewCommitUnderCursorInGv()
+    function! s:diffview_commit_under_cursor_in_gv()
         normal! ^2f w
         call v:lua.diff_view_commit(expand('<cword>'))
     endfunction
 
-    function! s:DiffviewCommitUnderCursorInFlog()
+    function! s:diffview_commit_under_cursor_in_flog()
         normal! ^f[w
         call v:lua.diff_view_commit(expand('<cword>'))
     endfunction
