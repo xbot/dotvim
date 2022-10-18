@@ -3130,7 +3130,7 @@ endif
 
 " firenvim settings
 if s:plugged('firenvim')
-    let g:firenvim_config = { 
+    let g:firenvim_config = {
         \ 'globalSettings': {
             \ 'alt': 'all',
         \  },
@@ -3390,28 +3390,34 @@ augroup disable_numbers_in_diff_mode
 augroup END
 
 if s:plugged('taboo.vim')
+
     augroup on_gv_start
         au!
         autocmd FileType GV TabooRename Commits
     augroup END
+
 endif
 
 " vim-after-object settings
 if s:plugged('vim-after-object')
+
     augroup vim_after_object
         au!
         autocmd VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
     augroup END
+
 endif
 
 " targets.vim settings
 if s:plugged('targets.vim')
+
     augroup targets_textobj
         au!
         autocmd User targets#mappings#user call targets#mappings#extend({ 
                     \ 'A': {'argument': [{'o': '[([]', 'c': '[])]', 's': ','}]}, 
                     \ }) 
     augroup END
+
 endif
 
 " vim-sandwich settings
@@ -3433,6 +3439,9 @@ if s:plugged('vim-sandwich')
     xmap am <Plug>(textobj-sandwich-literal-query-a)
     omap im <Plug>(textobj-sandwich-literal-query-i)
     omap am <Plug>(textobj-sandwich-literal-query-a)
+
+    nmap csb <Plug>(sandwich-replace-auto)
+    nmap dsb <Plug>(sandwich-delete-auto)
 
     let g:sandwich#recipes += [
         \ {'buns': ["( ", " )"], 'nesting': 1, 'match_syntax': 1, 'input': ['('] },
@@ -3517,10 +3526,10 @@ if !has('nvim')
 endif
 
 " Current file or path related mappings
-nmap <Leader><Leader>O   <Cmd>e <C-R>=expand("%:p:~")<CR>
-nmap <Leader><Leader>D   <Cmd>e <C-R>=expand("%:p:~:h").'/'<CR>
-nmap <Leader><Leader>rn  <Cmd>Rename <C-R>=expand('%:t')<CR>
-nmap <Leader><Leader>mv  <Cmd>Move <C-R>=expand('%:.')<CR>
+nmap <Leader><Leader>O   :e <C-R>=expand("%:p:~")<CR>
+nmap <Leader><Leader>D   :e <C-R>=expand("%:p:~:h").'/'<CR>
+nmap <Leader><Leader>rn  :Rename <C-R>=expand('%:t')<CR>
+nmap <Leader><Leader>mv  :Move <C-R>=expand('%:.')<CR>
 nmap <Leader><Leader>rm  :Delete
 nmap <Leader><Leader>duf :saveas <C-R>=expand('%:.')<CR>
 
@@ -4181,12 +4190,12 @@ if s:plugged('coc.nvim')
     " Do default action for previous item.
     nnoremap <silent> <space>k  <Cmd>CocPrev<CR><Cmd>sleep 10m<CR>zv
     " Resume latest coc list.
-    nnoremap <silent> <Leader>cocp  <Cmd>CocListResume<CR>
-    nnoremap <Leader>sy <Cmd>CocList -A --normal yank<CR>
-    nnoremap <Leader>op <Cmd>CocList project<CR>
-    nnoremap <Leader>sC <Cmd>let v:this_session=''<CR>:echo 'Session closed.'<CR>
-    nnoremap <Leader>sl <Cmd>CocList -A snippets<CR>
-    xnoremap <Leader>cs <Plug>(coc-convert-snippet)
+    nnoremap <silent> <C-/>      <Cmd>CocListResume<CR>
+    nnoremap <silent> <Leader>sy <Cmd>CocList -A --normal yank<CR>
+    nnoremap <silent> <Leader>op <Cmd>CocList project<CR>
+    nnoremap <silent> <Leader>sC <Cmd>let v:this_session=''<CR>:echo 'Session closed.'<CR>
+    nnoremap <silent> <Leader>sl <Cmd>CocList -A snippets<CR>
+    xnoremap <silent> <Leader>cs <Plug>(coc-convert-snippet)
 
     " navigate chunks of current buffer
     nmap [g <Plug>(coc-git-prevchunk)
