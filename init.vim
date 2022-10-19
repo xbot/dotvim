@@ -3595,7 +3595,7 @@ nnoremap vp `[v`]
 nnoremap vP V']
 
 " Clear highlighting of the last search
-nmap <Space><Space> <Cmd>nohl<CR>
+nmap <Space><Space> :nohl<CR>
 
 " Search word
 nmap <Leader>/w /\<\>\C<left><left><left><left>
