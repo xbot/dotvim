@@ -209,6 +209,7 @@ if has('nvim')
     Plug 'mrjones2014/smart-splits.nvim'
     Plug 'norcalli/nvim-colorizer.lua'
     Plug 'phaazon/hop.nvim'
+    Plug 'phelipetls/jsonpath.nvim'
     Plug 'rcarriga/nvim-notify'
     Plug 'simnalamburt/vim-mundo'
 
@@ -3261,6 +3262,18 @@ if s:plugged('dash.vim')
 
 endif
 
+" jsonpath.nvim settings
+if s:plugged('jsonpath.nvim')
+    
+    " show json path in the winbar
+    augroup jsonpath
+        au!
+        autocmd FileType json if exists('+winbar') | setlocal winbar=%{luaeval('require\"jsonpath\".get()')} | endif
+        autocmd FileType json nnoremap <buffer> y<C-p> <Cmd>let @+=luaeval('require"jsonpath".get()')<CR>:echomsg "Yanked <C-R>=@+<CR>"<CR>
+    augroup END
+
+endif
+
 "}}}
 
 " ------------------------------ Auto Commands ------------------------------"{{{
@@ -3665,7 +3678,7 @@ function! My_diff()"{{{
 endfunction"}}}
 
 " @see https://vim.fandom.com/wiki/Different_syntax_highlighting_within_regions_of_a_file
-function! s:text_enable_code_snippet(filetype, start, end, textSnipHl) abort"{{{
+function! SetPartialSyntax(filetype, start, end, textSnipHl) abort"{{{
     let ft=toupper(a:filetype)
     let group='textGroup'.ft
     if exists('b:current_syntax')
