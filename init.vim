@@ -1710,7 +1710,10 @@ endif
 
 " floaterm settings
 if s:plugged('vim-floaterm')
-    
+
+	nnoremap <silent> <C-/> <Cmd>FloatermToggle<CR>
+	tnoremap <silent> <C-/> <Cmd>FloatermToggle<CR>
+
     if g:colors_name == 'tokyonight' && &background == 'light'
         hi FloatermBorder guibg=#E0E2E6
     endif
@@ -2099,7 +2102,7 @@ if s:plugged('rest.nvim')
         autocmd FileType http nmap <buffer> <Leader>sL <Plug>RestNvimLast
         autocmd FileType http set commentstring=\#%s
         " autocmd BufEnter * if &filetype == 'httpResult' | call <SID>save_cookie() | endif
-        autocmd BufEnter * if &filetype == 'httpResult' | setl fdm=indent | setl fdl=1 | endif
+        " autocmd BufEnter * if &filetype == 'httpResult' | setl fdm=indent | setl fdl=1 | endif
     augroup END
 
     " Set g:http_response_header_uid, g:http_response_cookie_session in ~/.vimrc_private
@@ -4222,7 +4225,7 @@ if s:plugged('coc.nvim')
     " Do default action for previous item.
     nnoremap <silent> <space>k  <Cmd>CocPrev<CR><Cmd>sleep 10m<CR>zv
     " Resume latest coc list.
-    nnoremap <silent> <C-/>      <Cmd>CocListResume<CR>
+    nnoremap <silent> <C-.>      <Cmd>CocListResume<CR>
     nnoremap <silent> <Leader>sy <Cmd>CocList -A --normal yank<CR>
     nnoremap <silent> <Leader>op <Cmd>CocList project<CR>
     nnoremap <silent> <Leader>sC <Cmd>let v:this_session=''<CR>:echo 'Session closed.'<CR>
