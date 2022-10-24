@@ -3037,6 +3037,7 @@ endif
 " nvim-hlslens settings
 if s:plugged('nvim-hlslens')
 lua << EOF
+require('hlslens').setup()
 
 local kopts = {noremap = true, silent = true}
 
