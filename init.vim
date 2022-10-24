@@ -22,6 +22,7 @@ Plug 'arecarn/vim-fold-cycle'
 Plug 'chrisbra/SudoEdit.vim'
 Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-titlecase'
+Plug 'dbakker/vim-paragraph-motion'
 Plug 'dstein64/vim-startuptime'
 Plug 'farmergreg/vim-lastplace'
 Plug 'gcmt/wildfire.vim'
@@ -41,6 +42,7 @@ Plug 'mattn/webapi-vim'
 Plug 'mbbill/fencview'
 Plug 'mhinz/vim-startify'
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'on': ['ViraIssues', 'ViraReport', 'ViraLoadProject', 'ViraSetActiveTicket', 'ViraFilterEdit'] }
+Plug 'nat-418/boole.nvim'
 Plug 'preservim/nerdcommenter'
 Plug 'rizzatti/dash.vim'
 Plug 'segeljakt/vim-silicon'
@@ -3272,6 +3274,23 @@ if s:plugged('jsonpath.nvim')
         autocmd FileType json nnoremap <buffer> y<C-p> <Cmd>let @+=luaeval('require"jsonpath".get()')<CR>:echomsg "Yanked <C-R>=@+<CR>"<CR>
     augroup END
 
+endif
+
+" boole.nvim settings
+if s:plugged('boole.nvim')
+lua << EOF
+require('boole').setup({
+    mappings = {
+        increment = '<C-a>',
+        decrement = '<C-x>'
+    },
+    -- User defined loops
+    additions = {
+        -- {'Foo', 'Bar'},
+        -- {'tic', 'tac', 'toe'}
+    },
+})
+EOF
 endif
 
 "}}}
