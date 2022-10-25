@@ -57,8 +57,6 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-unimpaired'
 Plug 'twitvim/twitvim'
 Plug 'tyru/open-browser.vim'
-Plug 'vim-scripts/Align'
-Plug 'vim-scripts/SQLUtilities'
 Plug 'voldikss/vim-floaterm'
 Plug 'weirongxu/plantuml-previewer.vim'
 
@@ -188,7 +186,7 @@ Plug 'machakann/vim-sandwich'
 " Plug 'kentaro/vim-textobj-function-php' " Too old and 'if' works not as exptected in PHP syntax.
 
 " ctags/gtags group
-Plug 'ludovicchabant/vim-gutentags'
+Plug 'ludovicchabant/vim-gutentags', { 'do': 'cd plat/unix && chmod a+x *' }
 Plug 'skywind3000/gutentags_plus'
 Plug 'xbot/gtags.vim'
 
@@ -842,9 +840,6 @@ if s:plugged('Pydiction')
     endif
 
 endif
-
-" SQL Type Default
-let g:sql_type_default = 'sqlsvr'
 
 " NERD_commenter Settings
 if s:plugged('nerdcommenter')
@@ -2982,7 +2977,7 @@ if s:plugged('nvim-treesitter')
 lua << EOF
 require'nvim-treesitter.configs'.setup {
     -- A list of parser names, or "all"
-    ensure_installed = { 'bash', 'c', 'go', 'http', 'javascript', 'json', 'lua', 'php', 'python', 'vim', 'yaml' },
+    ensure_installed = { 'bash', 'c', 'go', 'http', 'javascript', 'json', 'lua', 'php', 'python', 'sql', 'vim', 'yaml' },
 
     -- Install parsers synchronously (only applied to `ensure_installed`)
     sync_install = false,
