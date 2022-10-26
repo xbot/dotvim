@@ -43,6 +43,7 @@ Plug 'mbbill/fencview'
 Plug 'mhinz/vim-startify'
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'on': ['ViraIssues', 'ViraReport', 'ViraLoadProject', 'ViraSetActiveTicket', 'ViraFilterEdit'] }
 Plug 'nat-418/boole.nvim'
+Plug 'nathanaelkane/vim-indent-guides'
 Plug 'preservim/nerdcommenter'
 Plug 'rizzatti/dash.vim'
 Plug 'segeljakt/vim-silicon'
