@@ -37,3 +37,29 @@ snippet code "A code block" b
 $2
 {code}$0
 endsnippet
+
+snippet api "An API description" b
+h2. ${1:Title}
+
+{{${2|GET,POST,PUT,PATCH,DELETE|} ${3:URI}}}
+
+${5:h3. Description}$0
+
+h3. ${4|Demo payload,Demo response|}
+
+endsnippet
+
+snippet ticket "The skeleton of a ticket document" b
+h1. Description
+
+${0:What to do and the design link.}
+
+h1. Backend branch
+
+*${1|Ready for testing,Working in progress|}.*
+
+{{${2:BRANCH_NAME}}}
+
+h1. API
+
+endsnippet

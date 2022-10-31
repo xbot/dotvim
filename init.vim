@@ -133,7 +133,9 @@ Plug 'inkarkat/vim-ingo-library'
 Plug 'inkarkat/vim-EnhancedJumps'
 
 " ultisnips group
-Plug 'SirVer/ultisnips'
+" Enabling ultisnips will cause snippets with choices failing to jump when
+" coc-snippets is active.
+" Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 " tabline and statusline group
@@ -4159,6 +4161,11 @@ if s:plugged('coc.nvim')
 
     let g:coc_snippet_next = '<TAB>'
     " --- The COC implementation of <TAB> behavior END ---
+
+    " coc-snippets settings
+    if !s:plugged('ultisnips')
+        nnoremap <Leader>ue <Cmd>CocCommand snippets.openSnippetFiles<CR>
+    endif
 
     " Float window
     nmap <Leader>ff <Plug>(coc-float-jump)

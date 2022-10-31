@@ -28,7 +28,6 @@
 	},
     "npm.binPath": "~/.nvm/versions/node/v14.16.1/bin/npm",
     "snippets.loadVSCodeProjectSnippets": false,
-    "snippets.userSnippetsDirectory": "~/.vim/UltiSnips",
     "codeLens.enable": true,
     "intelephense.client.disableInlayHints": false,
     "intelephense.diagnostics.enable": true,
