@@ -138,6 +138,7 @@
         "text",
         "rst"
     ],
+    "go.goplsPath": "~/.local/share/nvim/mason/bin/gopls",
     "diagnostic-languageserver.filetypes": {
     },
     "diagnostic-languageserver.formatters": {

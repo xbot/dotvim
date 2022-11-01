@@ -1238,7 +1238,7 @@ if s:plugged('mason-lspconfig.nvim')
 
 lua << EOF
 require("mason-lspconfig").setup({
-    ensure_installed = { 'sumneko_lua', 'intelephense', 'bashls', 'grammarly', 'jsonls', 'vimls', 'yamlls' }
+    ensure_installed = { 'bashls', 'gopls', 'grammarly', 'intelephense', 'jsonls', 'sumneko_lua', 'vimls', 'yamlls' }
 })
 EOF
 
@@ -4119,6 +4119,7 @@ if s:plugged('coc.nvim')
         \'@yaegassy/coc-phpstan',
         \'coc-diagnostic',
         \'coc-git',
+        \'coc-go',
         \'coc-grammarly',
         \'coc-json',
         \'coc-lists',
