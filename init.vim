@@ -1712,10 +1712,74 @@ if s:plugged('vim-floaterm')
 
 	nnoremap <silent> <C-/> <Cmd>FloatermToggle<CR>
 	tnoremap <silent> <C-/> <Cmd>FloatermToggle<CR>
+	tnoremap <silent> <F11> <C-\><C-n>:FloatermPrev<CR>
+	tnoremap <silent> <F12> <C-\><C-n>:FloatermNext<CR>
+
+    nnoremap <silent> <Leader>bp <Cmd>call <SID>toggle_terminal_app('bpython')<CR>
+    nnoremap <silent> <Leader>db <Cmd>call <SID>toggle_terminal_app('mycli')<CR>
+
+    augroup floaterm
+        au!
+        autocmd BufEnter * if executable('./artisan')|nnoremap <silent><buffer> <Leader>tk <Cmd>call <SID>toggle_terminal_app('tinker')<CR>|endif
+    augroup END
 
     if g:colors_name == 'tokyonight' && &background == 'light'
         hi FloatermBorder guibg=#E0E2E6
     endif
+
+    function! s:toggle_terminal_app(app_name) abort"{{{
+        let l:bufnr = floaterm#terminal#get_bufnr(a:app_name)
+        if l:bufnr >= 0
+            call floaterm#terminal#open_existing(l:bufnr)
+        else
+            let l:cmd           = a:app_name
+            let l:cmd_generator = 's:get_' .. a:app_name .. '_cmd'
+
+            if exists('*' .. l:cmd_generator)
+                let l:cmd = call(l:cmd_generator, [])
+            endif
+
+            exec 'FloatermNew --name=' .. a:app_name .. ' ' .. l:cmd
+        endif
+    endfunction"}}}
+
+    function! s:get_mycli_cmd() abort"{{{
+        let l:host          = 'nas'
+        let l:user          = 'root'
+        let l:password      = v:null
+        let l:password_file = '~/Desktop/db.pfile'
+        let l:db_name       = ''
+
+        if stridx(tolower(hostname()), 'imac') >= 0
+            let l:host = 'localhost'
+        endif
+
+        try
+            let l:host     = s:get_dotenv_option('DB_HOST', '.env', '')
+            let l:user     = s:get_dotenv_option('DB_USERNAME', '.env', '')
+            let l:password = s:get_dotenv_option('DB_PASSWORD', '.env', v:null)
+            let l:db_name  = s:get_dotenv_option('DB_DATABASE', '.env', '')
+        catch /.*/
+        endtry
+
+        let l:cmd = 'mycli -h' .. l:host .. ' -u' .. l:user
+
+        if l:password != v:null && strlen(l:password) > 0
+            let l:cmd = l:cmd .. ' -p' .. l:password
+        elseif l:password == v:null && strlen(l:password_file) > 0
+            let l:cmd = l:cmd .. ' --password-file ' .. l:password_file
+        endif
+
+        if strlen(l:db_name) > 0
+            let l:cmd = l:cmd .. ' ' .. l:db_name
+        endif
+
+        return l:cmd
+    endfunction"}}}
+
+    function! s:get_tinker_cmd() abort"{{{
+        return './artisan tinker'
+    endfunction"}}}
 
 endif
 
@@ -4118,6 +4182,33 @@ function! s:get_cword_safely()"{{{
 
     return l:cword
 endfunction"}}}
+
+" call s:get_dotenv_option(option, dotenv_file, default_value)
+" throws exception when the dotenv file is not readable
+let s:dotenv_cache = {}
+function! s:get_dotenv_option(option, ...) abort"{{{
+    let l:file = fnamemodify(get(a:, 1, '.env'), ':p')
+
+    if !filereadable(l:file)
+        throw l:file . ' is unreadable!'
+    endif
+
+    if !has_key(s:dotenv_cache, l:file)
+        let s:dotenv_cache[l:file] = readfile(l:file)
+    endif
+
+    let l:value = get(a:, 2, v:null)
+
+    for l:line in s:dotenv_cache[l:file]
+        if stridx(l:line, a:option . '=') == 0
+            let l:value = trim(matchstr(l:line, '\(^.*=\)\@<=.*'))
+            break
+        endif
+    endfor
+
+    return l:value
+endfunction"}}}
+
 "}}}
 
 " ------------------------------ PHP -----------------------------{{{
