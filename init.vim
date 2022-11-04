@@ -475,7 +475,7 @@ else
 endif
 
 if has('nvim')
-    let g:backupdir=expand(stdpath('data') . '/backup')
+    let g:backupdir=expand(stdpath('data') .. '/backup')
     if !isdirectory(g:backupdir)
         call mkdir(g:backupdir, "p")
     endif
@@ -643,14 +643,14 @@ if has('nvim')
         let g:clipboard = {
             \   'name': 'myClipboard',
             \   'copy': {
-            \      '+': ['lemonade', '--port=' . lemonade_port, 'copy'],
-            \      '*': ['lemonade', '--port=' . lemonade_port, 'copy'],
-            \      '"': ['lemonade', '--port=' . lemonade_port, 'copy'],
+            \      '+': ['lemonade', '--port=' .. lemonade_port, 'copy'],
+            \      '*': ['lemonade', '--port=' .. lemonade_port, 'copy'],
+            \      '"': ['lemonade', '--port=' .. lemonade_port, 'copy'],
             \    },
             \   'paste': {
-            \      '+': ['lemonade', '--port=' . lemonade_port, 'paste'],
-            \      '*': ['lemonade', '--port=' . lemonade_port, 'paste'],
-            \      '"': ['lemonade', '--port=' . lemonade_port, 'paste'],
+            \      '+': ['lemonade', '--port=' .. lemonade_port, 'paste'],
+            \      '*': ['lemonade', '--port=' .. lemonade_port, 'paste'],
+            \      '"': ['lemonade', '--port=' .. lemonade_port, 'paste'],
             \    },
             \   'cache_enabled': 1,
             \ }
@@ -786,6 +786,7 @@ if s:plugged('nvim-bqf')
     hi link BqfPreviewRange Search
 
 lua << EOF
+
 local status, bqf = pcall(require, 'bqf')
 if not status then
     return
@@ -830,6 +831,7 @@ bqf.setup({
         }
     }
 })
+
 EOF
 
 endif
@@ -1024,11 +1026,11 @@ if s:plugged('LeaderF')"{{{
             let l:sub_cmd = 'gtags'
         endif
 
-        let l:cmd = "Leaderf " . l:sub_cmd
+        let l:cmd = "Leaderf " .. l:sub_cmd
 
         let l:cword = s:get_cword_safely()
         if l:cword != ''
-            let l:cmd = l:cmd . " --input " . l:cword
+            let l:cmd = l:cmd .. " --input " .. l:cword
         endif
 
         exec l:cmd
@@ -1069,10 +1071,11 @@ if s:plugged('bufferline.nvim')
     nnoremap <Leader>bo <Cmd>BufferLineCloseLeft<CR><Cmd>BufferLineCloseRight<CR>
     inoremap <Leader>bo <Cmd>BufferLineCloseLeft<CR><Cmd>BufferLineCloseRight<CR>
 
-    augroup bufferline
-        au!
-        autocmd TabNewEntered * BufferLineSortByTabs
-    augroup END
+    " augroup bufferline
+    "     au!
+    "     " Enable BufferLineSortByTabs when mode=buffers
+    "     autocmd TabNewEntered * BufferLineSortByTabs
+    " augroup END
 
 lua << EOF
 require("bufferline").setup({
@@ -1813,7 +1816,7 @@ if s:plugged('vim-gutentags')
     let g:gutentags_ctags_extra_args = ['--PHP-kinds=+cdfint-va']
     let g:gutentags_project_root     = ['.git'] " config project root markers.
 
-    let g:gutentags_cache_dir = expand(g:Lf_CacheDirectory . '/.LfCache/gtags')
+    let g:gutentags_cache_dir = expand(g:Lf_CacheDirectory .. '/.LfCache/gtags')
     let g:gutentags_define_advanced_commands = 1
 
 endif
@@ -2030,6 +2033,9 @@ require("nvim-tree").setup {
         dotfiles = true,
     },
     hijack_directories = { enable = false },
+    renderer = {
+        symlink_destination = false,
+    },
 }
 EOF
 
@@ -2113,8 +2119,8 @@ if s:plugged('vira')
 
     " let g:vira_async_timer = 30000
     " let g:vira_async_timer_init = 30000
-    let g:vira_config_file_servers  = $HOME . '/.config/vira/vira_servers.yaml'
-    let g:vira_config_file_projects = $HOME . '/.config/vira/vira_projects.yaml'
+    let g:vira_config_file_servers  = $HOME .. '/.config/vira/vira_servers.yaml'
+    let g:vira_config_file_projects = $HOME .. '/.config/vira/vira_projects.yaml'
     let g:vira_menu_height          = 50
 
     nnoremap <silent> <Leader>va  :ViraSetActiveTicket<Space>
@@ -2170,7 +2176,7 @@ if s:plugged('rest.nvim')
 
     " Set g:http_response_header_uid, g:http_response_cookie_session in ~/.vimrc_private
     function s:save_cookie() abort"{{{
-        let l:cookie = matchstr(getline(search('Set-Cookie:')), '\(' . g:http_response_cookie_session . '=\)\@<=\(.\{-}\)\(;\)\@=')
+        let l:cookie = matchstr(getline(search('Set-Cookie:')), '\(' .. g:http_response_cookie_session .. '=\)\@<=\(.\{-}\)\(;\)\@=')
 
         if l:cookie == ''
             echoerr 'Cannot find a valid cookie.'
@@ -2182,7 +2188,7 @@ if s:plugged('rest.nvim')
                     \"eS2wb1cSveE3LPm9G5Z49A": "superadmin",
                     \}
 
-        let l:uid = matchstr(getline(search(g:http_response_header_uid . ':\c')), '\(' . g:http_response_header_uid . ': \)\@<=\(.*\)')
+        let l:uid = matchstr(getline(search(g:http_response_header_uid .. ':\c')), '\(' .. g:http_response_header_uid .. ': \)\@<=\(.*\)')
 
         if !has_key(l:env_var_by_uid, l:uid)
             echoerr 'Cannot find valid user ID.'
@@ -2194,7 +2200,7 @@ if s:plugged('rest.nvim')
             let l:bak_file_ext_part = '""'
         endif
 
-        call system('sed -i ' . l:bak_file_ext_part . ' "s/\(header_cookie_debug_' . l:env_var_by_uid[l:uid] . '_session=.*' . g:http_response_cookie_session . '=\)[0-9A-Za-z]*/\1' . l:cookie . '/" .env')
+        call system('sed -i ' .. l:bak_file_ext_part .. ' "s/\(header_cookie_debug_' .. l:env_var_by_uid[l:uid] .. '_session=.*' .. g:http_response_cookie_session .. '=\)[0-9A-Za-z]*/\1' .. l:cookie .. '/" .env')
     endfunction"}}}
 
 lua << EOF
@@ -2462,7 +2468,7 @@ EOF
 
     function! s:rebase_interactively_since_commit_under_cursor_in_gv()
         normal! ^2f w
-        exec 'Git rebase --interactive ' . expand('<cword>') . '~1'
+        exec 'Git rebase --interactive ' .. expand('<cword>') .. '~1'
     endfunction
 
     function! s:diffview_commit_under_cursor_in_gv()
@@ -2651,7 +2657,7 @@ endif
 " vimspector settings{{{
 if s:plugged('vimspector')
 
-    let g:vimspector_install_gadgets = [ 'debugpy' ]
+    let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-php-debug' ]
     let g:vimspector_sign_priority = {
                 \    'vimspectorBP':         999,
                 \    'vimspectorBPCond':     999,
@@ -2701,7 +2707,7 @@ if s:plugged('vimspector')
         endif
 
         for keymap in s:vimspector_keymaps
-            exec keymap['mode'] . 'map <silent> <buffer> ' . keymap['key'] . ' ' . keymap['callback']
+            exec keymap['mode'] .. 'map <silent> <buffer> ' .. keymap['key'] .. ' ' .. keymap['callback']
             unlet keymap
         endfor
 
@@ -2725,7 +2731,7 @@ if s:plugged('vimspector')
                 try
                     execute 'buffer' bufnr
                     for keymap in s:vimspector_keymaps
-                        exec 'silent! ' . keymap['mode'] . 'unmap <buffer> ' . keymap['key']
+                        exec 'silent! ' .. keymap['mode'] .. 'unmap <buffer> ' .. keymap['key']
                         unlet keymap
                     endfor
                     " silent! nunmap <buffer> <F4>
@@ -2754,7 +2760,7 @@ if s:plugged('vimspector')
 
         " Restore the foldopen option
         if s:vimspector_foldopen_holder != ''
-            exec 'set foldopen=' . s:vimspector_foldopen_holder
+            exec 'set foldopen=' .. s:vimspector_foldopen_holder
             let s:vimspector_foldopen_holder = ''
         endif
     endfunction"}}}
@@ -3104,8 +3110,8 @@ require('hlslens').setup()
 
 local kopts = {noremap = true, silent = true}
 
-vim.api.nvim_set_keymap('n', 'n',  [[<Cmd>call NiceNext(v:count1 . 'nzv')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
-vim.api.nvim_set_keymap('n', 'N',  [[<Cmd>call NiceNext(v:count1 . 'Nzv')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', 'n',  [[<Cmd>call NiceNext(v:count1 .. 'nzv')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', 'N',  [[<Cmd>call NiceNext(v:count1 .. 'Nzv')<CR><Cmd>lua require('hlslens').start()<CR>]], kopts)
 vim.api.nvim_set_keymap('n', '*',  [[*zv<Cmd>lua require('hlslens').start()<CR>]],                                      kopts)
 vim.api.nvim_set_keymap('n', '#',  [[#zv<Cmd>lua require('hlslens').start()<CR>]],                                      kopts)
 vim.api.nvim_set_keymap('n', 'g*', [[g*zv<Cmd>lua require('hlslens').start()<CR>]],                                     kopts)
@@ -3115,14 +3121,14 @@ EOF
 else
 
     " remap n/N to nzz/Nzz in a nice way
-    nnoremap <silent> n <Cmd>call NiceNext(v:count1 . 'nzv')<CR>
-    nnoremap <silent> N <Cmd>call NiceNext(v:count1 . 'Nzv')<CR>
+    nnoremap <silent> n <Cmd>call NiceNext(v:count1 .. 'nzv')<CR>
+    nnoremap <silent> N <Cmd>call NiceNext(v:count1 .. 'Nzv')<CR>
 
 endif
 
 function! NiceNext(cmd)"{{{
     let view = winsaveview()
-    execute 'normal! ' . a:cmd
+    execute 'normal! ' .. a:cmd
     if view.topline != winsaveview().topline
         normal! zz
     endif
@@ -3277,17 +3283,17 @@ if s:plugged('open-browser.vim')
                     return
                 endif
             elseif strlen(matchstr(l:result[1], '^http[s]\?://')) > 0
-                exe 'OpenBrowser ' . substitute(l:result[1], '\.git$', '', '')
+                exe 'OpenBrowser ' .. substitute(l:result[1], '\.git$', '', '')
                 return
             else
                 let l:plugin_name = l:result[1]
             endif
 
-            exe 'OpenBrowser https://github.com/' . l:plugin_name
+            exe 'OpenBrowser https://github.com/' .. l:plugin_name
             return
         endif
 
-        exe 'OpenBrowserSmartSearch ' . l:selection
+        exe 'OpenBrowserSmartSearch ' .. l:selection
     endfun"}}}
 
 endif
@@ -3791,8 +3797,8 @@ nmap <Leader>!! <Cmd><up><CR>
 nmap <Leader><Leader>mr <Cmd>AsyncRun glab mr view -w<CR>
 
 " navigating changes in the diff view
-nnoremap ]c <Cmd>call NiceNext(v:count1 . ']c')<CR>
-nnoremap [c <Cmd>call NiceNext(v:count1 . '[c')<CR>
+nnoremap ]c <Cmd>call NiceNext(v:count1 .. ']c')<CR>
+nnoremap [c <Cmd>call NiceNext(v:count1 .. '[c')<CR>
 
 "}}}
 
@@ -3804,7 +3810,7 @@ fun! s:get_visual_selection(type, ...)"{{{
     let reg_save   = @@
 
     if a:0
-        silent exe 'normal! `<' . a:type . '`>y'
+        silent exe 'normal! `<' .. a:type .. '`>y'
     elseif a:type ==? 'line'
         silent exe "normal! '[V']y"
     elseif a:type ==? 'block'
@@ -3826,26 +3832,26 @@ if IsPlatform('win')
 endif
 function! My_diff()"{{{
     let opt = '-a --binary '
-    if &diffopt =~? 'icase' | let opt = opt . '-i ' | endif
-    if &diffopt =~? 'iwhite' | let opt = opt . '-b ' | endif
+    if &diffopt =~? 'icase' | let opt = opt .. '-i ' | endif
+    if &diffopt =~? 'iwhite' | let opt = opt .. '-b ' | endif
     let arg1 = v:fname_in
-    if arg1 =~? ' ' | let arg1 = '"' . arg1 . '"' | endif
+    if arg1 =~? ' ' | let arg1 = '"' .. arg1 .. '"' | endif
     let arg2 = v:fname_new
-    if arg2 =~? ' ' | let arg2 = '"' . arg2 . '"' | endif
+    if arg2 =~? ' ' | let arg2 = '"' .. arg2 .. '"' | endif
     let arg3 = v:fname_out
-    if arg3 =~? ' ' | let arg3 = '"' . arg3 . '"' | endif
+    if arg3 =~? ' ' | let arg3 = '"' .. arg3 .. '"' | endif
     let eq = ''
     if $VIMRUNTIME =~? ' '
         if &sh =~? '\<cmd'
-            let cmd = '""' . $VIMRUNTIME . '\diff"'
+            let cmd = '""' .. $VIMRUNTIME .. '\diff"'
             let eq = '"'
         else
-            let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+            let cmd = substitute($VIMRUNTIME, ' ', '" ', '') .. '\diff"'
         endif
     else
-        let cmd = $VIMRUNTIME . '\diff'
+        let cmd = $VIMRUNTIME .. '\diff'
     endif
-    silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+    silent execute '!' .. cmd .. ' ' .. opt .. arg1 .. ' ' .. arg2 .. ' > ' .. arg3 .. eq
 endfunction"}}}
 
 " @see https://vim.fandom.com/wiki/Different_syntax_highlighting_within_regions_of_a_file
@@ -3889,7 +3895,7 @@ endfunction"}}}
 " Save the current buffer as a file with no EOF sign.
 function! s:save_as_no_eof(filename)"{{{
     let a=getline(1,line('$')-1)
-    let b=map(a, 'iconv(v:val,"'.&enc.'","'.&fenc.'") . nr2char(13)')
+    let b=map(a, 'iconv(v:val,"'.&enc.'","'.&fenc.'") .. nr2char(13)')
     call extend(b, getline('$', '$'))
     call writefile(b,a:filename, 'b')
     if a:filename == bufname('%')
@@ -3963,10 +3969,10 @@ function! s:close_fugitive_buffers()"{{{
     for b in range(1, bufnr('$'))
         if bufloaded(b) && !has_key(visible, b)
             let l:tally += 1
-            exe 'bw ' . b
+            exe 'bw ' .. b
         endif
     endfor
-    echon 'Deleted ' . l:tally . ' buffers'
+    echon 'Deleted ' .. l:tally .. ' buffers'
 endfunction"}}}
 
 " 执行命令并回到原位置
@@ -4036,7 +4042,7 @@ function! s:fold_spell_balloon()"{{{
         " and the last 14 lines
         if ( numLines > 31 )
             let lines = getline( foldStart, foldStart + 14 )
-            let lines += [ '-- Snipped ' . ( numLines - 30 ) . ' lines --' ]
+            let lines += [ '-- Snipped ' .. ( numLines - 30 ) .. ' lines --' ]
             let lines += getline( foldEnd - 14, foldEnd )
         else
             "less than 30 lines, lets show all of them
@@ -4062,12 +4068,12 @@ function! CustomFoldText()"{{{
 
     let w = winwidth(0) - &foldcolumn - (&number ? 8 : 0)
     let foldSize = 1 + v:foldend - v:foldstart
-    let foldSizeStr = ' ' . foldSize . ' lines '
+    let foldSizeStr = ' ' .. foldSize .. ' lines '
     let foldLevelStr = repeat('+--', v:foldlevel)
     let lineCount = line('$')
-    let foldPercentage = printf('[%.1f', (foldSize*1.0)/lineCount*100) . '%] '
+    let foldPercentage = printf('[%.1f', (foldSize*1.0)/lineCount*100) .. '%] '
     let expansionString = ' '.repeat('-', w - strwidth(foldSizeStr.line.foldLevelStr.foldPercentage))
-    return line . expansionString . foldSizeStr . foldPercentage . foldLevelStr
+    return line .. expansionString .. foldSizeStr .. foldPercentage .. foldLevelStr
 endf"}}}
 
 " translate the word under cursor
@@ -4094,7 +4100,7 @@ function! s:reset_ide()"{{{
     endif
 
     " Restart COC
-    call coc#rpc#restart()
+    CocRestart
 endfunction"}}}
 
 " Copy relative path of current file.
@@ -4125,7 +4131,7 @@ function! s:get_php_fqcn()"{{{
     " Get the class string into the regsiter b
     normal! knw"bye
 
-    let l:full_class_name = @a . '\' . @b
+    let l:full_class_name = @a .. '\' .. @b
 
     " Restore cursor position
     call setpos('.', l:pos)
@@ -4168,7 +4174,7 @@ function! s:get_php_fqmn()"{{{
         let @a = l:r_a
     endif
 
-    let l:full_method_name = l:full_class_name . '::' . l:current_tag . '()'
+    let l:full_method_name = l:full_class_name .. '::' .. l:current_tag .. '()'
 
     return l:full_method_name
 endfunction"}}}
@@ -4190,7 +4196,7 @@ function! s:get_dotenv_option(option, ...) abort"{{{
     let l:file = fnamemodify(get(a:, 1, '.env'), ':p')
 
     if !filereadable(l:file)
-        throw l:file . ' is unreadable!'
+        throw l:file .. ' is unreadable!'
     endif
 
     if !has_key(s:dotenv_cache, l:file)
@@ -4200,7 +4206,7 @@ function! s:get_dotenv_option(option, ...) abort"{{{
     let l:value = get(a:, 2, v:null)
 
     for l:line in s:dotenv_cache[l:file]
-        if stridx(l:line, a:option . '=') == 0
+        if stridx(l:line, a:option .. '=') == 0
             let l:value = trim(matchstr(l:line, '\(^.*=\)\@<=.*'))
             break
         endif
