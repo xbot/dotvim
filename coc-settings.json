@@ -1,5 +1,6 @@
 /* cSpell: disable */
 {
+    "coc.preferences.enableMessageDialog": true,
     "notification.statusLineProgress": false,
     "diagnostic.enable": true,
     "diagnostic.displayByAle": false,
@@ -8,14 +9,22 @@
         "rounded": true,
         "title": "Diagnostic",
         "shadow": false,
-        "close": true,
+        "close": false,
         "winblend": 20,
         "focusable": true
+    },
+    "hover.floatConfig": {
+        "border": true,
+        "rounded": true,
+        "title": "",
+        "shadow": false,
+        "close": false,
+        "winblend": 20,
+        "focusable": false
     },
     "list.height": 20,
     "list.source.files.command": "rg",
     "list.source.files.args": ["--files","--no-ignore"],
-    "list.source.files.defaultOptions": ["--number-select"],
 	"list.insertMappings": {
 		"<C-r>": "do:refresh",
 		"<C-f>": "feedkeys:\\<C-f>",
