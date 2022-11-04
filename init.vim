@@ -220,9 +220,9 @@ if has('nvim')
     Plug 'williamboman/mason.nvim'
     Plug 'WhoIsSethDaniel/mason-tool-installer.nvim'
 
-    " fine-cmdline group
+    " noice.nvim group
     Plug 'MunifTanjim/nui.nvim'
-    Plug 'VonHeikemen/fine-cmdline.nvim'
+    Plug 'folke/noice.nvim' " Requires MunifTanjim/nui.nvim
 
     " telescope group
     Plug 'nvim-telescope/telescope.nvim'
@@ -255,6 +255,7 @@ if has('nvim')
 
     " Plug 'caenrique/nvim-toggle-terminal'
     " Plug 'tveskag/nvim-blame-line' " Has performance problem
+    " Plug 'VonHeikemen/fine-cmdline.nvim' " Requires MunifTanjim/nui.nvim
 
     " " defx group
     " " This plugin has been stopped developing, see ddu.vim and ddu-ui-filer
@@ -435,7 +436,7 @@ set history=100        " keep 50 lines of command line history
 set hlsearch
 set ignorecase
 set laststatus=2
-set lazyredraw " Do not redraw while macros are running , this accelerates vim greatly .
+set nolazyredraw " Do not redraw while macros are running , this accelerates vim greatly. noice.nvim recommends no lazyredraw.
 set list listchars=tab:→\ ,trail:␣,extends:…,eol:⏎
 set mouse=a
 set nobackup
@@ -3292,6 +3293,91 @@ require('boole').setup({
         -- {'tic', 'tac', 'toe'}
     },
 })
+EOF
+endif
+
+" noice.nvim settings
+if s:plugged('noice.nvim')
+lua << EOF
+
+local noice = require("noice")
+
+noice.setup({
+    cmdline = {
+        enabled = false,
+        view = 'cmdline',
+    },
+    popupmenu = {
+        enabled = false,
+    },
+    -- views = {
+    --     cmdline_popup = {
+    --         position = {
+    --             row = 5,
+    --             col = "50%",
+    --         },
+    --         size = {
+    --             width = 60,
+    --             height = "auto",
+    --         },
+    --     },
+    --     popupmenu = {
+    --         relative = "editor",
+    --         position = {
+    --             row = 8,
+    --             col = "50%",
+    --         },
+    --         size = {
+    --             width = 60,
+    --             height = 10,
+    --         },
+    --         border = {
+    --             style = "rounded",
+    --             padding = { 0, 1 },
+    --         },
+    --         win_options = {
+    --             winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
+    --         },
+    --     },
+    -- },
+    messages = {
+        -- NOTE: If you enable messages, then the cmdline is enabled automatically.
+        -- This is a current Neovim limitation.
+        enabled = true, -- enables the Noice messages UI
+        view = "notify", -- default view for messages
+        view_error = "notify", -- view for errors
+        view_warn = "notify", -- view for warnings
+        view_history = "messages", -- view for :messages
+        view_search = false, -- view for search count messages. Set to `false` to disable
+    },
+    routes = {
+        {
+            filter = {
+                event = "msg_show",
+                kind = "",
+                find = "written",
+            },
+            opts = { skip = true },
+        },
+    },
+})
+
+-- Show @recording status in lualine.
+local status, lualine = pcall(require, 'lualine')
+if not status then
+    return
+end
+
+local lualine_config = lualine.get_config()
+
+table.insert(lualine_config.sections.lualine_x, 1, {
+    noice.api.statusline.mode.get,
+    cond = noice.api.statusline.mode.has,
+    color = { fg = "#ff9e64" },
+})
+
+lualine.setup(lualine_config)
+
 EOF
 endif
 
