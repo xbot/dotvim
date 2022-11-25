@@ -725,6 +725,7 @@ if s:plugged('vim-grepper')
     xnoremap <Leader>gs <Plug>(GrepperOperator)
     nnoremap <Leader>gg <Cmd>Grepper<CR>
     nnoremap <Leader>gr :GrepperRg 
+    nnoremap <leader>gw <Cmd>Grepper -tool git -open -switch -cword -noprompt<CR>
 
 endif
 
@@ -3045,7 +3046,7 @@ if s:plugged('nvim-treesitter')
     augroup treesitter
         au!
         autocmd FileType bash,c,go,javascript,json,lua,php,python,yaml setl foldmethod=expr | setl foldexpr=nvim_treesitter#foldexpr()
-        autocmd FileType json,php setl foldlevel=1
+        autocmd FileType json setl foldlevel=1
     augroup END
 
 lua << EOF
