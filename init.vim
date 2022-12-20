@@ -220,9 +220,9 @@ if has('nvim')
     Plug 'williamboman/mason.nvim'
     Plug 'WhoIsSethDaniel/mason-tool-installer.nvim'
 
-    " noice.nvim group
-    Plug 'MunifTanjim/nui.nvim'
-    Plug 'folke/noice.nvim' " Requires MunifTanjim/nui.nvim
+    " " noice.nvim group
+    " Plug 'MunifTanjim/nui.nvim'
+    " Plug 'folke/noice.nvim' " Requires MunifTanjim/nui.nvim
 
     " telescope group
     Plug 'nvim-telescope/telescope.nvim'
