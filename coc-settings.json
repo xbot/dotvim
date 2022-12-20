@@ -117,14 +117,6 @@
         "zip",
         "zlib"
     ],
-    "languageserver": {
-        "sql": {
-            "command": "sqls",
-            "args": ["-config", "$HOME/.config/sqls/config.yml"],
-            "filetypes": ["sql"],
-            "shell": true
-        }
-    },
     "Lua.workspace.library": {
         "/usr/local/share/nvim/runtime/lua": true,
         "/usr/local/share/nvim/runtime/lua/vim": true,
@@ -195,6 +187,7 @@
       "fqcns",
       "gearshape",
       "leaderf",
+      "libdev",
       "lidong",
       "mapkey",
       "omnifocus",
