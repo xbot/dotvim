@@ -2171,9 +2171,52 @@ if s:plugged('rest.nvim')
         autocmd FileType http nmap <buffer> <Leader>sp <Plug>RestNvimPreview
         autocmd FileType http nmap <buffer> <Leader>sL <Plug>RestNvimLast
         autocmd FileType http set commentstring=\#%s
-        " autocmd BufEnter * if &filetype == 'httpResult' | call <SID>save_cookie() | endif
+        autocmd BufEnter * if &filetype == 'httpResult' | call <SID>handle_restful_response() | endif
         " autocmd BufEnter * if &filetype == 'httpResult' | setl fdm=indent | setl fdl=1 | endif
     augroup END
+
+    function s:handle_restful_response() abort
+        " call s:save_cookie()
+
+        let l:request_signature = s:get_request_signature()
+        let l:request_status = s:get_request_status()
+
+        " Get people
+        if l:request_status == 200 && l:request_signature == 'GET /v2/advisors/{advisor_id}/households/{household_id}/people'
+            for l:person in s:get_response_data()
+                if index(['client', 'coclient', 'ex-coclient', 'joint', 'trust'], l:person['type']) >= 0
+                    call s:set_env('person_id_' .. substitute(l:person['type'], '-', '_', 'g'), l:person['id'])
+                endif
+            endfor
+        " Create a person
+        elseif l:request_status == 201 && l:request_signature == 'POST /v2/advisors/{advisor_id}/households/{household_id}/people'
+            let l:person = s:get_response_data()
+            if index(['coclient', 'ex-coclient'], l:person['type']) >= 0
+                call s:set_env('person_id_' .. substitute(l:person['type'], '-', '_', 'g'), l:person['id'])
+            endif
+        endif
+    endfunction
+
+    " Set g:http_request_domain in ~/.vimrc_private
+    function s:get_request_signature() abort"{{{
+        let l:request_line = getline(1)
+
+        let l:request_line = substitute(l:request_line, g:http_request_domain, '', 'g')
+        let l:request_line = substitute(l:request_line, '\(/advisors/\)\@<=[^/]\+\(/\)\@=', '{advisor_id}', 'g')
+        let l:request_line = substitute(l:request_line, '\(/households/\)\@<=[^/]\+\(/\)\@=', '{household_id}', 'g')
+
+        return l:request_line
+    endfunction"}}}
+
+    function s:get_request_status() abort"{{{
+        let l:request_status_parts = split(getline(search('HTTP/1.1')), '\s')
+        return l:request_status_parts[1]
+    endfunction"}}}
+
+    function s:get_response_data() abort"{{{
+        let l:response_data = getline(search('#+RESPONSE') + 1, search('#+END') - 1)
+        return json_decode(l:response_data)
+    endfunction"}}}
 
     " Set g:http_response_header_uid, g:http_response_cookie_session in ~/.vimrc_private
     function s:save_cookie() abort"{{{
@@ -2202,6 +2245,15 @@ if s:plugged('rest.nvim')
         endif
 
         call system('sed -i ' .. l:bak_file_ext_part .. ' "s/\(header_cookie_debug_' .. l:env_var_by_uid[l:uid] .. '_session=.*' .. g:http_response_cookie_session .. '=\)[0-9A-Za-z]*/\1' .. l:cookie .. '/" .env')
+    endfunction"}}}
+
+    function s:set_env(key, value) abort"{{{
+        let l:bak_file_ext_part = ''
+        if IsPlatform('mac')
+            let l:bak_file_ext_part = '""'
+        endif
+
+        call system('sed -i ' .. l:bak_file_ext_part .. ' "s/\(' .. a:key .. '=\)[0-9A-Za-z_-]*/\1' .. a:value .. '/" .env')
     endfunction"}}}
 
 lua << EOF
