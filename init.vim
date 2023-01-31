@@ -134,8 +134,9 @@ Plug 'inkarkat/vim-EnhancedJumps'
 
 " ultisnips group
 " Enabling ultisnips will cause snippets with choices failing to jump when
-" coc-snippets is active.
-" Plug 'SirVer/ultisnips'
+" coc-snippets is active and the key mapping for <TAB> in the coc settings
+" section is enabled.
+Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 " tabline and statusline group
@@ -692,26 +693,27 @@ if s:plugged('ultisnips')"{{{
 
     nmap <Leader>ue :UltiSnipsEdit<Space>
 
-    " inoremap <silent> <TAB> <C-r>=CleverTab()<CR>
-    " snoremap <silent> <TAB> <ESC>:call UltiSnips#ExpandSnippetOrJump()<CR>
-    " function! CleverTab()"{{{
-        " call UltiSnips#ExpandSnippetOrJump()
-        " if g:ulti_expand_or_jump_res
-            " return ''
-        " else
-            " if s:plugged('coc.nvim')
-                " if coc#pum#visible()
-                    " return coc#_select_confirm()
-                " else
-                    " return coc#refresh()
-                " endif
-            " else
-                " if pumvisible()
-                    " return "\<c-n>"
-                " endif
-            " endif
-        " endif
-    " endfunction"}}}
+    inoremap <silent> <TAB> <C-r>=CleverTab()<CR>
+    snoremap <silent> <TAB> <ESC>:call UltiSnips#ExpandSnippetOrJump()<CR>
+
+    function! CleverTab()"{{{
+        call UltiSnips#ExpandSnippetOrJump()
+        if g:ulti_expand_or_jump_res
+            return ''
+        else
+            if s:plugged('coc.nvim')
+                if coc#pum#visible()
+                    return coc#_select_confirm()
+                else
+                    return coc#refresh()
+                endif
+            else
+                if pumvisible()
+                    return "\<c-n>"
+                endif
+            endif
+        endif
+    endfunction"}}}
 
 endif"}}}
 
@@ -4385,21 +4387,22 @@ if s:plugged('coc.nvim')
     inoremap <expr>         <CR>   coc#pum#visible() ? coc#_select_confirm() : "\<CR>"
     inoremap <silent><expr> <C-c>  coc#pum#visible() ? coc#pum#stop()        : "\<C-c>"
 
-    " --- The COC implementation of <TAB> behavior ---
-    inoremap <silent><expr> <TAB>
-                \ coc#pum#visible() ? coc#_select_confirm() :
-                \ coc#expandableOrJumpable() ?
-                \ "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-                \ <SID>check_back_space() ? "\<TAB>" :
-                \ coc#refresh()
+    " " --- The COC implementation of <TAB> behavior ---
+    " inoremap <silent><expr> <TAB>
+    "             \ coc#pum#visible() ? coc#_select_confirm() :
+    "             \ coc#expandableOrJumpable() ?
+    "             \ "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+    "             \ <SID>check_back_space() ? "\<TAB>" :
+    "             \ coc#refresh()
 
-    function! s:check_back_space() abort"{{{
-        let col = col('.') - 1
-        return !col || getline('.')[col - 1]  =~# '\s'
-    endfunction"}}}
+    " function! s:check_back_space() abort"{{{
+    "     let col = col('.') - 1
+    "     return !col || getline('.')[col - 1]  =~# '\s'
+    " endfunction"}}}
 
-    let g:coc_snippet_next = '<TAB>'
-    " --- The COC implementation of <TAB> behavior END ---
+    " let g:coc_snippet_next = '<TAB>'
+    nnoremap <silent> <Leader>sl <Cmd>CocList -A snippets<CR>
+    " " --- The COC implementation of <TAB> behavior END ---
 
     " coc-snippets settings
     if !s:plugged('ultisnips')
@@ -4472,7 +4475,6 @@ if s:plugged('coc.nvim')
     nnoremap <silent> <Leader>sy <Cmd>CocList -A --normal yank<CR>
     nnoremap <silent> <Leader>op <Cmd>CocList project<CR>
     nnoremap <silent> <Leader>sC <Cmd>let v:this_session=''<CR>:echo 'Session closed.'<CR>
-    nnoremap <silent> <Leader>sl <Cmd>CocList -A snippets<CR>
     xnoremap <silent> <Leader>cs <Plug>(coc-convert-snippet)
 
     " navigate chunks of current buffer
