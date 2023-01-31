@@ -3858,6 +3858,16 @@ nmap <Leader><Leader>mr <Cmd>AsyncRun glab mr view -w<CR>
 nnoremap ]c <Cmd>call NiceNext(v:count1 .. ']c')<CR>
 nnoremap [c <Cmd>call NiceNext(v:count1 .. '[c')<CR>
 
+" Mark the TODO on the cursor line as done.
+nnoremap XX <Cmd>call ToggleTodo()<CR>
+
+function! ToggleTodo()
+    let l:regex = '^\(\s*\)//\sTODO\s\(\w\+:\s\)\?'
+    if match(getline('.'), l:regex) == 0
+        call setline('.', substitute(getline('.'), l:regex, '\=submatch(1) .. "// "', ''))
+    endif
+endfunction
+
 "}}}
 
 " ------------------------------ Functions -----------------------------{{{
