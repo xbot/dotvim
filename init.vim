@@ -2606,6 +2606,7 @@ endif
 
 " Telescope settings
 if s:plugged('telescope.nvim')
+    nnoremap <Leader>tskm <cmd>Telescope keymaps<CR>
     nnoremap <Leader>tslg <cmd>Telescope live_grep<CR>
 
 lua << EOF
