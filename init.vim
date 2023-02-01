@@ -2509,9 +2509,10 @@ EOF
 
     augroup diffview
         au!
-        autocmd FileType    GV        call <SID>map_key_bindings_for_gv()
-        autocmd FileType    floggraph nnoremap <buffer> vv <Cmd>call <SID>diffview_commit_under_cursor_in_flog()<CR>
+        autocmd FileType    GV                            call <SID>map_key_bindings_for_gv()
+        autocmd FileType    floggraph                     nnoremap <buffer> vv <Cmd>call <SID>diffview_commit_under_cursor_in_flog()<CR>
         autocmd BufWinEnter diffview://*/log/*/commit_log nnoremap <buffer> q <Cmd>q<CR>
+        autocmd User        DiffviewViewOpened            exec 'windo set norelativenumber nonumber' | DiffviewFocusFiles
         if s:plugged('git-blame.nvim')
             autocmd User DiffviewViewEnter exec 'GitBlameDisable'
             autocmd User DiffviewViewLeave exec 'GitBlameEnable'
@@ -3634,7 +3635,7 @@ augroup END
 
 augroup disable_numbers_in_diff_mode
     au!
-    autocmd BufEnter * if &diff | set nonu nornu | endif
+    autocmd BufEnter * if &diff | set norelativenumber nonumber | endif
 augroup END
 
 if s:plugged('taboo.vim')
