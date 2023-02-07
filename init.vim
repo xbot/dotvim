@@ -200,8 +200,6 @@ Plug '~/.vim/plugged/confluencewiki'
 " neovim plugins
 if has('nvim')
 
-    " Plug 'github/copilot.vim'
-    Plug 'NTBBloodbath/rest.nvim'
     Plug 'akinsho/toggleterm.nvim', {'tag' : 'v2.*'}
     Plug 'ckipp01/stylua-nvim'
     Plug 'elihunter173/dirbuf.nvim' " Conflict with dirvish
@@ -216,6 +214,10 @@ if has('nvim')
     Plug 'phelipetls/jsonpath.nvim'
     Plug 'rcarriga/nvim-notify'
     Plug 'simnalamburt/vim-mundo'
+
+    " rest.nvim group
+    Plug 'NTBBloodbath/rest.nvim'
+    Plug 'git@github.com:xbot/vim-textobj-restful-request' " Requires vim-textobj-user
 
     " mason group
     Plug 'williamboman/mason.nvim'
@@ -254,6 +256,7 @@ if has('nvim')
     Plug 'theHamsta/nvim-dap-virtual-text'
     Plug 'jbyuki/one-small-step-for-vimkind'
 
+    " Plug 'github/copilot.vim'
     " Plug 'caenrique/nvim-toggle-terminal'
     " Plug 'tveskag/nvim-blame-line' " Has performance problem
     " Plug 'VonHeikemen/fine-cmdline.nvim' " Requires MunifTanjim/nui.nvim
