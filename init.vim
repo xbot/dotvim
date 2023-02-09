@@ -214,6 +214,7 @@ if has('nvim')
     Plug 'phelipetls/jsonpath.nvim'
     Plug 'rcarriga/nvim-notify'
     Plug 'simnalamburt/vim-mundo'
+    Plug 'gbprod/substitute.nvim'
 
     " rest.nvim group
     Plug 'NTBBloodbath/rest.nvim'
@@ -285,6 +286,10 @@ else
     Plug 'Shougo/defx.nvim'
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
+
+    " Vim alternatives for gbprod/substitute.nvim
+    Plug 'svermeulen/vim-subversive'
+    Plug 'tommcdo/vim-exchange'
 endif
 
 if has('gui_running')
@@ -3511,6 +3516,52 @@ table.insert(lualine_config.sections.lualine_x, 1, {
 lualine.setup(lualine_config)
 
 EOF
+endif
+
+" substitute.nvim settings
+if s:plugged('substitute.nvim')
+
+lua << EOF
+require("substitute").setup({
+  -- your configuration comes here
+  -- or leave it empty to use the default settings
+  -- refer to the configuration section below
+})
+
+vim.keymap.set("n", "s",  "<CMD>lua require('substitute').operator()<CR>", { noremap = true })
+vim.keymap.set("n", "ss", "<CMD>lua require('substitute').line()<CR>",     { noremap = true })
+vim.keymap.set("n", "S",  "<CMD>lua require('substitute').eol()<CR>",      { noremap = true })
+vim.keymap.set("x", "s",  "<CMD>lua require('substitute').visual()<CR>",   { noremap = true })
+
+vim.keymap.set("n", "<Leader><Leader>s",  "<CMD>lua require('substitute.range').operator()<CR>", { noremap = true })
+vim.keymap.set("x", "<Leader><Leader>s",  "<CMD>lua require('substitute.range').visual()<CR>",   { noremap = true })
+vim.keymap.set("n", "<Leader><Leader>ss", "<CMD>lua require('substitute.range').word()<CR>",     { noremap = true })
+
+vim.keymap.set("n", "sx",  "<CMD>lua require('substitute.exchange').operator()<CR>", { noremap = true })
+vim.keymap.set("n", "sxc", "<CMD>lua require('substitute.exchange').cancel()<CR>",   { noremap = true })
+vim.keymap.set("n", "sxx", "<CMD>lua require('substitute.exchange').line()<CR>",     { noremap = true })
+vim.keymap.set("x", "X",   "<CMD>lua require('substitute.exchange').visual()<CR>",   { noremap = true })
+EOF
+
+endif
+
+" vim-subversive settings
+if s:plugged('vim-subversive')
+    nmap s  <Plug>(SubversiveSubstitute)
+    nmap ss <Plug>(SubversiveSubstituteLine)
+    nmap S  <Plug>(SubversiveSubstituteToEndOfLine)
+
+    nmap <Leader><Leader>s  <Plug>(SubversiveSubstituteRange)
+    nmap <Leader><Leader>ss <Plug>(SubversiveSubstituteWordRange)
+    xmap <Leader><Leader>s  <Plug>(SubversiveSubstituteRange)
+endif
+
+" vim-exchange settings
+if s:plugged('vim-exchange')
+    nmap sx  <Plug>(Exchange)
+    nmap sxc <Plug>(ExchangeClear)
+    nmap sxx <Plug>(ExchangeLine)
+    xmap X   <Plug>(Exchange)
 endif
 
 "}}}
