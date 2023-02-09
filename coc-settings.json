@@ -38,11 +38,13 @@
     "npm.binPath": "~/.nvm/versions/node/v14.16.1/bin/npm",
     "snippets.loadVSCodeProjectSnippets": false,
     "codeLens.enable": true,
+    "intelephense.path": "~/.local/share/nvim/mason/bin/intelephense",
     "intelephense.client.disableInlayHints": false,
     "intelephense.diagnostics.enable": true,
     "intelephense.progress.enable": true,
     "intelephense.environment.phpVersion": "8.1.0",
     "intelephense.files.maxSize": 3000000,
+    "intelephense.diagnostics.implementationErrors": false,
     "intelephense.stubs": [
         "apache",
         "bcmath",
