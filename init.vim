@@ -56,7 +56,6 @@ Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-unimpaired'
-Plug 'twitvim/twitvim'
 Plug 'tyru/open-browser.vim'
 Plug 'voldikss/vim-floaterm'
 Plug 'weirongxu/plantuml-previewer.vim'
@@ -317,6 +316,7 @@ if has('nvim') && !s:plugged('coc.nvim')
     " Plug 'https://git.sr.ht/~whynothugo/lsp_lines.nvim' " Experience needs to be improved.
 endif
 
+" Plug 'twitvim/twitvim'
 " Plug 'dense-analysis/ale'
 " Plug 'joeytwiddle/sexy_scroller.vim'
 " Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
