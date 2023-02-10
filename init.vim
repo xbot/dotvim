@@ -133,7 +133,7 @@ Plug 'inkarkat/vim-EnhancedJumps'
 
 " ultisnips group
 " Enabling ultisnips will cause snippets with choices failing to jump when
-" coc-snippets is active and the key mapping for <TAB> in the coc settings
+" coc-snippets is active and the key mapping for <Tab> in the coc settings
 " section is enabled.
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -467,7 +467,7 @@ set updatetime=10000
 set vb t_vb=
 set viminfo+=!
 set wildignore=*.class,*.pyc
-set wildmenu " Type :help and press <TAB> , so that's the effect .
+set wildmenu " Type :help and press <Tab> , so that's the effect .
 set winblend=20
 set winminheight=1
 
@@ -717,7 +717,7 @@ if s:plugged('ultisnips')"{{{
                 endif
             else
                 if pumvisible()
-                    return "\<c-n>"
+                    return "\<C-n>"
                 endif
             endif
         endif
@@ -2393,8 +2393,8 @@ require'diffview'.setup {
         view = {
             -- The `view` bindings are active in the diff buffers, only when the current
             -- tabpage is a Diffview.
-            ["<tab>"]      = actions.select_next_entry, -- Open the diff for the next file
-            ["<s-tab>"]    = actions.select_prev_entry, -- Open the diff for the previous file
+            ["<Tab>"]      = actions.select_next_entry, -- Open the diff for the next file
+            ["<S-tab>"]    = actions.select_prev_entry, -- Open the diff for the previous file
             ["gf"]         = actions.goto_file_tab,         -- Open the file in a new split in previous tabpage
             ["<C-w><C-f>"] = actions.goto_file_split,   -- Open the file in a new split
             ["<C-w>gf"]    = actions.goto_file,     -- Open the file in a new tabpage
@@ -2439,10 +2439,10 @@ require'diffview'.setup {
             end,
             ["R"]             = actions.refresh_files,      -- Update stats and entries in the file list.
             ["I"]             = actions.open_commit_log,    -- Open the commit log panel.
-            ["<c-b>"]         = actions.scroll_view(-0.25), -- Scroll the view up
-            ["<c-f>"]         = actions.scroll_view(0.25),  -- Scroll the view down
-            ["<tab>"]         = actions.select_next_entry,
-            ["<s-tab>"]       = actions.select_prev_entry,
+            ["<C-b>"]         = actions.scroll_view(-0.25), -- Scroll the view up
+            ["<C-f>"]         = actions.scroll_view(0.25),  -- Scroll the view down
+            ["<Tab>"]         = actions.select_next_entry,
+            ["<S-Tab>"]       = actions.select_prev_entry,
             ["gf"]            = actions.goto_file_tab,
             ["<C-w><C-f>"]    = actions.goto_file_split,
             ["<C-w>gf"]       = actions.goto_file,
@@ -2460,16 +2460,16 @@ require'diffview'.setup {
             ["zR"]            = actions.open_all_folds,
             ["zM"]            = actions.close_all_folds,
             ["j"]             = actions.next_entry,
-            ["<down>"]        = actions.next_entry,
+            ["<Down>"]        = actions.next_entry,
             ["k"]             = actions.prev_entry,
-            ["<up>"]          = actions.prev_entry,
-            ["<cr>"]          = actions.select_entry,
+            ["<Up>"]          = actions.prev_entry,
+            ["<CR>"]          = actions.select_entry,
             ["o"]             = actions.select_entry,
             ["<2-LeftMouse>"] = actions.select_entry,
-            ["<c-b>"]         = actions.scroll_view(-0.25),
-            ["<c-f>"]         = actions.scroll_view(0.25),
-            ["<tab>"]         = actions.select_next_entry,
-            ["<s-tab>"]       = actions.select_prev_entry,
+            ["<C-b>"]         = actions.scroll_view(-0.25),
+            ["<C-f>"]         = actions.scroll_view(0.25),
+            ["<Tab>"]         = actions.select_next_entry,
+            ["<S-Tab>"]       = actions.select_prev_entry,
             ["gf"]            = actions.goto_file_tab,
             ["<C-w><C-f>"]    = actions.goto_file_split,
             ["<C-w>gf"]       = actions.goto_file,
@@ -3797,7 +3797,7 @@ nmap     <Leader>hs <Cmd>sp<CR><C-W>_
 nmap     <Leader>vs <Cmd>vsp<CR><C-W>_
 
 " Jump to next window and maximize it.
-" Notice that <TAB> is equivalent to <C-I> in some conditions,
+" Notice that <Tab> is equivalent to <C-I> in some conditions,
 " so remap <C-I> as an opposite of <C-O>.
 nmap     <Tab>   <C-W>j<C-W>_
 nnoremap <S-Tab> <C-W>k<C-W>_
@@ -4453,12 +4453,12 @@ if s:plugged('coc.nvim')
     inoremap <expr>         <CR>   coc#pum#visible() ? coc#_select_confirm() : "\<CR>"
     inoremap <silent><expr> <C-c>  coc#pum#visible() ? coc#pum#stop()        : "\<C-c>"
 
-    " " --- The COC implementation of <TAB> behavior ---
-    " inoremap <silent><expr> <TAB>
+    " " --- The COC implementation of <Tab> behavior ---
+    " inoremap <silent><expr> <Tab>
     "             \ coc#pum#visible() ? coc#_select_confirm() :
     "             \ coc#expandableOrJumpable() ?
     "             \ "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-    "             \ <SID>check_back_space() ? "\<TAB>" :
+    "             \ <SID>check_back_space() ? "\<Tab>" :
     "             \ coc#refresh()
 
     " function! s:check_back_space() abort"{{{
@@ -4466,9 +4466,9 @@ if s:plugged('coc.nvim')
     "     return !col || getline('.')[col - 1]  =~# '\s'
     " endfunction"}}}
 
-    " let g:coc_snippet_next = '<TAB>'
+    " let g:coc_snippet_next = '<Tab>'
     nnoremap <silent> <Leader>sl <Cmd>CocList -A snippets<CR>
-    " " --- The COC implementation of <TAB> behavior END ---
+    " " --- The COC implementation of <Tab> behavior END ---
 
     " coc-snippets settings
     if !s:plugged('ultisnips')
@@ -4516,11 +4516,11 @@ if s:plugged('coc.nvim')
     " xmap if <Plug>(coc-funcobj-i)
     " omap if <Plug>(coc-funcobj-i)
 
-    " " Use <TAB> for selections ranges.
+    " " Use <Tab> for selections ranges.
     " " NOTE: Requires 'textDocument/selectionRange' support from the language server.
     " " coc-tsserver, coc-python are the examples of servers that support it.
-    " nmap <silent> <TAB> <Plug>(coc-range-select)
-    " xmap <silent> <TAB> <Plug>(coc-range-select)
+    " nmap <silent> <Tab> <Plug>(coc-range-select)
+    " xmap <silent> <Tab> <Plug>(coc-range-select)
 
     " Mappings using CoCList:
     " Show all diagnostics.
