@@ -691,23 +691,21 @@ endif
 " UltiSnips settings
 if s:plugged('ultisnips')"{{{
 
-    let g:UltiSnipsExpandTrigger                           = '<C-Tab>'
-    let g:UltiSnipsJumpForwardTrigger                      = '<C-j>'
-    let g:UltiSnipsJumpBackwardTrigger                     = '<C-k>'
-    let g:UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit = '~/.vim/UltiSnips'
-    let g:ulti_expand_or_jump_res                          = 0
     let g:UltiSnipsEditSplit                               = 'tabdo'
     let g:UltiSnipsEnableSnipMate                          = 0
+    let g:UltiSnipsExpandTrigger                           = '<C-.>'
+    let g:UltiSnipsJumpBackwardTrigger                     = '<C-k>'
+    let g:UltiSnipsJumpForwardTrigger                      = '<C-j>'
+    let g:UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit = '~/.vim/UltiSnips'
 
     nmap <Leader>ue :UltiSnipsEdit<Space>
 
-    inoremap <silent> <TAB> <C-r>=CleverTab()<CR>
-    snoremap <silent> <TAB> <ESC>:call UltiSnips#ExpandSnippetOrJump()<CR>
+    inoremap <silent> <Tab> <C-r>=CleverTab()<CR>
+    snoremap <silent> <Tab> <Esc>:call UltiSnips#ExpandSnippetOrJump()<CR>
 
     function! CleverTab()"{{{
-        call UltiSnips#ExpandSnippetOrJump()
-        if g:ulti_expand_or_jump_res
-            return ''
+        if UltiSnips#CanExpandSnippet() || UltiSnips#CanJumpForwards()
+            return UltiSnips#ExpandSnippetOrJump()
         else
             if s:plugged('coc.nvim')
                 if coc#pum#visible()
@@ -719,6 +717,20 @@ if s:plugged('ultisnips')"{{{
                 if pumvisible()
                     return "\<C-n>"
                 endif
+            endif
+        endif
+    endfunction"}}}
+
+    inoremap <silent> <S-Tab> <C-r>=CleverShiftTab()<CR>
+    snoremap <silent> <S-Tab> <Esc>:call UltiSnips#JumpBackwards()<CR>
+
+    function! CleverShiftTab()"{{{
+        if UltiSnips#CanJumpBackwards()
+            call UltiSnips#JumpBackwards()
+            return ''
+        else
+            if pumvisible()
+                return "\<C-p>"
             endif
         endif
     endfunction"}}}
@@ -1301,11 +1313,28 @@ local lsp_defaults = {
     flags = {
         debounce_text_changes = 150,
     },
-    capabilities = require('cmp_nvim_lsp').update_capabilities(
+    capabilities = require('cmp_nvim_lsp').default_capabilities(
         vim.lsp.protocol.make_client_capabilities()
     ),
     on_attach = function(client, bufnr)
         vim.api.nvim_exec_autocmds('User', {pattern = 'LspAttached'})
+
+        local bufopts = { noremap=true, silent=true, buffer=bufnr }
+        vim.keymap.set('n', 'K',  vim.lsp.buf.hover,          bufopts)
+        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration,    bufopts)
+        vim.keymap.set('n', 'gd', vim.lsp.buf.definition,     bufopts)
+        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+        vim.keymap.set('n', 'gr', vim.lsp.buf.references,     bufopts)
+        -- vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+        -- vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+        -- vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+        -- vim.keymap.set('n', '<space>wl', function()
+        --     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+        -- end, bufopts)
+        -- vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
+        -- vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+        -- vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+        -- vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
     end
 }
 
@@ -1453,20 +1482,26 @@ cmp.setup({
     mapping = {
         ['<Tab>'] = cmp.mapping(
             function(fallback)
-                if cmp.visible() then
-                    cmp.select_next_item()
-                else
+                if vim.fn['UltiSnips#CanExpandSnippet']() == 1 or vim.fn['UltiSnips#CanJumpForwards']() == 1 then
+                    -- vim.fn['UltiSnips#ExpandSnippetOrJump']()
                     ultisnips_mappings.expand_or_jump_forwards(fallback)
+                else
+                    if cmp.visible() then
+                        cmp.select_next_item()
+                    end
                 end
             end,
             {'i', 's'}
         ),
         ['<S-Tab>'] = cmp.mapping(
             function(fallback)
-                if cmp.visible() then
-                    cmp.select_prev_item()
-                else
+                if vim.fn['UltiSnips#CanJumpBackwards']() == 1 then
+                    -- vim.fn['UltiSnips#JumpBackwards']()
                     ultisnips_mappings.jump_backwards(fallback)
+                else
+                    if cmp.visible() then
+                        cmp.select_prev_item()
+                    end
                 end
             end,
             {'i', 's'}
@@ -1499,7 +1534,7 @@ vim.keymap.set("n", "[E",         "<Cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
 vim.keymap.set('n', '<Space>gr',  '<Cmd>Lspsaga lsp_finder<CR>',           opts)
 -- vim.keymap.set('n', 'gr', '<Cmd>Lspsaga rename<CR>', opts)
 
-require('lspsaga').init_lsp_saga({
+require('lspsaga').setup({
     --the range of 0 for fully opaque window (disabled) to 100 for fully
     --transparent background. Values between 0-30 are typically most useful.
     saga_winblend = 0,
@@ -4505,8 +4540,8 @@ if s:plugged('coc.nvim')
     nmap <Leader>rn <Plug>(coc-rename)
 
     " Code actions.
-    xmap <Leader>ac  <Plug>(coc-codeaction-selected)
-    nmap <Leader>ac  <Plug>(coc-codeaction-line)
+    xmap <Leader>ac <Plug>(coc-codeaction-selected)
+    nmap <Leader>ac <Plug>(coc-codeaction-line)
 
     " Introduce function text object
     " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
