@@ -3599,6 +3599,20 @@ if s:plugged('vim-exchange')
     xmap X   <Plug>(Exchange)
 endif
 
+" plantuml-previewer settings
+if s:plugged('plantuml-previewer.vim')
+
+    augroup plantuml_previewer
+        au!
+        autocmd FileType plantuml let g:plantuml_previewer#plantuml_jar_path = get(
+            \  matchlist(system('cat `which plantuml` | grep plantuml.jar'), '\v.*\s[''"]?(\S+plantuml\.jar).*'),
+            \  1,
+            \  0
+            \)
+    augroup END
+
+endif
+
 "}}}
 
 " ------------------------------ Auto Commands ------------------------------"{{{
