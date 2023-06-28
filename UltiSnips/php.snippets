@@ -82,8 +82,12 @@ snippet vs "$a <=> $b" i
 ${1:$${2:a}} <=> ${3:$${4:b}}
 endsnippet
 
-snippet this "$this->" i
+snippet this "$this->" "not re.match(r'.*\$', snip.before )" ie
 \$this->${0}
+endsnippet
+
+snippet this "$this->" "re.match(r'.*\$', snip.before )" ie
+this->${0}
 endsnippet
 
 snippet self "self::" i
