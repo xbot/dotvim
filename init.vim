@@ -9,7 +9,6 @@ endfunction
 
 call plug#begin('~/.vim/plugged')
 
-Plug '0x84/vim-coderunner'
 Plug 'AndrewRadev/sideways.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/tagalong.vim'
