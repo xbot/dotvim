@@ -413,7 +413,10 @@ if IsPlatform('win')
 endif
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
-source $HOME/.vimrc_private
+let gbl_vimrc_private = expand('~/.vimrc_private')
+if filereadable(gbl_vimrc_private)
+    exec 'source ' .. gbl_vimrc_private
+endif
 
 if IsPlatform('mac')
     let g:ruby_host_prog='~/.rbenv/shims/ruby'
