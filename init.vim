@@ -493,36 +493,17 @@ if has('nvim')
     let &backupdir=g:backupdir
 endif
 
+set guifont=CaskaydiaCove\ Nerd\ Font:h16
+
 if has('gui_running')
-    if !has('nvim')
-        set macligatures
-        set macthinstrokes
-        " set guifont=Monaco\ for\ Powerline:h16
-        set guifont=CaskaydiaCove\ Nerd\ Font:h16
-    endif
 
     set linespace=2
-
-    " set background=dark
-    set background=light
-
-    " let g:solarized_diffmode="high"
-    " colorscheme solarized
-
-    colorscheme solarized8_flat
-    " colorscheme dracula
-    " colorscheme nord
-    " colorscheme onedark
-
     set lines=70 columns=189
 
     " GUI Options
     set go-=T
     set go-=m
     set go-=L
-    if IsPlatform('win')
-        set go-=r
-    endif
     set go-=r
     "set go+=b
 
@@ -534,51 +515,38 @@ if has('gui_running')
                     \set guioptions+=m <Bar>
                     \endif<CR>
     endif
-else
+
+    if !has('nvim')
+        set macligatures
+        set macthinstrokes
+    endif
+
     " neovide hacks
     if exists('g:neovide')
-        set guifont=CaskaydiaCove\ Nerd\ Font:h16
         let g:neovide_cursor_vfx_mode = "torpedo"
         let g:neovide_remember_window_size = v:true
-        set linespace=2
     endif
 
-    " For CLI vim
-    " set background=light
-    " set background=dark
-    " let g:solarized_termcolors=256
-    " colorscheme solarized
-    " colorscheme nord
-    " colorscheme dracula
-    " colorscheme space_vim_theme
-    " colorscheme flattened_light
-    " colorscheme solarized8_flat
-    " colorscheme base16-oned
+endif
 
-    if has('nvim')
-
-        set background=light
-        " set background=dark
-        let g:tokyonight_style = 'day' " available: night, storm, day
-        let g:tokyonight_italic_functions = 1
-        " let g:tokyonight_transparent = 1
-        " let g:tokyonight_transparent_sidebar = 1
-        " let g:tokyonight_dark_sidebar = 1
-        " let g:tokyonight_dark_float = 1
-        " Change the "hint" color to the "orange" color, and make the "error" color bright red
-        let g:tokyonight_colors = {
-                    \ 'hint': 'orange',
-                    \ 'error': '#ff0000',
-                    \ }
-        colorscheme tokyonight
-
-        " set background=dark | colorscheme doom-one
-
-    else
-        set background=light
-        let g:solarized_termcolors=256
-        colorscheme solarized8_flat
-    endif
+if has('nvim')
+    set background=light
+    let g:tokyonight_style = 'day' " available: night, storm, day
+    let g:tokyonight_italic_functions = 1
+    " let g:tokyonight_transparent = 1
+    " let g:tokyonight_transparent_sidebar = 1
+    " let g:tokyonight_dark_sidebar = 1
+    " let g:tokyonight_dark_float = 1
+    " Change the "hint" color to the "orange" color, and make the "error" color bright red
+    let g:tokyonight_colors = {
+                \ 'hint': 'orange',
+                \ 'error': '#ff0000',
+                \ }
+    colorscheme tokyonight
+else
+    set background=light
+    let g:solarized_termcolors=256
+    colorscheme solarized8_flat
 endif
 
 " vim-airline colorscheme
