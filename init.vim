@@ -41,7 +41,6 @@ Plug 'mattn/webapi-vim'
 Plug 'mbbill/fencview'
 Plug 'mhinz/vim-startify'
 Plug 'n0v1c3/vira', { 'do': './install.sh', 'on': ['ViraIssues', 'ViraReport', 'ViraLoadProject', 'ViraSetActiveTicket', 'ViraFilterEdit'] }
-Plug 'nat-418/boole.nvim'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'preservim/nerdcommenter'
 Plug 'rizzatti/dash.vim'
@@ -207,6 +206,7 @@ if has('nvim')
     Plug 'kevinhwang91/nvim-bqf', { 'for': 'qf' } | Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'kevinhwang91/nvim-hlslens'
     Plug 'mrjones2014/smart-splits.nvim'
+    Plug 'nat-418/boole.nvim'
     Plug 'norcalli/nvim-colorizer.lua'
     Plug 'phaazon/hop.nvim'
     Plug 'phelipetls/jsonpath.nvim'
@@ -470,8 +470,11 @@ set vb t_vb=
 set viminfo+=!
 set wildignore=*.class,*.pyc
 set wildmenu " Type :help and press <Tab> , so that's the effect .
-set winblend=20
 set winminheight=1
+
+if has('nvim')
+    set winblend=20
+endif
 
 if has('nvim')
     set undodir=~/.vim/undodir/nvim/
@@ -4437,7 +4440,7 @@ command! -nargs=* DebugPy py3 import debugpy; debugpy.listen(4444); debugpy.wait
 " ------------------------------ COC settings -----------------------------{{{
 if s:plugged('coc.nvim')
 
-    let g:coc_node_path='~/.nvm/versions/node/v14.16.1/bin/node'
+    let g:coc_node_path='~/.nvm/versions/node/v16.15.0/bin/node'
     let g:coc_global_extensions = [
         \'@yaegassy/coc-intelephense',
         \'@yaegassy/coc-nginx',
