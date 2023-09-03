@@ -158,11 +158,6 @@
         "python": ["black"]
     },
     "php-cs-fixer.rules": "",
-    "rainbow-fart.locale": ["zh"],
-    "rainbow-fart.voice-packages": [ 
-        "$HOME/Dropbox/RainbowFart/Crosstalk-rainbow-fart"
-    ],
-    "rainbow-fart.disable-voice-packages": [],
     "cSpell.userWords": [
       "Annotatable",
       "Archlinux",
