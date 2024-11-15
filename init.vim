@@ -35,7 +35,7 @@ Plug 'junegunn/vader.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/vim-plug'
 Plug 'junkblocker/git-time-lapse'
-Plug 'liuchengxu/vista.vim'
+Plug 'liuchengxu/vista.vim' " tag list
 Plug 'mattn/gist-vim'
 Plug 'mattn/webapi-vim'
 Plug 'mbbill/fencview'
@@ -49,6 +49,7 @@ Plug 'skywind3000/asyncrun.vim'
 Plug 'szw/vim-maximizer'
 Plug 't9md/vim-choosewin'
 Plug 'terryma/vim-expand-region'
+Plug 'towolf/vim-helm' " syntax for .gotmpl files
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-commentary'
@@ -75,6 +76,7 @@ Plug 'Blackrush/vim-gocode',         { 'for': 'go'        }
 Plug 'altercation/vim-colors-solarized'
 Plug 'arcticicestudio/nord-vim'
 Plug 'base16-project/base16-vim'
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'jacoborus/tender.vim'
 Plug 'joshdick/onedark.vim'
@@ -139,7 +141,7 @@ Plug 'honza/vim-snippets'
 " tabline and statusline group
 if has('nvim')
     Plug 'kyazdani42/nvim-web-devicons'
-    Plug 'akinsho/bufferline.nvim', { 'tag': 'v2.*' }
+    Plug 'akinsho/bufferline.nvim'
     Plug 'nvim-lualine/lualine.nvim'
 else
     " airline group
@@ -188,7 +190,7 @@ Plug 'machakann/vim-sandwich'
 
 " ctags/gtags group
 Plug 'ludovicchabant/vim-gutentags', { 'do': 'cd plat/unix && chmod a+x *' }
-Plug 'skywind3000/gutentags_plus'
+" Plug 'skywind3000/gutentags_plus'
 Plug 'xbot/gtags.vim'
 
 " offline plugins
@@ -203,7 +205,7 @@ if has('nvim')
     Plug 'f-person/git-blame.nvim'
     Plug 'folke/which-key.nvim'
     Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-    Plug 'kevinhwang91/nvim-bqf', { 'for': 'qf' } | Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+    Plug 'kevinhwang91/nvim-bqf' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'kevinhwang91/nvim-hlslens'
     Plug 'mrjones2014/smart-splits.nvim'
     Plug 'nat-418/boole.nvim'
@@ -213,9 +215,16 @@ if has('nvim')
     Plug 'rcarriga/nvim-notify'
     Plug 'simnalamburt/vim-mundo'
     Plug 'gbprod/substitute.nvim'
+    Plug 'github/copilot.vim'
+    Plug 'harrisoncramer/jump-tag'
+
+    " laravel.nvim group
+    " Plug 'adalessa/laravel.nvim'
+    Plug 'tpope/vim-dotenv'
 
     " rest.nvim group
-    Plug 'NTBBloodbath/rest.nvim'
+    Plug 'rest-nvim/rest.nvim', { 'do': 'luarocks install mimetypes && luarocks install lua-curl && luarocks install nvim-nio && luarocks install xml2lua' }
+    Plug 'j-hui/fidget.nvim'
     Plug 'git@github.com:xbot/vim-textobj-restful-request' " Requires vim-textobj-user
 
     " mason group
@@ -254,8 +263,8 @@ if has('nvim')
     Plug 'rcarriga/nvim-dap-ui'
     Plug 'theHamsta/nvim-dap-virtual-text'
     Plug 'jbyuki/one-small-step-for-vimkind'
+    Plug 'nvim-neotest/nvim-nio'
 
-    " Plug 'github/copilot.vim'
     " Plug 'caenrique/nvim-toggle-terminal'
     " Plug 'tveskag/nvim-blame-line' " Has performance problem
     " Plug 'VonHeikemen/fine-cmdline.nvim' " Requires MunifTanjim/nui.nvim
@@ -296,6 +305,11 @@ endif
 
 " LSP group
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+if s:plugged('coc.nvim')
+    Plug 'junegunn/fzf', {'dir': '~/.fzf','do': './install --all'}
+    Plug 'junegunn/fzf.vim' " needed for previews
+    Plug 'antoinemadec/coc-fzf'
+endif
 if has('nvim') && !s:plugged('coc.nvim')
     " Experimental replacements of coc.nvim
     Plug 'neovim/nvim-lspconfig'
@@ -757,7 +771,7 @@ if s:plugged('ferret')"{{{
     endfunction
 
     " List all tasks under the current directory
-    map <Leader><Leader>tl :Ack //\s(TODO\|FIXME)\s(lidong\|donie)<CR>
+    map <Leader><Leader>tl :Ack //\s(TODO\|FIXME)\:?\s(xbot\|donie)?<CR>
     " Highlight TODO, FIXME, NOTE, etc.
     augroup ferret
         au!
@@ -783,50 +797,89 @@ if s:plugged('nvim-bqf')
 
 lua << EOF
 
-local status, bqf = pcall(require, 'bqf')
-if not status then
-    return
-end
+-- local status, bqf = pcall(require, 'bqf')
+-- if not status then
+--     return
+-- end
+--
+-- bqf.setup({
+--     auto_enable = true,
+--     auto_resize_height = true, -- highly recommended enable
+--     preview = {
+--         win_height = 12,
+--         win_vheight = 12,
+--         delay_syntax = 80,
+--         border_chars = {'┃', '┃', '━', '━', '┏', '┓', '┗', '┛', '█'},
+--         show_title = false,
+--         should_preview_cb = function(bufnr, qwinid)
+--             local ret = true
+--             local bufname = vim.api.nvim_buf_get_name(bufnr)
+--             local fsize = vim.fn.getfsize(bufname)
+--             if fsize > 100 * 1024 then
+--                 -- skip file size greater than 100k
+--                 ret = false
+--             elseif bufname:match('^fugitive://') then
+--                 -- skip fugitive buffer
+--                 ret = false
+--             end
+--             return ret
+--         end
+--     },
+--     -- make `drop` and `tab drop` to become preferred
+--     func_map = {
+--         drop = 'o',
+--         openc = 'O',
+--         split = '<C-s>',
+--         tabdrop = '<C-t>',
+--         tabc = '',
+--         ptogglemode = 'z,',
+--     },
+--     filter = {
+--         fzf = {
+--             action_for = {['ctrl-s'] = 'split', ['ctrl-t'] = 'tab drop'},
+--             extra_opts = {'--bind', 'ctrl-o:toggle-all', '--prompt', '> '}
+--         }
+--     }
+-- })
 
-bqf.setup({
-    auto_enable = true,
-    auto_resize_height = true, -- highly recommended enable
-    preview = {
-        win_height = 12,
-        win_vheight = 12,
-        delay_syntax = 80,
-        border_chars = {'┃', '┃', '━', '━', '┏', '┓', '┗', '┛', '█'},
-        show_title = false,
-        should_preview_cb = function(bufnr, qwinid)
-            local ret = true
-            local bufname = vim.api.nvim_buf_get_name(bufnr)
-            local fsize = vim.fn.getfsize(bufname)
-            if fsize > 100 * 1024 then
-                -- skip file size greater than 100k
-                ret = false
-            elseif bufname:match('^fugitive://') then
-                -- skip fugitive buffer
-                ret = false
-            end
-            return ret
-        end
-    },
-    -- make `drop` and `tab drop` to become preferred
-    func_map = {
-        drop = 'o',
-        openc = 'O',
-        split = '<C-s>',
-        tabdrop = '<C-t>',
-        tabc = '',
-        ptogglemode = 'z,',
-    },
-    filter = {
-        fzf = {
-            action_for = {['ctrl-s'] = 'split', ['ctrl-t'] = 'tab drop'},
-            extra_opts = {'--bind', 'ctrl-o:toggle-all', '--prompt', '> '}
-        }
+require('bqf').setup {
+
+  func_map = {
+    pscrollup = '<C-u>',
+    pscrolldown = '<C-d>',
+  },
+
+  filter = {
+    fzf = {
+      extra_opts = { '--delimiter', '│' }
     }
-})
+  },
+  preview = {
+    should_preview_cb = function(bufnr, qwinid)
+      local bufname = vim.api.nvim_buf_get_name(bufnr)
+      if bufname:match '^fugitive://' and not vim.api.nvim_buf_is_loaded(bufnr) then
+        if bqf_pv_timer and bqf_pv_timer:get_due_in() > 0 then
+          bqf_pv_timer:stop()
+          bqf_pv_timer = nil
+        end
+        bqf_pv_timer = vim.defer_fn(function()
+          vim.api.nvim_buf_call(bufnr, function()
+            vim.cmd(('do fugitive BufReadCmd %s'):format(bufname))
+          end)
+          require('bqf.preview.handler').open(qwinid, nil, true)
+        end, 60)
+      end
+
+      -- File size greater than 10K can't be previewed automatically
+      -- local fsize = vim.fn.getfsize(bufname)
+      -- if fsize > 10 * 1024 then
+      --   return false
+      -- end
+
+      return true
+    end
+  }
+}
 
 EOF
 
@@ -978,6 +1031,10 @@ if s:plugged('LeaderF')"{{{
     let g:Lf_ShowHidden      = 1
     let g:Lf_StlSeparator    = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "Cascadia Code PL" }
     let g:Lf_WindowPosition  = 'popup'
+    let g:Lf_WildIgnore = {
+                \ 'dir': [],
+                \ 'file': []
+                \}
 
     let g:Lf_CommandMap      = {
                 \'<C-c>': ['<Esc>', '<C-c>'],
@@ -1607,8 +1664,8 @@ if s:plugged('vim-fugitive')
 endif
 if s:plugged('coc.nvim')
 
-    nnoremap <Leader>gb  <Cmd>CocList branches<CR>
-    nnoremap <Leader>gB  <Cmd>CocList branches -a<CR>
+    nnoremap <Leader>gb  <Cmd>CocFzfList branches<CR>
+    nnoremap <Leader>gB  <Cmd>CocFzfList branches -a<CR>
 
 endif
 " git-time-lapse settings
@@ -1830,7 +1887,8 @@ if s:plugged('vim-gutentags')
     " let g:gutentags_modules = ['gtags_cscope']
 
     " Use ctags
-    let g:gutentags_modules          = ['ctags', 'gtags_cscope']
+    " let g:gutentags_modules          = ['ctags', 'gtags_cscope']
+    let g:gutentags_modules          = ['ctags']
     let g:gutentags_ctags_exclude    = ['_ide_helper.php', 'Makefile', 'node_modules', '*.js', '*.json', '*.md', '*.ts']
     let g:gutentags_ctags_extra_args = ['--PHP-kinds=+cdfint-va']
     let g:gutentags_project_root     = ['.git'] " config project root markers.
@@ -2342,38 +2400,6 @@ if s:plugged('rest.nvim')
 
 lua << EOF
 require("rest-nvim").setup({
-    -- Open request results in a horizontal split
-    result_split_horizontal = false,
-    -- Keep the http file buffer above|left when split horizontal|vertical
-    result_split_in_place = true,
-    -- Skip SSL verification, useful for unknown certificates
-    skip_ssl_verification = false,
-            -- Encode URL before making request
-            encode_url = true,
-    -- Highlight request on run
-    highlight = {
-        enabled = true,
-        timeout = 150,
-    },
-    result = {
-        -- toggle showing URL, HTTP info, headers at top the of result window
-        show_url = true,
-        show_http_info = true,
-        show_headers = true,
-        -- executables or functions for formatting response body [optional]
-        -- set them to nil if you want to disable them
-        formatters = {
-        json = "jq",
-        html = function(body)
-            return vim.fn.system({"tidy", "-i", "-q", "-"}, body)
-        end
-        },
-    },
-    -- Jump to request line on run
-    jump_to_request = false,
-    env_file = '.env',
-    custom_dynamic_variables = {},
-    yank_dry_run = true,
 })
 EOF
 
@@ -2585,9 +2611,13 @@ end
 EOF
 "}}}
 
-    nnoremap <Leader>dv <Cmd>DiffviewOpen<CR>
-    nnoremap <Leader>df <Cmd>DiffviewFileHistory %<CR>
-    nnoremap <Leader>dh <Cmd>call v:lua.diff_view_commit('HEAD')<CR>
+    nnoremap <Leader>dv          <Cmd>DiffviewOpen<CR>
+    nnoremap <Leader>df          <Cmd>DiffviewFileHistory %<CR>
+    nnoremap <Leader>dh          <Cmd>call v:lua.diff_view_commit('HEAD')<CR>
+    nnoremap <Leader><Leader>dh2 <Cmd>DiffviewOpen HEAD~2<CR>
+    nnoremap <Leader><Leader>dh3 <Cmd>DiffviewOpen HEAD~3<CR>
+    nnoremap <Leader><Leader>dh4 <Cmd>DiffviewOpen HEAD~4<CR>
+    nnoremap <Leader><Leader>dh5 <Cmd>DiffviewOpen HEAD~5<CR>
 
     augroup diffview
         au!
@@ -2655,7 +2685,7 @@ if s:plugged('vista.vim')
 
     nnoremap <silent> <Leader>tb <Cmd>Vista!!<CR>
 
-    let g:vista_ignore_kinds = ['Variable', 'Function']
+    let g:vista_ignore_kinds = ['Variable']
     let g:vista_sidebar_position = 'vertical botright'
     let g:vista_sidebar_width = 50
     let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
@@ -2736,16 +2766,17 @@ if s:plugged('auto-session')
     let g:auto_session_pre_save_cmds = ["call CleanupBeforeSaveSession()"]
 
     nnoremap <Leader>os <Cmd>SearchSession<CR>
-    nnoremap <Leader>ss <Cmd>SaveSession<CR>
+    nnoremap <Leader>ss <Cmd>SessionSave<CR>
 
 lua << EOF
 require('auto-session').setup {
     log_level = 'error',
     auto_session_use_git_branch = true,
     auto_session_enabled = true,
-    auto_session_create_enabled = false,
-    auto_save_enabled = false,
+    auto_session_create_enabled = true,
+    auto_save_enabled = true,
     auto_restore_enabled = true,
+    auto_session_enable_last_session = true,
 }
 EOF
 
@@ -3123,7 +3154,7 @@ endif
 " copilot.vim settings
 if s:plugged('copilot.vim')
 
-    let g:copilot_node_command = "~/.nvm/versions/node/v16.15.0/bin/node"
+    let g:copilot_node_command = "~/.nvm/versions/node/v18.20.3/bin/node"
 
     imap <M-,> <Plug>(copilot-previous)
     imap <M-.> <Plug>(copilot-next)
@@ -3213,7 +3244,7 @@ require'nvim-treesitter.configs'.setup {
         -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
         -- the name of the parser)
         -- list of language that will be disabled
-        disable = {},
+        disable = {'http'},
 
         -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
         -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
@@ -3652,6 +3683,42 @@ if s:plugged('plantuml-previewer.vim')
 
 endif
 
+" fzf settings
+if s:plugged('fzf')
+    let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+endif
+
+" laravel.nvim settings
+if s:plugged('laravel.nvim')
+
+    autocmd VimEnter * lua require('laravel').setup({
+        \   environment = {
+        \       resolver = require "laravel.environment.resolver"(true, true, "docker-compose"),
+        \       environments = {
+        \           ["docker-compose"] = require("laravel.environment.docker_compose").setup({container_name = "api"}),
+        \       }
+        \   }
+        \})
+
+lua << EOF
+require('telescope').load_extension "laravel"
+EOF
+
+endif
+
+" jump-tag settings
+if s:plugged('jump-tag')
+    augroup jump_tag_mappings
+        autocmd!
+        autocmd FileType html,xml if !&diff | 
+                    \ nnoremap <silent><buffer> [p :lua require('jump-tag').jumpParent()<CR> |
+                    \ nnoremap <silent><buffer> [s :lua require('jump-tag').jumpPrevSibling()<CR> |
+                    \ nnoremap <silent><buffer> ]s :lua require('jump-tag').jumpNextSibling()<CR> |
+                    \ nnoremap <silent><buffer> ]c :lua require('jump-tag').jumpChild()<CR> |
+                    \ endif
+    augroup END
+endif
+
 "}}}
 
 " ------------------------------ Auto Commands ------------------------------"{{{
@@ -3943,7 +4010,7 @@ nnoremap <Leader>dl yiw<Cmd>call <SID>preserve("g/".Escape_regex(@")."/d")<CR>
 vnoremap <Leader>dl y<Cmd>call   <SID>preserve("g/".Escape_regex(@")."/d")<CR>
 
 " Set TODO comments done.
-nnoremap <Leader>dn <Cmd>s/\(^\s*\/\/\s\)\@<=TODO\s\(lidong\\|donie\):\s//<CR>
+nnoremap <Leader>dn <Cmd>s/\(^\s*\/\/\s\)\@<=TODO\s\(xbot\\|donie\):\s//<CR>
 
 " Edit & source vimrc
 exec 'nmap <Leader><Leader>, <Cmd>tabnew '.gbl_vimrc_file.'<CR><C-W>_'
@@ -3998,8 +4065,13 @@ nmap <Leader>!! <Cmd><up><CR>
 nmap <Leader><Leader>mr <Cmd>AsyncRun glab mr view -w<CR>
 
 " navigating changes in the diff view
-nnoremap ]c <Cmd>call NiceNext(v:count1 .. ']c')<CR>
-nnoremap [c <Cmd>call NiceNext(v:count1 .. '[c')<CR>
+augroup diff_view_navigation_mappings
+    autocmd!
+    autocmd BufEnter * if &diff |
+                \ nnoremap ]c <Cmd>call NiceNext(v:count1 .. ']c')<CR> |
+                \ nnoremap [c <Cmd>call NiceNext(v:count1 .. '[c')<CR> |
+                \ endif
+augroup END
 
 " Mark the TODO on the cursor line as done.
 nnoremap XX <Cmd>call ToggleTodo()<CR>
@@ -4555,7 +4627,7 @@ if s:plugged('coc.nvim')
     " endfunction"}}}
 
     " let g:coc_snippet_next = '<Tab>'
-    nnoremap <silent> <Leader>sl <Cmd>CocList -A snippets<CR>
+    nnoremap <silent> <Leader>sl <Cmd>CocFzfList snippets -A<CR>
     " " --- The COC implementation of <Tab> behavior END ---
 
     " coc-snippets settings
@@ -4612,22 +4684,23 @@ if s:plugged('coc.nvim')
 
     " Mappings using CoCList:
     " Show all diagnostics.
-    nnoremap <silent> <space>a  <Cmd>CocList diagnostics<CR>
+    nnoremap <silent> <space>a  <Cmd>CocFzfList diagnostics<CR>
     " Manage extensions.
-    nnoremap <silent> <space>e  <Cmd>CocList extensions<CR>
+    nnoremap <silent> <space>e  <Cmd>CocFzfList extensions<CR>
     " Show commands.
-    nnoremap <silent> <space>c  <Cmd>CocList commands<CR>
+    nnoremap <silent> <space>c  <Cmd>CocFzfList commands<CR>
     " Search workspace symbols.
-    nnoremap <silent> <Leader>cocs  <Cmd>CocList -I symbols<CR>
+    " nnoremap <silent> <Leader>cocs  <Cmd>CocList -I symbols<CR>
+    nnoremap <silent> <Leader>cocs  <Cmd>CocFzfList symbols<CR>
     " Do default action for next item.
     " nnoremap <silent> <space>j  <Cmd>CocNext<CR><Cmd>sleep 100m<CR>zv
     nnoremap <silent> <space>j  <Cmd>CocNext<CR><Cmd>sleep 10m<CR>zv
     " Do default action for previous item.
     nnoremap <silent> <space>k  <Cmd>CocPrev<CR><Cmd>sleep 10m<CR>zv
     " Resume latest coc list.
-    nnoremap <silent> <C-.>      <Cmd>CocListResume<CR>
-    nnoremap <silent> <Leader>sy <Cmd>CocList -A --normal yank<CR>
-    nnoremap <silent> <Leader>op <Cmd>CocList project<CR>
+    nnoremap <silent> <C-.>      <Cmd>CocFzfListResume<CR>
+    nnoremap <silent> <Leader>sy <Cmd>CocFzfList yank -A --normal<CR>
+    nnoremap <silent> <Leader>op <Cmd>CocFzfList project<CR>
     nnoremap <silent> <Leader>sC <Cmd>let v:this_session=''<CR>:echo 'Session closed.'<CR>
     xnoremap <silent> <Leader>cs <Plug>(coc-convert-snippet)
 
@@ -4647,7 +4720,7 @@ if s:plugged('coc.nvim')
     omap ag <Plug>(coc-git-chunk-outer)
     xmap ag <Plug>(coc-git-chunk-outer)
 
-    " nnoremap <Leader>os :<C-u>CocList sessions<CR>
+    " nnoremap <Leader>os :<C-u>CocFzfList sessions<CR>
     " nnoremap <Leader>ss :<C-u>CocCommand session.save<CR>
 
     " vim-test is more convinient to run tests.

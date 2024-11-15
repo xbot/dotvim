@@ -170,6 +170,7 @@
       "Laravel",
       "Macbook",
       "Magisk",
+      "Referer",
       "Spatie",
       "Surfingkeys",
       "Underlayed",
@@ -236,5 +237,8 @@
 		"snippet": "\ue60b",
 		"typeParameter": "\uea92",
 		"default": "\uf29c"
-    }
+    },
+    "cSpell.words": [
+      "monocloud"
+    ]
 }
