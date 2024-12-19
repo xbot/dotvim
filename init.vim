@@ -3095,9 +3095,10 @@ if s:plugged('copilot.vim')
 
     let g:copilot_node_command = "~/.nvm/versions/node/v18.20.3/bin/node"
 
-    imap <M-,> <Plug>(copilot-previous)
-    imap <M-.> <Plug>(copilot-next)
-
+    imap <M-,>       <Plug>(copilot-previous)
+    imap <M-.>       <Plug>(copilot-next)
+    imap <M-/>       <Plug>(copilot-dismiss)
+    imap <M-S-Right> <Plug>(copilot-accept-line)
 endif
 
 " NeoZoom settings
