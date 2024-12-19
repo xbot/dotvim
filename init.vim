@@ -3836,7 +3836,7 @@ if s:plugged('targets.vim')
 
 endif
 
-" vim-sandwich settings
+" vim-sandwich settings{{{
 if s:plugged('vim-sandwich')
 
     runtime macros/sandwich/keymap/surround.vim
@@ -3865,7 +3865,7 @@ if s:plugged('vim-sandwich')
         \ {'buns': ["{ ", " }"], 'nesting': 1, 'match_syntax': 1, 'input': ['{'] },
         \ ]
 
-endif
+endif"}}}
 
 "}}}
 
