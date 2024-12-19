@@ -204,7 +204,10 @@ if has('nvim')
     Plug 'elihunter173/dirbuf.nvim' " Conflict with dirvish
     Plug 'f-person/git-blame.nvim'
     Plug 'folke/which-key.nvim'
+    Plug 'gbprod/substitute.nvim'
+    Plug 'github/copilot.vim'
     Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+    Plug 'harrisoncramer/jump-tag'
     Plug 'kevinhwang91/nvim-bqf' | Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'kevinhwang91/nvim-hlslens'
     Plug 'mrjones2014/smart-splits.nvim'
@@ -214,9 +217,7 @@ if has('nvim')
     Plug 'phelipetls/jsonpath.nvim'
     Plug 'rcarriga/nvim-notify'
     Plug 'simnalamburt/vim-mundo'
-    Plug 'gbprod/substitute.nvim'
-    Plug 'github/copilot.vim'
-    Plug 'harrisoncramer/jump-tag'
+    Plug 'stevearc/conform.nvim'
 
     " laravel.nvim group
     " Plug 'adalessa/laravel.nvim'
@@ -3719,6 +3720,25 @@ if s:plugged('jump-tag')
     augroup END
 endif
 
+" conform.nvim settings{{{
+if s:plugged('conform.nvim')
+lua << EOF
+require("conform").setup({
+    formatters_by_ft = {
+        lua = { "stylua" },
+        javascript = { "prettierd", "prettier", stop_after_first = true },
+        json = { "jq" },
+    },
+})
+EOF
+
+    augroup conform.nvim
+        au!
+        autocmd FileType json setl formatexpr=v:lua.require'conform'.formatexpr()
+    augroup END
+
+endif"}}}
+
 "}}}
 
 " ------------------------------ Auto Commands ------------------------------"{{{
@@ -4746,7 +4766,7 @@ if s:plugged('coc.nvim')
     augroup coc
         au!
         " Setup formatexpr specified filetype(s).
-        autocmd FileType typescript,json,php setl formatexpr=CocAction('formatSelected')
+        autocmd FileType typescript,php setl formatexpr=CocAction('formatSelected')
         " Update signature help on jump placeholder.
         autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
         " Highlight the symbol and its references when holding the cursor.
